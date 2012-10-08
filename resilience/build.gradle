@@ -1,9 +1,13 @@
 buildscript {
   repositories {
+    mavenLocal()
     mavenCentral()
   }
 
   dependencies {
+
+    // 1.2.0 version of the plugin is not able to sign the package under osx JDK 1.6
+    // Recompiling fixes this
     //classpath 'org.gradle.api.plugins:gradle-android-plugin:1.2.0'
     classpath 'org.gradle.api.plugins:gradle-android-plugin:1.2.1-SNAPSHOT'
   }
@@ -25,6 +29,10 @@ repositories {
 
 // Sets the package version
 version = "1.0.0"
+
+task buildDependencies {
+    "gradle -b ./gradle-android-plugin/build.gradle install"
+}
 
 // Signing configuration, valid for all builds (1)
 androidSignAndAlign {
