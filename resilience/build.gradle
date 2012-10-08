@@ -1,0 +1,54 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    //classpath 'org.gradle.api.plugins:gradle-android-plugin:1.2.0'
+    classpath 'org.gradle.api.plugins:gradle-android-plugin:1.2.1-SNAPSHOT'
+  }
+}
+
+apply plugin: 'android'
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src/java'
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+// Sets the package version
+version = "1.0.0"
+
+// Signing configuration, valid for all builds (1)
+androidSignAndAlign {
+//  keyStore = "path/to/my/keystore"
+//  keyAlias = "my-key-alias"
+  keyStorePassword = "mystorepass"
+  keyAliasPassword = "myaliaspass"
+}
+
+androidEmulatorStart {
+  avdName = "Resilience"
+}
+
+// Configure the filtering of resources with properties from the Gradle's project scope (2)
+processResources {
+  expand (project.properties)
+}
+
+// Configure a dedicated debug build (3)
+task configureDebug << {
+  jar.classifier = "debug"
+}
+
+// Configure a dedicated release build (4)
+task configureRelease << {
+  proguard.enabled = true
+}
