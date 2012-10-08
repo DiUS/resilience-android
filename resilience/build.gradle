@@ -30,8 +30,9 @@ repositories {
 // Sets the package version
 version = "1.0.0"
 
-task buildDependencies {
-    "gradle -b ./gradle-android-plugin/build.gradle install"
+task buildDependencies(type:GradleBuild) {
+    buildFile = './gradle-android-plugin/build.gradle'
+    tasks = ['install']
 }
 
 // Signing configuration, valid for all builds (1)
