@@ -18,7 +18,7 @@ apply plugin: 'android'
 sourceSets {
   main {
     java {
-      srcDir 'src'
+      srcDir 'src/main/java'
     }
   }
 }

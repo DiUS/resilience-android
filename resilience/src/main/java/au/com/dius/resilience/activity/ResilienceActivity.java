@@ -1,6 +1,7 @@
 package au.com.dius.resilience.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,6 +39,8 @@ public class ResilienceActivity extends Activity {
         Log.d(LOG_TAG, "Tracked issues selected");
         break;
       case R.id.raise_incident:
+        Intent raiseIncident = new Intent(this, EditIncidentActivity.class);
+        startActivity(raiseIncident);
         Log.d(LOG_TAG, "Raise incident selected");
         break;
       default:
