@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ResilienceActivity</string>
+
+    <string name="app_name">Resilience</string>
+
+    <!-- Action bar menu -->
+    <string name="all_incidents">All incidents</string>
+    <string name="tracked_incidents">Tracked incidents</string>
+    <string name="raise_incident">Create</string>
+
 </resources>

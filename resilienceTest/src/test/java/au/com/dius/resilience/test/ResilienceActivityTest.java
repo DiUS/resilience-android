@@ -21,7 +21,6 @@ public class ResilienceActivityTest extends ActivityInstrumentationTestCase2<Res
 
     public void testThingsAreOk() {
       
-      new ResilienceActivity("Yourface");
       assertTrue(true);
     }
 }
