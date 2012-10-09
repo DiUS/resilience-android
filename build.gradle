@@ -1,0 +1,11 @@
+subprojects {
+  apply plugin: 'java'
+}
+
+project(':resilienceTest') {
+//  dependencies {
+//    compile project(':resilience')
+//  }
+
+  task instrumentationTests(dependsOn: ':resilienceTest:androidInstrumentationTests')
+}

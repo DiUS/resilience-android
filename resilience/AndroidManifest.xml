@@ -3,6 +3,11 @@
       package="au.com.dius.resilience"
       android:versionCode="1"
       android:versionName="1.0">
+
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="15" />
+
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
         <activity android:name="ResilienceActivity"
                   android:label="@string/app_name">
