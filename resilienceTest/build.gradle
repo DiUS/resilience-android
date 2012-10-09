@@ -16,7 +16,6 @@ dependencies {
   compile project(":resilience")
 }
 
-apply plugin: 'eclipse'
 apply plugin: 'android'
 
 sourceSets {
