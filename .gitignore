@@ -18,3 +18,10 @@ local.properties
 
 .gradle/
 .DS_Store
+*.iml
+.settings
+.project
+.status
+classes/
+.classpath
+
