@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/all_issues"
+          android:title="@string/all_incidents"
+          android:showAsAction="always|withText"/>
+
+    <item android:id="@+id/tracked_issues"
+          android:title="@string/tracked_incidents"
+          android:showAsAction="always|withText"/>
+
+    <item android:id="@+id/raise_incident"
+          android:icon="@drawable/create_contact"
+          android:title="@string/raise_incident"
+          android:showAsAction="always"/>
+</menu>
