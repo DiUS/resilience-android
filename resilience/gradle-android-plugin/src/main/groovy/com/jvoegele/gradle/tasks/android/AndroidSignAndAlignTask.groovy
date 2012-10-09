@@ -137,6 +137,7 @@ class AndroidSignAndAlignTask extends DefaultTask {
             keypass: 'android',
             validity: 10 * 365,
             storetype: 'JKS',
+            keyalg : 'RSA',
             dname: 'CN=Android Debug,O=Android,C=US')
       }
 
