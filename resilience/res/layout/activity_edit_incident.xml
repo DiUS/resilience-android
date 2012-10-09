@@ -1,14 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:gravity="top"
+    android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/incident_note"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        tools:context=".EditIncidentActivity" />
+        android:layout_weight="4"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/report_an_incident"
+        android:inputType="textMultiLine" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/submit_incident"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0px"
+        android:layout_marginRight="0px"
+        android:layout_weight="1"
+        android:text="@string/raise_incident" 
+        android:onClick="onSubmitClick"/>
+
+</LinearLayout>
