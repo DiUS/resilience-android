@@ -35,14 +35,17 @@ public class ResilienceActivity extends Activity {
       case R.id.all_issues:
         Log.d(LOG_TAG, "All issues selected");
         break;
+
       case R.id.tracked_issues:
         Log.d(LOG_TAG, "Tracked issues selected");
         break;
+
       case R.id.raise_incident:
         Intent raiseIncident = new Intent(this, EditIncidentActivity.class);
         startActivity(raiseIncident);
         Log.d(LOG_TAG, "Raise incident selected");
         break;
+
       default:
         return super.onOptionsItemSelected(item);
     }

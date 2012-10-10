@@ -5,10 +5,10 @@
     android:layout_height="fill_parent"
     >
 
-<TextView
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="Hello World, ResilienceActivity"
-    />
+    <fragment
+        android:name="au.com.dius.resilience.fragment.IncidentListFragment"
+        android:id="@+id/incident_list_fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
 
 </LinearLayout>
