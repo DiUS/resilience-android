@@ -1,8 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:padding="6dp">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/list_view_padding"
+        android:background="#FFFFFF">
 
+        <ImageView
+            android:id="@+id/list_view_category_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:layout_gravity="left"
+            android:layout_weight="3"
+            android:clickable="false"
+            android:contentDescription="@string/list_view_category_desc"
+            android:src="@drawable/fire"/>
 
-</TextView>
+        <LinearLayout
+            android:id="@+id/list_view_details_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left|center_vertical"
+            android:layout_weight="10"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/list_view_item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLength="@integer/list_view_name_max"
+                android:text="Zombie sighting"
+                android:textStyle="bold" >
+                
+            </TextView>
+
+            <TextView
+                android:id="@+id/list_view_item_time_reported"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reported 3 hours ago" />
+
+            <TextView
+                android:id="@+id/list_view_item_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Melbourne CBD" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/list_view_more_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:contentDescription="@string/list_view_category_desc"
+            android:src="@drawable/navigation_forward" />
+
+    </LinearLayout>

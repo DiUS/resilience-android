@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Resilience</string>
+  <string name="app_name">Resilience</string>
 
-    <!-- Action bar menu -->
-    <string name="all_incidents">All incidents</string>
-    <string name="tracked_incidents">Tracked incidents</string>
-    <string name="raise_incident">Create</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_edit_incident">EditIncidentActivity</string>
-    <string name="extra_notes">Extra notes</string>
-    <string name="name">Name</string>
+  <!-- Action bar menu -->
+  <string name="all_incidents">All incidents</string>
+  <string name="tracked_incidents">Tracked incidents</string>
+  <string name="raise_incident">Create</string>
+  <string name="menu_settings">Settings</string>
+  <string name="title_activity_edit_incident">EditIncidentActivity</string>
+  <string name="report_an_incident">Report an incident..</string>
+
+  <!-- List view -->
+  <string name="list_view_more_details_desc">More details</string>
+  <string name="list_view_category_desc">Incident category</string>
 
 </resources>
