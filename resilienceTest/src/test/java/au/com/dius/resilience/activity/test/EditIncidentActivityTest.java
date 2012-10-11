@@ -5,8 +5,11 @@ import android.test.TouchUtils;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.activity.EditIncidentActivity;
+import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.Repository;
 import au.com.dius.resilience.persistence.RepositoryFactory;
@@ -16,6 +19,7 @@ public class EditIncidentActivityTest extends
     ActivityInstrumentationTestCase2<EditIncidentActivity> {
 
   private EditIncidentActivity activity;
+  private Repository repository;
 
   public EditIncidentActivityTest() {
     super("au.com.dius.resilience", EditIncidentActivity.class);
@@ -23,22 +27,36 @@ public class EditIncidentActivityTest extends
 
   public void setUp() {
     activity = getActivity();
-    RepositoryFactory.setTestFlag(true);
+    repository = RepositoryFactory.create(getActivity());
   }
 
   public void testSaveNoteToDB() {
     
-    EditText name = (EditText) activity.findViewById(R.id.incident_name);
-    EditText notes = (EditText) activity.findViewById(R.id.incident_note);
+    Spinner categorySpinner = (Spinner) activity.findViewById(R.id.category_spinner);
+    TouchUtils.clickView(this, categorySpinner);
+    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
+    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
+    this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
+    
+    Spinner subCategorySpinner = (Spinner) activity.findViewById(R.id.sub_category_spinner);
+    TouchUtils.clickView(this, subCategorySpinner);
+    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
+    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
+    this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
+    
+    final SeekBar seekerBar = (SeekBar) activity.findViewById(R.id.impact_scale);
+    
+    activity.runOnUiThread(new Runnable() {
+      public void run() {
+        seekerBar.setProgress(ImpactScale.HIGH.getCode());
+      }
+    });
+    
+    EditText notes = (EditText) activity.findViewById(R.id.notes);
     Button createButton = (Button) activity.findViewById(R.id.submit_incident);
     
-    TouchUtils.clickView(this, name);
-    this.sendKeys(KeyEvent.KEYCODE_N, KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_M, KeyEvent.KEYCODE_E);
-    this.sendKeys(KeyEvent.KEYCODE_BACK);
-    
-    sleep(2000);
-    
     TouchUtils.clickView(this, notes);
+    
     this.sendKeys(KeyEvent.KEYCODE_F, KeyEvent.KEYCODE_I, KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_E);
     this.sendKeys(KeyEvent.KEYCODE_BACK);
     
@@ -47,10 +65,8 @@ public class EditIncidentActivityTest extends
     TouchUtils.clickView(this, createButton);
     
     // Check that it saved
-    Repository repository = RepositoryFactory.create(getActivity());
     Incident incident = repository.findAll().get(0);
     
-    assertEquals("name", incident.getName());
     assertEquals("fire", incident.getNote());
   }
 
@@ -63,7 +79,6 @@ public class EditIncidentActivityTest extends
   }
   
   public void tearDown() {
-    RepositoryFactory.setTestFlag(false);
     getActivity().getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
   }
 }

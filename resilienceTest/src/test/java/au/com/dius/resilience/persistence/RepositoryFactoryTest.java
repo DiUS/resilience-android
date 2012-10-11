@@ -3,31 +3,18 @@ package au.com.dius.resilience.persistence;
 import java.util.List;
 
 import android.test.AndroidTestCase;
+import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.IncidentFactory;
 
 public class RepositoryFactoryTest extends AndroidTestCase {
   
-  public void testCreate() {
-    RepositoryFactory.setTestFlag(false);
-    Repository parseInstance = RepositoryFactory.create(null);
-    RepositoryFactory.setTestFlag(true);
-    Repository sqlLiteRepository = RepositoryFactory.create(null);
-    
-    assertTrue(parseInstance instanceof ParseRepository);
-    assertTrue(sqlLiteRepository instanceof SqlLiteRepository);
-    
-    RepositoryFactory.setTestFlag(false);
-    Repository parseInstance2 = RepositoryFactory.create(null);
-    assertTrue(parseInstance2 instanceof ParseRepository);
-  }
-  
   public void testSqlLiteSaveAndLoad() {
     SqlLiteRepository sqlLiteRepository = new SqlLiteRepository(getContext());
     
-    sqlLiteRepository.save(IncidentFactory.createIncident("Test1", Long.valueOf(999), "Hello World"));
-    sqlLiteRepository.save(IncidentFactory.createIncident("Test2", Long.valueOf(888), "Goodbye World"));
-    sqlLiteRepository.save(IncidentFactory.createIncident("Test3", Long.valueOf(777), "Sup, World?"));
+    sqlLiteRepository.save(IncidentFactory.createIncident("Test1", Long.valueOf(999), "Hello World", "Cat1", "Subcat1", ImpactScale.LOW));
+    sqlLiteRepository.save(IncidentFactory.createIncident("Test2", Long.valueOf(888), "Goodbye World", "Cat2", "Subcat2", ImpactScale.MEDIUM));
+    sqlLiteRepository.save(IncidentFactory.createIncident("Test3", Long.valueOf(777), "Sup, World?", "Cat3", "Subcat3", ImpactScale.HIGH));
     
     List<Incident> findAll = sqlLiteRepository.findAll();
     
