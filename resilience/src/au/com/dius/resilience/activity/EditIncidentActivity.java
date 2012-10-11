@@ -49,15 +49,14 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
   }
 
   public void onSubmitClick(View button) {
-    String incidentName = ((EditText) findViewById(R.id.incident_name)).getText().toString();
-    String incidentNote = ((EditText) findViewById(R.id.incident_note)).getText().toString();
+    String incidentNote = ((EditText) findViewById(R.id.notes)).getText().toString();
 
     String category = ((Spinner) findViewById(R.id.category_spinner)).getSelectedItem().toString();
     String subCategory = ((Spinner) findViewById(R.id.sub_category_spinner)).getSelectedItem().toString();
     ImpactScale impact = ImpactScale.fromCode(((SeekBar) findViewById(R.id.impact_scale)).getProgress());
     
     Repository repository = RepositoryFactory.create(this);
-    Incident incident = IncidentFactory.createIncident(incidentName, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
+    Incident incident = IncidentFactory.createIncident(category, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
     repository.save(incident);

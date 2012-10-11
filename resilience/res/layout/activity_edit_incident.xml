@@ -76,7 +76,8 @@
             android:id="@+id/submit_incident"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/raise_incident" />
+            android:text="@string/raise_incident" 
+            android:onClick="onSubmitClick"/>
     </LinearLayout>
 
 </LinearLayout>

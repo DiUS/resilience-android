@@ -44,11 +44,11 @@ public class EditIncidentActivityTest extends
     this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
     this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
     
-    final SeekBar seekerBar = (SeekBar) activity.findViewById(R.id.impact_scale);
+    final SeekBar impactRating = (SeekBar) activity.findViewById(R.id.impact_scale);
     
     activity.runOnUiThread(new Runnable() {
       public void run() {
-        seekerBar.setProgress(ImpactScale.HIGH.getCode());
+        impactRating.setProgress(ImpactScale.MEDIUM.getCode());
       }
     });
     

@@ -109,12 +109,12 @@ public class SqlLiteRepository extends SQLiteOpenHelper implements Repository {
 
   private Incident cursorToIncident(Cursor cursor) {
     Long id = cursor.getLong(0);
-    String name = cursor.getString(2);
-    String category = cursor.getString(3);
-    String subCategory = cursor.getString(4);
-    ImpactScale impact = ImpactScale.valueOf(cursor.getString(5));
-    Long dateCreated = cursor.getLong(6);
-    String note = cursor.getString(7);
+    String name = cursor.getString(1);
+    String category = cursor.getString(2);
+    String subCategory = cursor.getString(3);
+    ImpactScale impact = ImpactScale.valueOf(cursor.getString(4));
+    Long dateCreated = cursor.getLong(5);
+    String note = cursor.getString(6);
     
     return new Incident(id, name, dateCreated, note, category, subCategory, impact);
   }
