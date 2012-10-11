@@ -3,11 +3,13 @@ package au.com.dius.resilience.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.RuntimeProperties;
 
 public class ResilienceActivity extends Activity {
 
@@ -20,6 +22,27 @@ public class ResilienceActivity extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
+
+    setStrictMode();
+  }
+
+  private void setStrictMode() {
+    if (RuntimeProperties.useStrictMode()) {
+      StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+              .detectDiskReads()
+              .detectDiskWrites()
+//            .detectNetwork()   // or .detectAll() for all detectable problems
+              .detectAll()
+              .penaltyLog()
+              .build());
+
+      StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+              .detectLeakedSqlLiteObjects()
+              .detectLeakedClosableObjects()
+              .penaltyLog()
+              .penaltyDeath()
+              .build());
+    }
   }
 
   @Override
