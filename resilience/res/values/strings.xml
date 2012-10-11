@@ -11,5 +11,8 @@
     <string name="title_activity_edit_incident">EditIncidentActivity</string>
     <string name="extra_notes">Extra notes</string>
     <string name="name">Name</string>
+    <string name="category">Category</string>
+    <string name="photo">Photo</string>
+    <string name="map">Map</string>
 
 </resources>
