@@ -29,6 +29,7 @@ public class EditIncidentActivityTest extends
   public void setUp() {
     activity = getActivity();
     repository = RepositoryFactory.create(getActivity());
+    
   }
   
   // TODO - This test is rather big..
@@ -50,20 +51,6 @@ public class EditIncidentActivityTest extends
     this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
     this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
     
-    // Test that the initial displayed impact is LOW
-    TextView impactRatingLbl = (TextView) activity.findViewById(R.id.impact_scale_desc);
-    impactRatingLbl.getText().toString().equals(ImpactScale.LOW.name());
-    
-    final SeekBar impactRating = (SeekBar) activity.findViewById(R.id.impact_scale);
-    
-    activity.runOnUiThread(new Runnable() {
-      public void run() {
-        impactRating.setProgress(ImpactScale.MEDIUM.getCode());
-      }
-    });
-    
-    impactRatingLbl.getText().toString().equals(ImpactScale.MEDIUM.name());
-    
     EditText notes = (EditText) activity.findViewById(R.id.notes);
     Button createButton = (Button) activity.findViewById(R.id.submit_incident);
     
@@ -82,7 +69,30 @@ public class EditIncidentActivityTest extends
     assertEquals("fire", incident.getNote());
     assertEquals("Fire", incident.getCategory());
     assertEquals("SubC1", incident.getSubCategory());
-    assertEquals(ImpactScale.MEDIUM, incident.getImpact());
+    assertEquals(ImpactScale.LOW, incident.getImpact());
+  }
+  
+  public void testImpactLabelChange() {
+    // Test that the initial displayed impact is LOW
+    TextView impactRatingLbl = (TextView) activity.findViewById(R.id.impact_scale_desc);
+    assertEquals(ImpactScale.LOW.name(), impactRatingLbl.getText().toString());
+    
+    final SeekBar impactRating = (SeekBar) activity.findViewById(R.id.impact_scale);
+    activity.runOnUiThread(new Runnable() {
+      public void run() {
+        impactRating.setProgress(ImpactScale.MEDIUM.getCode());
+      }
+    });
+    sleep(2000);
+    assertEquals(ImpactScale.MEDIUM.name(), impactRatingLbl.getText().toString());
+    
+    activity.runOnUiThread(new Runnable() {
+      public void run() {
+        impactRating.setProgress(ImpactScale.HIGH.getCode());
+      }
+    });
+    sleep(2000);
+    assertEquals(ImpactScale.HIGH.name(), impactRatingLbl.getText().toString());
   }
 
   private void sleep(long time) {
@@ -94,6 +104,7 @@ public class EditIncidentActivityTest extends
   }
   
   public void tearDown() {
-    getActivity().getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
+    activity.getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
+    activity.finish();
   }
 }
