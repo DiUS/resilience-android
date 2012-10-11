@@ -1,5 +1,7 @@
 package au.com.dius.resilience.activity;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,10 +29,12 @@ public class EditIncidentActivity extends Activity {
     }
     
     public void onSubmitClick(View button) {
+      EditText incidentName = (EditText) findViewById(R.id.incident_name);
       EditText incidentNote = (EditText) findViewById(R.id.incident_note);
       
       Repository repository = RepositoryFactory.create(this);
-      Incident incident = IncidentFactory.createIncident("SomeName", 100, incidentNote.getText().toString());
+      Incident incident = IncidentFactory.createIncident(incidentName.getText().toString(), Long.valueOf(new Date().getTime()), incidentNote.getText().toString());
+      
       Log.d("EditIncidentActivity", "Saving incident: " + incident.toString());
       
       repository.save(incident);
