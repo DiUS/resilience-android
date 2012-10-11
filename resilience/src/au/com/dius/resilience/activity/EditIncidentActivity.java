@@ -2,13 +2,18 @@ package au.com.dius.resilience.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.IncidentFactory;
+import au.com.dius.resilience.persistence.Repository;
+import au.com.dius.resilience.persistence.RepositoryFactory;
 
 public class EditIncidentActivity extends Activity {
-
+  
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +28,11 @@ public class EditIncidentActivity extends Activity {
     
     public void onSubmitClick(View button) {
       EditText incidentNote = (EditText) findViewById(R.id.incident_note);
-      System.out.println("Note contains text: \"" + incidentNote.getText().toString()
-          + "\"");
+      
+      Repository repository = RepositoryFactory.create(this);
+      Incident incident = IncidentFactory.createIncident("SomeName", 100, incidentNote.getText().toString());
+      Log.d("EditIncidentActivity", "Saving incident: " + incident.toString());
+      
+      repository.save(incident);
     }
 }

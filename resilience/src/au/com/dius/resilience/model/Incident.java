@@ -2,14 +2,20 @@ package au.com.dius.resilience.model;
 
 public class Incident {
 
+  private Long id;
   private String name;
-  private long dateCreated;
+  private Long dateCreated;
   private String note;
 
-  public Incident(String name, long dateCreated, String note) {
+  public Incident(Long id, String name, Long dateCreated, String note) {
+    this.id = id;
     this.name = name;
     this.dateCreated = dateCreated;
     this.note = note;
+  }
+  
+  public Long getId() {
+    return id;
   }
 
   public String getName() {
@@ -20,11 +26,11 @@ public class Incident {
     this.name = name;
   }
 
-  public long getDateCreated() {
+  public Long getDateCreated() {
     return dateCreated;
   }
 
-  void setDateCreated(long dateCreated) {
+  void setDateCreated(Long dateCreated) {
     this.dateCreated = dateCreated;
   }
   

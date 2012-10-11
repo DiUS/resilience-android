@@ -18,9 +18,4 @@ public class ResilienceActivityTest extends ActivityInstrumentationTestCase2<Res
     public ResilienceActivityTest() {
         super("au.com.dius.resilience", ResilienceActivity.class);
     }
-
-    public void testThingsAreOk() {
-      
-      assertTrue(true);
-    }
 }
