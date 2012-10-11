@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.activity.EditIncidentActivity;
 import au.com.dius.resilience.model.ImpactScale;
@@ -29,8 +30,13 @@ public class EditIncidentActivityTest extends
     activity = getActivity();
     repository = RepositoryFactory.create(getActivity());
   }
-
-  public void testSaveNoteToDB() {
+  
+  // TODO - This test is rather big..
+  // also, this test depends on production values
+  // being present in the spinners, maybe we
+  // could hook in a test ArrayAdapter for spinners
+  // so it's more sand-boxy.
+  public void testCreateAndSaveIncident() {
     
     Spinner categorySpinner = (Spinner) activity.findViewById(R.id.category_spinner);
     TouchUtils.clickView(this, categorySpinner);
@@ -44,6 +50,10 @@ public class EditIncidentActivityTest extends
     this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
     this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
     
+    // Test that the initial displayed impact is LOW
+    TextView impactRatingLbl = (TextView) activity.findViewById(R.id.impact_scale_desc);
+    impactRatingLbl.getText().toString().equals(ImpactScale.LOW.name());
+    
     final SeekBar impactRating = (SeekBar) activity.findViewById(R.id.impact_scale);
     
     activity.runOnUiThread(new Runnable() {
@@ -51,6 +61,8 @@ public class EditIncidentActivityTest extends
         impactRating.setProgress(ImpactScale.MEDIUM.getCode());
       }
     });
+    
+    impactRatingLbl.getText().toString().equals(ImpactScale.MEDIUM.name());
     
     EditText notes = (EditText) activity.findViewById(R.id.notes);
     Button createButton = (Button) activity.findViewById(R.id.submit_incident);
@@ -68,6 +80,9 @@ public class EditIncidentActivityTest extends
     Incident incident = repository.findAll().get(0);
     
     assertEquals("fire", incident.getNote());
+    assertEquals("Fire", incident.getCategory());
+    assertEquals("SubC1", incident.getSubCategory());
+    assertEquals(ImpactScale.MEDIUM, incident.getImpact());
   }
 
   private void sleep(long time) {

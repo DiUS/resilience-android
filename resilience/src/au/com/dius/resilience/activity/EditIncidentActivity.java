@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
+import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
@@ -21,39 +22,51 @@ import au.com.dius.resilience.persistence.RepositoryFactory;
 
 public class EditIncidentActivity extends Activity implements OnSeekBarChangeListener {
 
+  private Spinner categorySpinner;
+  private Spinner subCategorySpinner;
+  private SeekBar impactScale;
+  private EditText notes;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_edit_incident);
 
-    Spinner categorySpinner = (Spinner) findViewById(R.id.category_spinner);
+    categorySpinner = (Spinner) findViewById(R.id.category_spinner);
+    subCategorySpinner = (Spinner) findViewById(R.id.sub_category_spinner);
+    initialiseSpinners();
+    
+    impactScale = (SeekBar) findViewById(R.id.impact_scale);
+    impactScale.setOnSeekBarChangeListener(this);
+    
+    notes = (EditText) findViewById(R.id.notes);
+  }
+
+  private void initialiseSpinners() {
     ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this,
         R.array.categories, android.R.layout.simple_spinner_item);
     categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     categorySpinner.setAdapter(categoryAdapter);
     
-    Spinner subCategorySpinner = (Spinner) findViewById(R.id.sub_category_spinner);
     ArrayAdapter<CharSequence> subCategoryadapter = ArrayAdapter.createFromResource(this,
         R.array.subcategories, android.R.layout.simple_spinner_item);
     subCategoryadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     subCategorySpinner.setAdapter(subCategoryadapter);
-    
-    SeekBar impactScale = (SeekBar) findViewById(R.id.impact_scale);
-    impactScale.setOnSeekBarChangeListener(this);
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.activity_edit_incident, menu);
+    updateImpactLabel(ImpactScale.LOW);
     return true;
   }
 
   public void onSubmitClick(View button) {
-    String incidentNote = ((EditText) findViewById(R.id.notes)).getText().toString();
+    String incidentNote = notes.getText().toString();
 
-    String category = ((Spinner) findViewById(R.id.category_spinner)).getSelectedItem().toString();
-    String subCategory = ((Spinner) findViewById(R.id.sub_category_spinner)).getSelectedItem().toString();
-    ImpactScale impact = ImpactScale.fromCode(((SeekBar) findViewById(R.id.impact_scale)).getProgress());
+    String category = categorySpinner.getSelectedItem().toString();
+    String subCategory = subCategorySpinner.getSelectedItem().toString();
+    ImpactScale impact = ImpactScale.fromCode(impactScale.getProgress());
     
     Repository repository = RepositoryFactory.create(this);
     Incident incident = IncidentFactory.createIncident(category, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
@@ -65,8 +78,12 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
   @Override
   public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
     ImpactScale scale = ImpactScale.fromCode(progress);
-    
-    Log.d(getClass().getName(), "scale = " + scale);
+    updateImpactLabel(scale);
+  }
+
+  private void updateImpactLabel(ImpactScale scale) {
+    TextView impactDescription = (TextView) findViewById(R.id.impact_scale_desc);
+    impactDescription.setText(scale.name());
   }
 
   @Override
