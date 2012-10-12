@@ -29,7 +29,7 @@ public class EditIncidentActivityTest extends
   public void setUp() {
     activity = getActivity();
     repository = RepositoryFactory.createIncidentRepository(getActivity());
-    
+    activity.getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
   }
   
   // TODO - This test is rather big..
