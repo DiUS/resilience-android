@@ -1,5 +1,5 @@
-resilience-android
-==================
+Resilience for Android
+======================
 
 Building:
 
