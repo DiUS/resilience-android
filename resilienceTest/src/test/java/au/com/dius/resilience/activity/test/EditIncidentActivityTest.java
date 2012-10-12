@@ -24,6 +24,7 @@ public class EditIncidentActivityTest extends
   public void setUp() {
     activity = getActivity();
     RepositoryFactory.setTestFlag(true);
+    getActivity().getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
   }
 
   public void testSaveNoteToDB() {

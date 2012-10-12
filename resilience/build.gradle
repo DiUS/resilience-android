@@ -23,10 +23,6 @@ sourceSets {
   }
 }
 
-repositories {
-  mavenCentral()
-}
-
 // Sets the package version
 version = "1.0.0"
 

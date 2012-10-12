@@ -1,11 +1,12 @@
-package au.com.dius.resilience.model.test;
+package au.com.dius.resilience.model;
 
-import junit.framework.TestCase;
-import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.model.IncidentFactory;
+import org.junit.Test;
 
-public class IncidentFactoryTest extends TestCase{
+import static junit.framework.Assert.assertEquals;
 
+public class  IncidentFactoryTest {
+
+  @Test
 	public void testCreateWithNameAndDateCreated() {
 		Long dateCreated = Long.valueOf(1000);
 		String name = "incident";

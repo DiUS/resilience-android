@@ -3,3 +3,9 @@ subprojects {
   apply plugin: 'idea'
   apply plugin: 'eclipse'
 }
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
