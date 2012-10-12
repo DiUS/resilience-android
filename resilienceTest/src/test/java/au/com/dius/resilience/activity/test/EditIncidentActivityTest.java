@@ -20,7 +20,7 @@ public class EditIncidentActivityTest extends
     ActivityInstrumentationTestCase2<EditIncidentActivity> {
 
   private EditIncidentActivity activity;
-  private Repository repository;
+  private Repository<Incident> repository;
 
   public EditIncidentActivityTest() {
     super("au.com.dius.resilience", EditIncidentActivity.class);
