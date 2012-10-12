@@ -4,9 +4,9 @@ import java.util.List;
 
 import au.com.dius.resilience.model.Incident;
 
-public interface Repository {
+public interface Repository<T> {
 
-  void save(Incident incident);
+  void save(T incident);
   Incident findById(long id);
-  List<Incident> findAll();
+  List<T> findAll();
 }

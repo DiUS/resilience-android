@@ -3,11 +3,15 @@ package au.com.dius.resilience.activity;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -40,6 +44,12 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
     impactScale.setOnSeekBarChangeListener(this);
     
     notes = (EditText) findViewById(R.id.notes);
+    
+    // FIXME - test this (-xxx-camera args not taking effect on my emulator)
+    PackageManager pm = getPackageManager();
+    boolean deviceHasCamera = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    Button cameraButton = (Button) findViewById(R.id.submit_photo);
+    cameraButton.setEnabled(deviceHasCamera);
   }
 
   private void initialiseSpinners() {
@@ -73,6 +83,10 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
     repository.save(incident);
+  }
+  
+  public void onCameraClick(View button) {
+    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
   }
 
   @Override

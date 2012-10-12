@@ -15,6 +15,7 @@
     <string name="select_category">Category</string>
     <string name="select_subcategory">Subcategory</string>
     <string name="impact">Impact Scale</string>
+    <string name="camera">Camera</string>
     <string name="photo">Photo</string>
     <string name="map">Map</string>
 

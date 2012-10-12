@@ -4,7 +4,7 @@ import java.util.List;
 
 import au.com.dius.resilience.model.Incident;
 
-public class ParseRepository implements Repository {
+public class ParseRepository implements Repository<Incident> {
 
   @Override
   public void save(Incident incident) {

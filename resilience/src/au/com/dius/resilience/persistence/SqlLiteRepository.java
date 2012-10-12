@@ -12,7 +12,7 @@ import android.util.Log;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 
-public class SqlLiteRepository extends SQLiteOpenHelper implements Repository {
+public class SqlLiteRepository extends SQLiteOpenHelper implements Repository<Incident> {
 
   private static final int DATABASE_VERSION = 1;
   
