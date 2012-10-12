@@ -2,7 +2,8 @@ resilience-android
 ==================
 
 Building:
-  gradle buildDependencies assemble
+
+    gradle buildDependencies assemble
 
 Running tests:
 
@@ -20,4 +21,4 @@ Integration with Eclipse:
 
   Then use File -> Import -> Existing Projects into Workspace and select the location of the *top level* build.gradle file.
 
-NOTE: Each of the above build commands should be invoked form the top level, i.e. the parent  build.gradle file.
+**NOTE**: Each of the above build commands should be invoked form the top level, i.e. the parent  build.gradle file.
