@@ -28,7 +28,7 @@ public class EditIncidentActivityTest extends
 
   public void setUp() {
     activity = getActivity();
-    repository = RepositoryFactory.create(getActivity());
+    repository = RepositoryFactory.createIncidentRepository(getActivity());
     
   }
   

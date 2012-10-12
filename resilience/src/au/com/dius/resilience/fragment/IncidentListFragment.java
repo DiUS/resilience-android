@@ -1,5 +1,8 @@
 package au.com.dius.resilience.fragment;
 
+import java.util.Collections;
+import java.util.List;
+
 import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,16 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.RuntimeProperties;
 import au.com.dius.resilience.adapter.ListViewAdapter;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.ParseRepository;
-import au.com.dius.resilience.persistence.Repository;
 import au.com.dius.resilience.persistence.RepositoryFactory;
-import au.com.dius.resilience.persistence.SqlLiteRepository;
-
-import java.util.Collections;
-import java.util.List;
 
 public class IncidentListFragment extends ListFragment {
 
@@ -81,7 +77,7 @@ public class IncidentListFragment extends ListFragment {
       protected List<Incident> doInBackground(DataListener<Incident>... dataListeners) {
         Log.d("async", "do in background");
         this.dataListeners = dataListeners;
-        return RepositoryFactory.create(getActivity()).findAll();
+        return RepositoryFactory.createIncidentRepository(getActivity()).findAll();
       }
 
       @Override
