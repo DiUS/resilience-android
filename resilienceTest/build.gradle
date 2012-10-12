@@ -1,17 +1,3 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
-    dependencies {
-
-        // 1.2.0 version of the plugin is not able to sign the package under osx JDK 1.6
-        // Recompiling fixes this
-        classpath 'org.gradle.api.plugins:gradle-android-plugin:1.2.1-SNAPSHOT'
-    }
-}
-
 sourceSets {
     main {
         java {
@@ -59,7 +45,22 @@ task unitTests(type: Test) {
     excludes = ['**/ResilienceRobolectricTestRunner.class']
 }
 
-apply plugin: 'android'
+// The Eclipse plugin seems to only add compile
+// (or at least, non-unitCompile) dependencies
+// to the Eclipse classpath.
+task appendDependencies(dependsOn: cleanEclipse) << {
+  project.dependencies {
+    compile project(":resilience")
+    compile 'com.pivotallabs:robolectric:1.1'
+    compile 'junit:junit:4.8.2'
+    compile "org.mockito:mockito-all:1.9.0"
+    compile "org.powermock:powermock-core:1.4.12"
+    compile "org.powermock:powermock-module-junit4:1.4.12"
+    compile "org.powermock:powermock-api-mockito:1.4.12"
+    compile files(androidJar)
+  }
+}
+tasks.eclipse.dependsOn(appendDependencies)
 
 // Sets the package version
 version = "1.0.0"
