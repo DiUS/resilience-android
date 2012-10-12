@@ -1,10 +1,14 @@
 package au.com.dius.resilience.model;
 
-import org.junit.Test;
-
 import static junit.framework.Assert.assertEquals;
 
-public class  IncidentFactoryTest {
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.xtremelabs.robolectric.RobolectricTestRunner;
+
+@RunWith(RobolectricTestRunner.class)
+public class IncidentFactoryTest {
 
   @Test
 	public void testCreateWithNameAndDateCreated() {

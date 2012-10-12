@@ -33,14 +33,15 @@ configurations {
     resilienceAndroid
 }
 
-androidJar = new File(System.getenv('ANDROID_HOME'), '/platforms/android-14/android.jar')
+def androidJar = new File(System.getenv('ANDROID_HOME'), '/platforms/android-14/android.jar')
 dependencies {
     compile project(":resilience")
 
     robo 'com.pivotallabs:robolectric:1.1'
     junit 'junit:junit:4.8.2'
-    mocking "org.mockito:mockito-all:1.9.0" , "org.powermock:powermock-core:1.4.12", "org.powermock:powermock-module-junit4:1.4.12", "org.powermock:powermock-api-mockito:1.4.12"
-    resilienceAndroid  files(androidJar)
+    mocking "org.mockito:mockito-all:1.9.0", "org.powermock:powermock-core:1.4.12", "org.powermock:powermock-module-junit4:1.4.12", "org.powermock:powermock-api-mockito:1.4.12"
+      
+    resilienceAndroid files(androidJar)
 
     unitCompile project(":resilience")
     unitCompile 'com.pivotallabs:robolectric:1.1'
@@ -52,13 +53,10 @@ dependencies {
     unitCompile files(androidJar)
 }
 
-task unitTest(type: Test) {
+task unitTests(type: Test) {
     testClassesDir = sourceSets.unit.output.classesDir
-    classpath = configurations.robo + configurations.junit + configurations.mocking + configurations.resilienceAndroid + sourceSets.unit.runtimeClasspath
-
-    classpath.each {
-        println "Classpath member " + it
-    }
+    classpath = configurations.robo + configurations.junit + configurations.mocking + configurations.resilienceAndroid + sourceSets.unit.runtimeClasspath + sourceSets.main.runtimeClasspath
+    excludes = ['**/ResilienceRobolectricTestRunner.class']
 }
 
 apply plugin: 'android'
