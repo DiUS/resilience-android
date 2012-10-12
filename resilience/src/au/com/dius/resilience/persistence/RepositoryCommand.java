@@ -7,7 +7,8 @@ import au.com.dius.resilience.model.Incident;
 /**
  * @author georgepapas
  */
-public interface RepositoryAction {
+public interface RepositoryCommand<T> {
 
-    List<Incident> perform(Repository<Incident> repository);
+  RepositoryCommandResult<T> perform();
+
 }

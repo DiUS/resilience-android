@@ -1,7 +1,7 @@
 package au.com.dius.resilience.persistence;
 
-import junit.framework.Assert;
-
+import android.content.Context;
+import au.com.dius.resilience.RuntimeProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +10,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import android.content.Context;
-import au.com.dius.resilience.RuntimeProperties;
+import static junit.framework.Assert.assertTrue;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({RuntimeProperties.class, RepositoryFactory.class})
@@ -28,13 +27,13 @@ public class RepositoryFactoryTest {
   
   @Test
   public void testShouldReturnParseRepositoryWhenInLiveDbMode() {
-    PowerMockito.when(RuntimeProperties.useLiveDb()).thenReturn(true);
-    Assert.assertTrue(RepositoryFactory.createIncidentRepository(context) instanceof ParseRepository);
+    Mockito.when(RuntimeProperties.useLiveDb()).thenReturn(true);
+    assertTrue(RepositoryFactory.createIncidentRepository(context) instanceof ParseRepository);
   }
 
   @Test
   public void testShouldReturnSqlLiteInstanceWhenNotInLiveMode() {
     PowerMockito.when(RuntimeProperties.useLiveDb()).thenReturn(false);
-    Assert.assertTrue(RepositoryFactory.createIncidentRepository(context) instanceof SqlLiteRepository);
+    assertTrue(RepositoryFactory.createIncidentRepository(context) instanceof SqlLiteRepository);
   }
 }
