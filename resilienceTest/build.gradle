@@ -42,7 +42,11 @@ dependencies {
 task unitTests(type: Test) {
     testClassesDir = sourceSets.unit.output.classesDir
     classpath = configurations.robo + configurations.junit + configurations.mocking + configurations.resilienceAndroid + sourceSets.unit.runtimeClasspath + sourceSets.main.runtimeClasspath
-    excludes = ['**/ResilienceRobolectricTestRunner.class']
+    excludes = ['**/utils/**/**.class']
+
+    classpath.each {
+        println "classpath entry " + it
+    }
 }
 
 // The Eclipse plugin seems to only add compile

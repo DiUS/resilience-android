@@ -6,6 +6,7 @@ import au.com.dius.resilience.model.Incident;
 
 /**
  * @author georgepapas
+ * @deprecated
  */
 public interface RepositoryMethod {
 
