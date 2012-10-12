@@ -6,8 +6,7 @@ Prerequisite software
 
 * Gradle version 1.1 to 1.2 *
 * Groovy version 2.0.1 *
-* Eclipse + ADT plugin
-* IntelliJ
+* Eclipse + ADT plugin *or* IntelliJ *or* whatever works for you
 
 \* Later versions may work.
 
