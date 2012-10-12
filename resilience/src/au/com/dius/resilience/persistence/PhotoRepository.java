@@ -29,7 +29,4 @@ public class PhotoRepository implements Repository<Photo> {
   public List<Photo> findAll() {
     return null;
   }
-  
-
-
 }

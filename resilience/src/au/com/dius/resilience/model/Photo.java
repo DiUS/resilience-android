@@ -10,15 +10,19 @@ import android.util.Log;
 
 public class Photo {
 
+  private static final String FILENAME_DATE_FORMAT = "yyyyMMdd_HHmmss";
+  private static final String FILE_PREFIX = "IMG_";
+  private static final String EXTENSION = ".jpg";
+  private static final String STORAGE_DIRECTORY = "au.com.dius.resilience";
+  
   public static Uri getOutputMediaFile() {
     if (! Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ) {
       return null;
     }
 
     File mediaStorageDir = new File(
-        Environment
-            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-        "au.com.dius.resilience");
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+        STORAGE_DIRECTORY);
 
     if (!mediaStorageDir.exists()) {
       if (!mediaStorageDir.mkdirs()) {
@@ -27,11 +31,11 @@ public class Photo {
       }
     }
 
-    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+    String timeStamp = new SimpleDateFormat(FILENAME_DATE_FORMAT)
         .format(new Date());
     File mediaFile;
-    mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"
-        + timeStamp + ".jpg");
+    mediaFile = new File(mediaStorageDir.getPath() + File.separator + FILE_PREFIX
+        + timeStamp + EXTENSION);
 
     return Uri.fromFile(mediaFile);
   }
