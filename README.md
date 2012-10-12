@@ -1,7 +1,18 @@
 Resilience for Android
 ======================
 
-Building:
+Prerequisite software
+---------------------
+
+* Gradle version 1.1 to 1.2 *
+* Groovy version 2.0.1 *
+* Eclipse + ADT plugin
+* IntelliJ
+
+\* Later versions may work.
+
+Building
+--------
 
     gradle buildDependencies assemble
 
