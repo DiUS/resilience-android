@@ -23,7 +23,11 @@ public class EditIncidentActivityTest extends
 
   public void setUp() {
     activity = getActivity();
+<<<<<<< HEAD
     RepositoryFactory.setTestFlag(true);
+=======
+    repository = RepositoryFactory.create(getActivity());
+>>>>>>> 2ed11af... merge fix
     getActivity().getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
   }
 
