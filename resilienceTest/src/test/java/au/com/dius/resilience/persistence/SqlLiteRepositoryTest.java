@@ -1,6 +1,7 @@
 package au.com.dius.resilience.persistence;
 
 import android.test.AndroidTestCase;
+import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.IncidentFactory;
 
@@ -11,16 +12,10 @@ public class SqlLiteRepositoryTest extends AndroidTestCase {
   public void testSqlLiteSaveAndLoad() {
     SqlLiteRepository sqlLiteRepository = new SqlLiteRepository(getContext());
 
-<<<<<<< HEAD
-    sqlLiteRepository.save(IncidentFactory.createIncident("Test1", Long.valueOf(999), "Hello World"));
-    sqlLiteRepository.save(IncidentFactory.createIncident("Test2", Long.valueOf(888), "Goodbye World"));
-    sqlLiteRepository.save(IncidentFactory.createIncident("Test3", Long.valueOf(777), "Sup, World?"));
-=======
     sqlLiteRepository.save(IncidentFactory.createIncident("Test1", Long.valueOf(999), "Hello World", "Cat1", "Subcat1", ImpactScale.LOW));
     sqlLiteRepository.save(IncidentFactory.createIncident("Test2", Long.valueOf(888), "Goodbye World", "Cat2", "Subcat2", ImpactScale.MEDIUM));
     sqlLiteRepository.save(IncidentFactory.createIncident("Test3", Long.valueOf(777), "Sup, World?", "Cat3", "Subcat3", ImpactScale.HIGH));
->>>>>>> 2ed11af... merge fix
-
+    
     List<Incident> findAll = sqlLiteRepository.findAll();
 
     assertEquals(3, findAll.size());

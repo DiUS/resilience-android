@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 
 public class SqlLiteRepository extends SQLiteOpenHelper implements Repository {
@@ -20,12 +21,18 @@ public class SqlLiteRepository extends SQLiteOpenHelper implements Repository {
   
   public static final String COL_ID = "_id";
   public static final String COL_NAME = "name";
+  public static final String COL_CATEGORY = "category";
+  public static final String COL_SUBCATEGORY = "subcategory";
+  public static final String COL_IMPACT = "impact";
   public static final String COL_CREATION_DATE = "dateCreated";
   public static final String COL_NOTE = "note";
   
   public static final String CREATE_DB_SQL = "CREATE TABLE " + TABLE_INCIDENT
                                             + " (" + COL_ID + " integer primary key autoincrement, "
-                                            + COL_NAME + " text not null, "
+                                            + COL_NAME + " text, "
+                                            + COL_CATEGORY + " text not null, "
+                                            + COL_SUBCATEGORY + " text not null, "
+                                            + COL_IMPACT + " text not null, "
                                             + COL_CREATION_DATE + " date not null, "
                                             + COL_NOTE + " text);";
   
@@ -52,6 +59,9 @@ public class SqlLiteRepository extends SQLiteOpenHelper implements Repository {
     ContentValues contentValues = new ContentValues();
     contentValues.put(COL_ID, incident.getId());
     contentValues.put(COL_NAME, incident.getName());
+    contentValues.put(COL_CATEGORY, incident.getCategory());
+    contentValues.put(COL_SUBCATEGORY, incident.getSubCategory());
+    contentValues.put(COL_IMPACT, incident.getImpact().name());
     contentValues.put(COL_CREATION_DATE, incident.getDateCreated());
     contentValues.put(COL_NOTE, incident.getNote());
     
@@ -100,9 +110,12 @@ public class SqlLiteRepository extends SQLiteOpenHelper implements Repository {
   private Incident cursorToIncident(Cursor cursor) {
     Long id = cursor.getLong(0);
     String name = cursor.getString(1);
-    Long dateCreated = cursor.getLong(2);
-    String note = cursor.getString(3);
+    String category = cursor.getString(2);
+    String subCategory = cursor.getString(3);
+    ImpactScale impact = ImpactScale.valueOf(cursor.getString(4));
+    Long dateCreated = cursor.getLong(5);
+    String note = cursor.getString(6);
     
-    return new Incident(id, name, dateCreated, note);
+    return new Incident(id, name, dateCreated, note, category, subCategory, impact);
   }
 }

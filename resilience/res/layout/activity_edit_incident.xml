@@ -1,93 +1,98 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="top" >
+    android:orientation="vertical" >
 
-    <ImageButton
-        android:id="@+id/category_icon"
+    <TextView
+        android:id="@+id/category_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:contentDescription="@string/category"
-        android:src="@drawable/ic_launcher" />
+        android:layout_weight="0"
+        android:text="@string/select_category"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText
-        android:id="@+id/incident_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/category_icon"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/category_icon"
-        android:ems="10"
-        android:hint="@string/name" >
-
-        <requestFocus />
-    </EditText>
-
-    <TableLayout
-        android:id="@+id/detailed_info_table"
+    <Spinner
+        android:id="@+id/category_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/category_icon" >
+        android:layout_weight="0"
+        android:prompt="@string/select_category" />
 
-        <TableRow
-            android:id="@+id/di_tr1"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent" 
-            android:padding="5dip"
-            android:layout_weight="0.25">
+    <TextView
+        android:id="@+id/sub_category_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="@string/select_subcategory"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <ImageView
-                android:id="@+id/incident_photo"
-                android:layout_height="fill_parent"
-                android:contentDescription="@string/photo"
-                android:src="@drawable/ic_launcher" 
-                android:layout_weight="1"/>
+    <Spinner
+        android:id="@+id/sub_category_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:prompt="@string/select_subcategory" />
 
-            <ImageView
-                android:id="@+id/incident_map"
-                android:layout_height="fill_parent"
-                android:contentDescription="@string/map"
-                android:src="@drawable/ic_launcher" 
-                android:layout_weight="1"/>
-        </TableRow>
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:orientation="horizontal">
+    
+        <TextView
+        android:id="@+id/impact_scale_lbl"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="@string/impact"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+        <TextView
+        android:id="@+id/impact_scale_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="right"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TableRow
-            android:id="@+id/di_tr2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:layout_weight="0.5">
+    </LinearLayout>
 
-            <EditText
-                android:id="@+id/incident_note"
-                android:layout_height="fill_parent"
-                android:ems="10"
-                android:gravity="top"
-                android:hint="@string/extra_notes"
-                android:inputType="textMultiLine"
-                android:layout_span="2" 
-                android:layout_weight="1"/>
-        </TableRow>
+    <SeekBar
+        android:id="@+id/impact_scale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:max="2" />
+    
+    <TextView
+        android:id="@+id/notes_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="@string/extra_notes"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TableRow
-            android:id="@+id/di_tr3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+    <EditText
+        android:id="@+id/notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:gravity="top"
+        android:inputType="textMultiLine" >
+    </EditText>
 
-            <Button
-                android:id="@+id/submit_incident"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onSubmitClick"
-                android:text="@string/raise_incident"
-                android:layout_weight="1" />
-        </TableRow>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-    </TableLayout>
+        <Button
+            android:id="@+id/submit_incident"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onSubmitClick"
+            android:text="@string/raise_incident" />
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
