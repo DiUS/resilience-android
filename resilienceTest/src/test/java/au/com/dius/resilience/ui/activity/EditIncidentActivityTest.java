@@ -1,15 +1,10 @@
-package au.com.dius.resilience.activity.test;
+package au.com.dius.resilience.ui.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.view.KeyEvent;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.activity.EditIncidentActivity;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.Repository;

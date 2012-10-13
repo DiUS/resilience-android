@@ -6,7 +6,7 @@
     >
 
     <fragment
-        android:name="au.com.dius.resilience.fragment.IncidentListFragment"
+        android:name="au.com.dius.resilience.ui.fragment.IncidentListFragment"
         android:id="@+id/incident_list_fragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>

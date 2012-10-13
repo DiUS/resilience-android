@@ -1,4 +1,4 @@
-package au.com.dius.resilience.adapter;
+package au.com.dius.resilience.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

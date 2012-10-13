@@ -1,4 +1,4 @@
-package au.com.dius.resilience.activity;
+package au.com.dius.resilience.ui.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
