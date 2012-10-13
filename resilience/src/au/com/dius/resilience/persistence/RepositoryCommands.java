@@ -1,5 +1,7 @@
 package au.com.dius.resilience.persistence;
 
+import com.google.inject.Singleton;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,9 +9,10 @@ import java.util.List;
 /**
  * @author georgepapas
  */
+@Singleton
 public class RepositoryCommands {
 
-  public static final <T> RepositoryCommand<T> findAll(final Repository<T> repository) {
+  public final <T> RepositoryCommand<T> findAll(final Repository<T> repository) {
     return new RepositoryCommand<T>() {
       @Override
       public RepositoryCommandResult<T> perform() {
@@ -18,7 +21,7 @@ public class RepositoryCommands {
     };
   }
 
-  public static final <T> RepositoryCommand<T> save(final Repository<T> repository, final T item) {
+  public final <T> RepositoryCommand<T> save(final Repository<T> repository, final T item) {
     return new RepositoryCommand<T>() {
       @Override
       public RepositoryCommandResult<T> perform() {
@@ -27,7 +30,7 @@ public class RepositoryCommands {
     };
   }
 
-  public static final <T> RepositoryCommand<T> findById(final Repository<T> repository, final long identifier) {
+  public final <T> RepositoryCommand<T> findById(final Repository<T> repository, final long identifier) {
     return new RepositoryCommand<T>() {
       @Override
       public RepositoryCommandResult<T> perform() {

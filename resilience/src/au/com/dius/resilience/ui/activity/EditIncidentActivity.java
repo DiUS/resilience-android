@@ -1,6 +1,5 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,32 +13,49 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.IncidentFactory;
-import au.com.dius.resilience.persistence.Repository;
+import au.com.dius.resilience.persistence.RepositoryCommandResult;
+import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.RepositoryCommands;
 import au.com.dius.resilience.persistence.RepositoryFactory;
+import au.com.dius.resilience.persistence.async.BackgroundDataOperation;
+import com.google.inject.Inject;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 
 import java.util.Date;
 
-public class EditIncidentActivity extends Activity implements OnSeekBarChangeListener {
+public class EditIncidentActivity extends RoboActivity implements OnSeekBarChangeListener, RepositoryCommandResultListener<Incident> {
 
+  @InjectView(R.id.category_spinner)
   private Spinner categorySpinner;
+
+  @InjectView(R.id.sub_category_spinner)
   private Spinner subCategorySpinner;
+
+  @InjectView(R.id.impact_scale)
   private SeekBar impactScale;
+
+  @InjectView(R.id.notes)
   private EditText notes;
+
+  @Inject
+  private RepositoryCommands repositoryCommands;
+
+  @Inject
+  private RepositoryFactory repositoryFactory;
+
+  @Inject
+  private IncidentFactory incidentFactory;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_edit_incident);
-
-    categorySpinner = (Spinner) findViewById(R.id.category_spinner);
-    subCategorySpinner = (Spinner) findViewById(R.id.sub_category_spinner);
     initialiseSpinners();
     
-    impactScale = (SeekBar) findViewById(R.id.impact_scale);
     impactScale.setOnSeekBarChangeListener(this);
     
-    notes = (EditText) findViewById(R.id.notes);
-    
+
     // FIXME - test this (-xxx-camera args not taking effect on my emulator)
     PackageManager pm = getPackageManager();
     boolean deviceHasCamera = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
@@ -73,12 +89,14 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
     String subCategory = subCategorySpinner.getSelectedItem().toString();
     ImpactScale impact = ImpactScale.fromCode(impactScale.getProgress());
     
-    Repository<Incident> repository = RepositoryFactory.createIncidentRepository(this);
-    Incident incident = IncidentFactory.createIncident(category, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
+    Incident incident = incidentFactory.createIncident(
+            category, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
+
+    new BackgroundDataOperation<Incident>().execute(
+            this,
+            repositoryCommands.save(repositoryFactory.createIncidentRepository(this), incident));
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
-
-    repository.save(incident);
   }
   
   public void onCameraClick(View button) {
@@ -104,5 +122,10 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
   @Override
   public void onStopTrackingTouch(SeekBar seekBar) {
     
+  }
+
+  @Override
+  public void commandComplete(RepositoryCommandResult<Incident> result) {
+    Toast.makeText(this, "Incident was " + (result.isSuccess() ? " saved" : " not saved"), Toast.LENGTH_SHORT).show();
   }
 }

@@ -23,7 +23,7 @@ public class EditIncidentActivityTest extends
 
   public void setUp() {
     activity = getActivity();
-    repository = RepositoryFactory.createIncidentRepository(getActivity());
+    repository = new RepositoryFactory().createIncidentRepository(getActivity());
     activity.getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
   }
   

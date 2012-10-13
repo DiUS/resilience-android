@@ -1,6 +1,5 @@
 package au.com.dius.resilience.ui.fragment;
 
-import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -10,12 +9,20 @@ import au.com.dius.resilience.persistence.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
 import au.com.dius.resilience.persistence.RepositoryCommands;
 import au.com.dius.resilience.persistence.RepositoryFactory;
-import au.com.dius.resilience.persistence.async.BackgroundDataLoader;
+import au.com.dius.resilience.persistence.async.BackgroundDataOperation;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
+import com.google.inject.Inject;
+import roboguice.fragment.RoboListFragment;
 
 import java.util.Collections;
 
-public class IncidentListFragment extends ListFragment implements RepositoryCommandResultListener<Incident>{
+public class IncidentListFragment extends RoboListFragment implements RepositoryCommandResultListener<Incident> {
+
+  @Inject
+  private RepositoryFactory repositoryFactory;
+
+  @Inject
+  private RepositoryCommands repositoryCommands;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -41,24 +48,14 @@ public class IncidentListFragment extends ListFragment implements RepositoryComm
   }
 
   private void loadIncidents() {
-    new BackgroundDataLoader<Incident>().execute(
+    new BackgroundDataOperation<Incident>().execute(
             this,
-            RepositoryCommands.findAll(RepositoryFactory.createIncidentRepository(getActivity())));
+            repositoryCommands.findAll(repositoryFactory.createIncidentRepository(getActivity())));
   }
 
   @Override
   public void commandComplete(final RepositoryCommandResult<Incident> result) {
-    final ListFragment fragment = this;
-
-    this.getActivity().runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        fragment.setListAdapter(
-                new ListViewAdapter(
-                        getActivity(),
-                        R.layout.fragment_incident_list_view_item,
-                        result.getResults()));
-      }
-    });
+    this.setListAdapter(
+            new ListViewAdapter(getActivity(), R.layout.fragment_incident_list_view_item, result.getResults()));
   }
 }

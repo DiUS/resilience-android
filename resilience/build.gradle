@@ -14,6 +14,12 @@ task buildDependencies(type:GradleBuild) {
     tasks = ['install']
 }
 
+dependencies {
+    compile "joda-time:joda-time:2.1"
+    compile "org.roboguice:roboguice:2.0"
+    compile "com.google.android:support-v4:r6"  // required by RoboGuice
+}
+
 tasks.eclipse.dependsOn cleanEclipse
 
 // Signing configuration, valid for all builds (1)

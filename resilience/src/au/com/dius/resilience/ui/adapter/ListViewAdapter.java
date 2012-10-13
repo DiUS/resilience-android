@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 
 import java.util.List;
 
@@ -29,10 +31,22 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
 
     View rowView = inflater.inflate(R.layout.fragment_incident_list_view_item, null);
 
+    Incident incident = incidents.get(position);
+
     TextView nameField = (TextView) rowView.findViewById(R.id.list_view_item_name);
-    nameField.setText(incidents.get(position).getName());
+    nameField.setText(incident.getName());
+
+    TextView reportedTime = (TextView) rowView.findViewById(R.id.list_view_item_time_reported);
+    reportedTime.setText(getFriendlyDate(new DateTime(incident.getDateCreated())));
 
     return rowView;
+  }
+
+  private String getFriendlyDate(DateTime dateCreated) {
+    DateTime now = new DateTime();
+    Period period = new Period(now, dateCreated);
+
+    return "some time ago...";
   }
 
 }

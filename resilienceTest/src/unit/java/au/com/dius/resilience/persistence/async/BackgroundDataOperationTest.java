@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
  * @author georgepapas
  */
 @RunWith(RobolectricTestRunner.class)
-public class BackgroundDataLoaderTest {
+public class BackgroundDataOperationTest {
 
   @Test
   public void shouldCallBackToListenerWhenCommandCompletes() {
@@ -25,8 +25,8 @@ public class BackgroundDataLoaderTest {
     final MutableBoolean yahIgotCalled = new MutableBoolean(false);
     RepositoryCommandResultListener<String> resultListener = DataLoaderHelper.createCommandListener(yahIgotCalled);
 
-    BackgroundDataLoader<String> loader = new BackgroundDataLoader<String>();
-    loader.execute(resultListener, DataLoaderHelper.createRepositoryCommand());
+    BackgroundDataOperation<String> operation = new BackgroundDataOperation<String>();
+    operation.execute(resultListener, DataLoaderHelper.createRepositoryCommand());
 
     Robolectric.runBackgroundTasks();
     assertTrue(yahIgotCalled.isTrue());
@@ -37,10 +37,10 @@ public class BackgroundDataLoaderTest {
     final MutableBoolean yayIgotCalled = new MutableBoolean(false);
     RepositoryCommandResultListener<String> resultListener = DataLoaderHelper.createCommandListener(yayIgotCalled);
 
-    BackgroundDataLoader<String> loader = new BackgroundDataLoader<String>();
+    BackgroundDataOperation<String> operation = new BackgroundDataOperation<String>();
 
     RepositoryCommand<String> mockCommand = mock(RepositoryCommand.class);
-    loader.execute(resultListener, mockCommand);
+    operation.execute(resultListener, mockCommand);
 
     Robolectric.runBackgroundTasks();
     verify(mockCommand).perform();
@@ -48,14 +48,14 @@ public class BackgroundDataLoaderTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void shouldThrowExceptionWhenListenerIsNull() {
-    BackgroundDataLoader<String> loader = new BackgroundDataLoader<String>();
-    loader.execute(null, null);
+    BackgroundDataOperation<String> operation = new BackgroundDataOperation<String>();
+    operation.execute(null, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void shouldThrowExceptionWhenCommandIsNull() {
-    BackgroundDataLoader<String> loader = new BackgroundDataLoader<String>();
-    loader.execute(DataLoaderHelper.createCommandListener(null), null);
+    BackgroundDataOperation<String> operation = new BackgroundDataOperation<String>();
+    operation.execute(DataLoaderHelper.createCommandListener(null), null);
   }
 
 }

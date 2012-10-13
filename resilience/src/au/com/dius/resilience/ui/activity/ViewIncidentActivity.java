@@ -1,11 +1,11 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import au.com.dius.resilience.R;
+import roboguice.activity.RoboActivity;
 
-public class ViewIncidentActivity extends Activity {
+public class ViewIncidentActivity extends RoboActivity {
   
     @Override
     public void onCreate(Bundle savedInstanceState) {
