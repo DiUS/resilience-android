@@ -13,7 +13,7 @@ public class Photo {
   private static final String FILENAME_DATE_FORMAT = "yyyyMMdd_HHmmss";
   private static final String FILE_PREFIX = "IMG_";
   private static final String EXTENSION = ".jpg";
-  private static final String STORAGE_DIRECTORY = "au.com.dius.resilience";
+  private static final String STORAGE_DIRECTORY = "Incidents";
   
   public static Uri getOutputMediaFile() {
     if (! Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ) {

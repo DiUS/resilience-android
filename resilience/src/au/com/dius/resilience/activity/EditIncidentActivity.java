@@ -5,6 +5,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -21,6 +22,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.IncidentFactory;
+import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.Repository;
 import au.com.dius.resilience.persistence.RepositoryFactory;
 
@@ -30,6 +32,8 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
   private Spinner subCategorySpinner;
   private SeekBar impactScale;
   private EditText notes;
+  
+  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,15 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
   
   public void onCameraClick(View button) {
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    
+    // TODO - put in AsyncTask since this carries out file
+    // operations.
+    Uri filesystemDestination = Photo.getOutputMediaFile();
+    
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, filesystemDestination);
+    
+    // TOOD - wtf is CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
+    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
   }
 
   @Override
