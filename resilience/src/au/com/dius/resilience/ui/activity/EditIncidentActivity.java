@@ -1,25 +1,28 @@
 package au.com.dius.resilience.ui.activity;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
+import android.widget.TextView;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.facade.CameraFacade;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.IncidentFactory;
-import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.Repository;
 import au.com.dius.resilience.persistence.RepositoryFactory;
-
-import java.util.Date;
 
 public class EditIncidentActivity extends Activity implements OnSeekBarChangeListener {
 
@@ -28,8 +31,10 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
   private SeekBar impactScale;
   private EditText notes;
   
-  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-
+  // TODO - This object is shared between calls to another activity.
+  // It may need to be bundled/deserialised during onPause/onResume?
+  private CameraFacade cameraFacade;
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -49,6 +54,7 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
     boolean deviceHasCamera = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     Button cameraButton = (Button) findViewById(R.id.submit_photo);
     cameraButton.setEnabled(deviceHasCamera);
+    cameraFacade = new CameraFacade(this);
   }
 
   private void initialiseSpinners() {
@@ -80,21 +86,19 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
     Repository<Incident> repository = RepositoryFactory.createIncidentRepository(this);
     Incident incident = IncidentFactory.createIncident(category, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
 
+    incident.addPhotos(cameraFacade.getPhotos());
+    
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
     repository.save(incident);
   }
-  
+
   public void onCameraClick(View button) {
-    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    
-    // TODO - put in AsyncTask since this carries out file
-    // operations.
-    Uri filesystemDestination = Photo.getOutputMediaFile();
-    
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, filesystemDestination);
-    
-    // TOOD - wtf is CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
-    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    cameraFacade.captureImage();
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    cameraFacade.processPhoto(requestCode, resultCode);
   }
 
   @Override

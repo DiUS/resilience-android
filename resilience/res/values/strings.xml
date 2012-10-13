@@ -8,7 +8,7 @@
     <string name="tracked_incidents">Tracked incidents</string>
     <string name="raise_incident">Create</string>
     <string name="menu_settings">Settings</string>
-    
+
     <!-- View/create incident -->
     <string name="extra_notes">Extra notes</string>
     <string name="name">Name</string>

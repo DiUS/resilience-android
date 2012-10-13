@@ -15,7 +15,7 @@ public class RepositoryFactory {
     return new ParseRepository();
   }
   
-  public static Repository<Photo> createPhotoRepository(Context context) {
-    return new PhotoRepository(context);
+  public static Repository<Photo> createPhotoRepository() {
+    return new PhotoRepository();
   }
 }

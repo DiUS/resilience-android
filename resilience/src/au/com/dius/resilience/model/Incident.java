@@ -1,5 +1,8 @@
 package au.com.dius.resilience.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Incident {
 
   private Long id;
@@ -9,6 +12,8 @@ public class Incident {
   private String category;
   private String subCategory;
   private ImpactScale scale;
+  
+  private List<Photo> photos = new ArrayList<Photo>();
 
   public Incident(Long id, String name, Long dateCreated, String note,
       String category, String subCategory, ImpactScale scale) {
@@ -60,6 +65,10 @@ public class Incident {
   public String getSubCategory() {
     return subCategory;
   }
+  
+  public List<Photo> getPhotos() {
+    return photos;
+  }
 
   public void setCategory(String category) {
     this.category = category;
@@ -71,5 +80,9 @@ public class Incident {
 
   public void setScale(ImpactScale scale) {
     this.scale = scale;
+  }
+  
+  public void addPhotos(List<Photo> photos) {
+    photos.addAll(photos);
   }
 }

@@ -2,15 +2,11 @@ package au.com.dius.resilience.persistence;
 
 import java.util.List;
 
-import android.content.Context;
 import au.com.dius.resilience.model.Photo;
 
 public class PhotoRepository implements Repository<Photo> {
 
-  private Context context;
-
-  public PhotoRepository(Context context) {
-    this.context = context;
+  public PhotoRepository() {
   }
 
   @Override
