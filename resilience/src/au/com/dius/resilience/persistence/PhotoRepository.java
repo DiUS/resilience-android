@@ -1,10 +1,10 @@
 package au.com.dius.resilience.persistence;
 
-import java.util.List;
-
 import android.content.Context;
 import android.net.Uri;
 import au.com.dius.resilience.model.Photo;
+
+import java.util.List;
 
 public class PhotoRepository implements Repository<Photo> {
 
@@ -15,9 +15,10 @@ public class PhotoRepository implements Repository<Photo> {
   }
 
   @Override
-  public void save(Photo incident) {
+  public boolean save(Photo incident) {
 
     Uri filesystemDestination = Photo.getOutputMediaFile();
+    return true; //TODO make this return the correct value...
   }
 
   @Override

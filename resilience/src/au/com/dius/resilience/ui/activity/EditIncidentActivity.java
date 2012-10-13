@@ -77,6 +77,7 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
     Incident incident = IncidentFactory.createIncident(category, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
+
     repository.save(incident);
   }
   

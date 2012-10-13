@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Repository<T> {
 
-  void save(T object);
+  boolean save(T object);
   T findById(long id);
   List<T> findAll();
 }
