@@ -96,7 +96,7 @@ public class SqlLiteRepository extends SQLiteOpenHelper implements Repository<In
     // FIXME - passing null as the second parameter returns all columns.
     // If we only want specific data later this could be optimised.
     Cursor cursor = getReadableDatabase().query(TABLE_INCIDENT,
-        null, null, null, null, null, null);
+        null, null, null, null, null, COL_CREATION_DATE + " DESC");
     
     cursor.moveToFirst();
     while (!cursor.isAfterLast()) {

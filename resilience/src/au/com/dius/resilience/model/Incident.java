@@ -1,6 +1,8 @@
 package au.com.dius.resilience.model;
 
-public class Incident {
+import java.io.Serializable;
+
+public class Incident implements Serializable {
 
   private Long id;
   private String name;

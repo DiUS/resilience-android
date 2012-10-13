@@ -1,5 +1,6 @@
 package au.com.dius.resilience.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -10,6 +11,7 @@ import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
 import au.com.dius.resilience.persistence.RepositoryCommands;
 import au.com.dius.resilience.persistence.RepositoryFactory;
 import au.com.dius.resilience.persistence.async.BackgroundDataOperation;
+import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import com.google.inject.Inject;
 import roboguice.fragment.RoboListFragment;
@@ -35,11 +37,10 @@ public class IncidentListFragment extends RoboListFragment implements Repository
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
-    StringBuffer logMsg = new StringBuffer("List item selected ")
-            .append(" id ")
-            .append(id)
-            .append(" position ")
-            .append(position);
+    Incident incident = (Incident) getListAdapter().getItem(position);
+    Intent viewIncident = new Intent(getActivity(), ViewIncidentActivity.class);
+    viewIncident.putExtra("incident", incident);
+    startActivityForResult(viewIncident, 0);
   }
 
   @Override
