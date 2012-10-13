@@ -1,13 +1,13 @@
 package au.com.dius.resilience.persistence;
 
-import java.util.List;
-
 import au.com.dius.resilience.model.Incident;
+
+import java.util.List;
 
 public class ParseRepository implements Repository<Incident> {
 
   @Override
-  public void save(Incident incident) {
+  public boolean save(Incident incident) {
     throw new RuntimeException("Not implemented.");
   }
 

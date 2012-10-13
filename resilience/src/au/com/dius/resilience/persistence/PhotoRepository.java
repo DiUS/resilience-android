@@ -10,8 +10,8 @@ public class PhotoRepository implements Repository<Photo> {
   }
 
   @Override
-  public void save(Photo incident) {
-
+  public boolean save(Photo photo) {
+    return true; //TODO make this return the correct value...
   }
 
   @Override

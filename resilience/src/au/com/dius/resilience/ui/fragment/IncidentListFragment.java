@@ -1,27 +1,27 @@
 package au.com.dius.resilience.ui.fragment;
 
 import android.app.ListFragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.RepositoryCommandResult;
+import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.RepositoryCommands;
 import au.com.dius.resilience.persistence.RepositoryFactory;
+import au.com.dius.resilience.persistence.async.BackgroundDataLoader;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 
 import java.util.Collections;
-import java.util.List;
 
-public class IncidentListFragment extends ListFragment {
-
-  private static final String TAG = "IncidentListFrag";
+public class IncidentListFragment extends ListFragment implements RepositoryCommandResultListener<Incident>{
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     super.setListAdapter(new ListViewAdapter(getActivity(), R.layout.fragment_incident_list_view_item, Collections.EMPTY_LIST));
+
     //should show loading view...
     loadIncidents();
   }
@@ -33,70 +33,32 @@ public class IncidentListFragment extends ListFragment {
             .append(id)
             .append(" position ")
             .append(position);
-
-    Log.d(TAG, logMsg.toString());
   }
 
   @Override
   public void onResume() {
     super.onResume();
-    Log.d(TAG, "Resumed");
   }
 
   private void loadIncidents() {
-
-    final ListFragment fragment = this;
-
-    //new BackgroundDataLoader<Incident>().execute();
-
-    final DataListener<Incident> dataListener = new DataListener<Incident>() {
-      @Override
-      public void listLoaded(final List<Incident> items) {
-        fragment.getActivity().runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            fragment.setListAdapter(new ListViewAdapter(getActivity(), R.layout.fragment_incident_list_view_item, items));
-          }
-        });
-      }
-
-      @Override
-      public void itemSaved() {
-      }
-
-      @Override
-      public void itemLoaded(Incident item) {
-      }
-    };
-
-
-    AsyncTask<DataListener<Incident>, Integer, List<Incident>> backgroundDataLoader = new AsyncTask<DataListener<Incident>, Integer, List<Incident>>(){
-
-      DataListener<Incident>[] dataListeners = null;
-
-      @Override
-      protected List<Incident> doInBackground(DataListener<Incident>... dataListeners) {
-        Log.d("async", "do in background");
-        this.dataListeners = dataListeners;
-        return RepositoryFactory.createIncidentRepository(getActivity()).findAll();
-      }
-
-      @Override
-      protected void onPostExecute(List<Incident> items) {
-        Log.d("async", "post execute method");
-        for (DataListener<Incident> listener : dataListeners) {
-          Log.d("async", "calling listener");
-          listener.listLoaded(items);
-        }
-      }
-    };
-
-    backgroundDataLoader.execute(dataListener);
+    new BackgroundDataLoader<Incident>().execute(
+            this,
+            RepositoryCommands.findAll(RepositoryFactory.createIncidentRepository(getActivity())));
   }
 
-  public interface DataListener<T> {
-    void listLoaded(List<T> items);
-    void itemSaved();
-    void itemLoaded(T item);
+  @Override
+  public void commandComplete(final RepositoryCommandResult<Incident> result) {
+    final ListFragment fragment = this;
+
+    this.getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        fragment.setListAdapter(
+                new ListViewAdapter(
+                        getActivity(),
+                        R.layout.fragment_incident_list_view_item,
+                        result.getResults()));
+      }
+    });
   }
 }

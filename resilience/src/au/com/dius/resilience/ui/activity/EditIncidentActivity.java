@@ -89,6 +89,7 @@ public class EditIncidentActivity extends Activity implements OnSeekBarChangeLis
     incident.addPhotos(cameraFacade.getPhotos());
     
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
+
     repository.save(incident);
   }
 

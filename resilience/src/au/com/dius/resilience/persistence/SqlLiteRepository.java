@@ -1,8 +1,5 @@
 package au.com.dius.resilience.persistence;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlLiteRepository extends SQLiteOpenHelper implements Repository<Incident> {
 
@@ -55,7 +55,7 @@ public class SqlLiteRepository extends SQLiteOpenHelper implements Repository<In
   }
 
   @Override
-  public void save(Incident incident) {
+  public boolean save(Incident incident) {
     ContentValues contentValues = new ContentValues();
     contentValues.put(COL_ID, incident.getId());
     contentValues.put(COL_NAME, incident.getName());
@@ -65,8 +65,10 @@ public class SqlLiteRepository extends SQLiteOpenHelper implements Repository<In
     contentValues.put(COL_CREATION_DATE, incident.getDateCreated());
     contentValues.put(COL_NOTE, incident.getNote());
     
-    getWritableDatabase().insertOrThrow(TABLE_INCIDENT, null, contentValues);
+    long saved = getWritableDatabase().insertOrThrow(TABLE_INCIDENT, null, contentValues);
     close();
+
+    return saved > 0;
   }
 
   @Override
