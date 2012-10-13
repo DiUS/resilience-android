@@ -1,6 +1,4 @@
-package au.com.dius.resilience.activity;
-
-import java.util.Date;
+package au.com.dius.resilience.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,13 +9,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.SeekBar;
+import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Spinner;
-import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
@@ -25,6 +18,8 @@ import au.com.dius.resilience.model.IncidentFactory;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.Repository;
 import au.com.dius.resilience.persistence.RepositoryFactory;
+
+import java.util.Date;
 
 public class EditIncidentActivity extends Activity implements OnSeekBarChangeListener {
 

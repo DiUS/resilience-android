@@ -1,7 +1,4 @@
-package au.com.dius.resilience.fragment;
-
-import java.util.Collections;
-import java.util.List;
+package au.com.dius.resilience.ui.fragment;
 
 import android.app.ListFragment;
 import android.os.AsyncTask;
@@ -10,9 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.adapter.ListViewAdapter;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.RepositoryFactory;
+import au.com.dius.resilience.ui.adapter.ListViewAdapter;
+
+import java.util.Collections;
+import java.util.List;
 
 public class IncidentListFragment extends ListFragment {
 
@@ -45,9 +45,10 @@ public class IncidentListFragment extends ListFragment {
 
   private void loadIncidents() {
 
-    Log.d("frag", "load incidents");
-
     final ListFragment fragment = this;
+
+    //new BackgroundDataLoader<Incident>().execute();
+
     final DataListener<Incident> dataListener = new DataListener<Incident>() {
       @Override
       public void listLoaded(final List<Incident> items) {

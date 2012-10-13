@@ -1,7 +1,6 @@
-package au.com.dius.resilience.activity.test;
+package au.com.dius.resilience.ui.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
-import au.com.dius.resilience.activity.ResilienceActivity;
 
 /**
  * This is a simple framework for a test of an Application.  See
