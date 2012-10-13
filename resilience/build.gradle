@@ -15,7 +15,6 @@ task buildDependencies(type:GradleBuild) {
 }
 
 dependencies {
-    compile "joda-time:joda-time:2.1"
     compile "org.roboguice:roboguice:2.0"
     compile "com.google.android:support-v4:r6"  // required by RoboGuice
 }
