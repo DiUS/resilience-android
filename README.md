@@ -13,6 +13,7 @@ Prerequisite software
 Building
 --------
 
+    android update project -p . -s
     gradle buildDependencies assemble
 
 Running tests:
