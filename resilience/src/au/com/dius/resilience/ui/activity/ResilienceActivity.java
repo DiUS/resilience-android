@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.RuntimeProperties;
+import au.com.dius.resilience.ui.Codes;
 import roboguice.activity.RoboFragmentActivity;
 
 public class ResilienceActivity extends RoboFragmentActivity {
@@ -65,7 +66,7 @@ public class ResilienceActivity extends RoboFragmentActivity {
 
       case R.id.raise_incident:
         Intent raiseIncident = new Intent(this, EditIncidentActivity.class);
-        startActivity(raiseIncident);
+        startActivityForResult(raiseIncident, Codes.CreateIncident.REQUEST_CODE);
         Log.d(LOG_TAG, "Raise incident selected");
         break;
 
@@ -74,4 +75,5 @@ public class ResilienceActivity extends RoboFragmentActivity {
     }
     return true;
   }
+
 }

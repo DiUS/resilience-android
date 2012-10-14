@@ -46,6 +46,7 @@ public class IncidentListFragment extends RoboListFragment implements Repository
   @Override
   public void onResume() {
     super.onResume();
+    loadIncidents();
   }
 
   private void loadIncidents() {
@@ -59,4 +60,5 @@ public class IncidentListFragment extends RoboListFragment implements Repository
     this.setListAdapter(
             new ListViewAdapter(getActivity(), R.layout.fragment_incident_list_view_item, result.getResults()));
   }
+
 }

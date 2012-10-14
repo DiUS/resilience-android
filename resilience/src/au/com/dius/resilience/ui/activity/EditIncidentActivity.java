@@ -2,6 +2,7 @@ package au.com.dius.resilience.ui.activity;
 
 import java.util.Date;
 
+import au.com.dius.resilience.ui.Codes;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Intent;
@@ -146,5 +147,8 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   @Override
   public void commandComplete(RepositoryCommandResult<Incident> result) {
     Toast.makeText(this, "Incident was " + (result.isSuccess() ? " saved" : " not saved"), Toast.LENGTH_SHORT).show();
+
+    setResult(Codes.CreateIncident.RESULT_OK);
+    finish();
   }
 }
