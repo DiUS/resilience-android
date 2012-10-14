@@ -10,7 +10,7 @@ import java.util.List;
 public class SqlLiteRepositoryTest extends AndroidTestCase {
 
   public void testSqlLiteSaveAndLoad() {
-    SqlLiteRepository sqlLiteRepository = new SqlLiteRepository(getContext());
+    SqlLiteIncidentRepository sqlLiteRepository = new SqlLiteIncidentRepository(getContext());
 
     sqlLiteRepository.save(IncidentFactory.createIncident("Test1", Long.valueOf(999), "Hello World", "Cat1", "Subcat1", ImpactScale.LOW));
     sqlLiteRepository.save(IncidentFactory.createIncident("Test2", Long.valueOf(888), "Goodbye World", "Cat2", "Subcat2", ImpactScale.MEDIUM));

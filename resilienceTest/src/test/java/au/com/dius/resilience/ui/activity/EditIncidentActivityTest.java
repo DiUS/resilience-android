@@ -11,9 +11,9 @@ import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.AbstractSqlLiteRepository;
 import au.com.dius.resilience.persistence.Repository;
 import au.com.dius.resilience.persistence.RepositoryFactory;
-import au.com.dius.resilience.persistence.SqlLiteRepository;
 
 public class EditIncidentActivityTest extends
     ActivityInstrumentationTestCase2<EditIncidentActivity> {
@@ -28,7 +28,7 @@ public class EditIncidentActivityTest extends
   public void setUp() {
     activity = getActivity();
     repository = new RepositoryFactory().createIncidentRepository(getActivity());
-    activity.getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
+    activity.getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
   }
   
   // TODO - This test is rather big..
@@ -103,7 +103,7 @@ public class EditIncidentActivityTest extends
   }
   
   public void tearDown() {
-    activity.getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
+    activity.getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
     activity.finish();
   }
 }

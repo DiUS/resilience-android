@@ -11,9 +11,9 @@ public class RepositoryFactory {
 
   public Repository<Incident> createIncidentRepository(Context context) {
     if (!RuntimeProperties.useLiveDb()) {
-      return new SqlLiteRepository(context);
+      return new SqlLiteIncidentRepository(context);
     }
     
-    return new ParseRepository();
+    return new ParseIncidentRepository();
   }
 }

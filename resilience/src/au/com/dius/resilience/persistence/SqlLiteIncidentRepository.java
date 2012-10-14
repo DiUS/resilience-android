@@ -1,59 +1,20 @@
 package au.com.dius.resilience.persistence;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import au.com.dius.resilience.model.ImpactScale;
-import au.com.dius.resilience.model.Incident;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqlLiteRepository extends SQLiteOpenHelper implements Repository<Incident> {
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import au.com.dius.resilience.model.ImpactScale;
+import au.com.dius.resilience.model.Incident;
 
-  private static final int DATABASE_VERSION = 1;
-  
-  public static final String DB_NAME = "resilience.db";
-  public static final String TABLE_INCIDENT = "incident";
-  
-  public static final String COL_ID = "_id";
-  public static final String COL_NAME = "name";
-  public static final String COL_CATEGORY = "category";
-  public static final String COL_SUBCATEGORY = "subcategory";
-  public static final String COL_IMPACT = "impact";
-  public static final String COL_CREATION_DATE = "dateCreated";
-  public static final String COL_NOTE = "note";
-  
-  public static final String CREATE_DB_SQL = "CREATE TABLE " + TABLE_INCIDENT
-                                            + " (" + COL_ID + " integer primary key autoincrement, "
-                                            + COL_NAME + " text, "
-                                            + COL_CATEGORY + " text not null, "
-                                            + COL_SUBCATEGORY + " text not null, "
-                                            + COL_IMPACT + " text not null, "
-                                            + COL_CREATION_DATE + " date not null, "
-                                            + COL_NOTE + " text);";
-  
-  public SqlLiteRepository(Context context) {
-    super(context, DB_NAME, null, DATABASE_VERSION);
+public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Incident> {
+
+  public SqlLiteIncidentRepository(Context context) {
+    super(context);
   }
   
-  @Override
-  public void onCreate(SQLiteDatabase db) {
-    db.execSQL(CREATE_DB_SQL);
-  }
-
-  @Override
-  public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    Log.w(SqlLiteRepository.class.getName(),
-        "Upgrading database from version " + oldVersion + " to "
-            + newVersion + ", old data will be pulverised");
-    db.execSQL("DROP TABLE IF EXISTS " + COL_NOTE);
-    onCreate(db);
-  }
-
   @Override
   public boolean save(Incident incident) {
     ContentValues contentValues = new ContentValues();
