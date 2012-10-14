@@ -1,6 +1,5 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -10,8 +9,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.RuntimeProperties;
+import roboguice.activity.RoboFragmentActivity;
 
-public class ResilienceActivity extends Activity {
+public class ResilienceActivity extends RoboFragmentActivity {
 
   private static final String LOG_TAG = "ResilienceActivity";
 

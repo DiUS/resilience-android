@@ -1,6 +1,7 @@
 package au.com.dius.resilience.ui.adapter;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +30,20 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
 
     View rowView = inflater.inflate(R.layout.fragment_incident_list_view_item, null);
 
+    Incident incident = incidents.get(position);
+
     TextView nameField = (TextView) rowView.findViewById(R.id.list_view_item_name);
-    nameField.setText(incidents.get(position).getName());
+    nameField.setText(incident.getName());
+
+    TextView reportedTime = (TextView) rowView.findViewById(R.id.list_view_item_time_reported);
+    reportedTime.setText(DateUtils.getRelativeDateTimeString(
+            getContext(),
+            incident.getDateCreated().longValue(),
+            DateUtils.SECOND_IN_MILLIS,
+            DateUtils.YEAR_IN_MILLIS, 0));
 
     return rowView;
   }
+
 
 }

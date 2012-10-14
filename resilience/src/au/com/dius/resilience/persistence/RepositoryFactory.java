@@ -5,9 +5,12 @@ import au.com.dius.resilience.RuntimeProperties;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 
+import com.google.inject.Singleton;
+
+@Singleton
 public class RepositoryFactory {
 
-  public static Repository<Incident> createIncidentRepository(Context context) {
+  public Repository<Incident> createIncidentRepository(Context context) {
     if (!RuntimeProperties.useLiveDb()) {
       return new SqlLiteRepository(context);
     }
@@ -15,7 +18,8 @@ public class RepositoryFactory {
     return new ParseRepository();
   }
   
-  public static Repository<Photo> createPhotoRepository() {
-    return new PhotoRepository();
+  public Repository<Photo> createPhotoRepository(Context context) {
+//    return new PhotoRepository(context);
+    return null;
   }
 }

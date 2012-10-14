@@ -21,14 +21,18 @@ public class RepositoryCommandsTest {
   @Mock
   private Repository<String> mockRepository;
 
+  private RepositoryCommands commands;
+
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
+
+    commands = new RepositoryCommands();
   }
 
   @Test
   public void findAllShouldBeCalledOnRespository() {
-    final RepositoryCommand<String> command = RepositoryCommands.findAll(mockRepository);
+    final RepositoryCommand<String> command = commands.findAll(mockRepository);
     assertNotNull(command);
 
     command.perform();
@@ -40,13 +44,13 @@ public class RepositoryCommandsTest {
     final List<String> results = Arrays.asList(new String[]{"foo","bar"});
     when(mockRepository.findAll()).thenReturn(results);
 
-    assertEquals(results, RepositoryCommands.findAll(mockRepository).perform().getResults());
+    assertEquals(results, commands.findAll(mockRepository).perform().getResults());
   }
 
   @Test
   public void saveShouldBeCalledOnRepository() {
     final String foo = "";
-    final RepositoryCommand<String> command = RepositoryCommands.save(mockRepository, foo);
+    final RepositoryCommand<String> command = commands.save(mockRepository, foo);
     assertNotNull(command);
 
     command.perform();
@@ -56,16 +60,16 @@ public class RepositoryCommandsTest {
   @Test
   public void saveShouldReturnRepositoryResult() {
     when(mockRepository.save(anyString())).thenReturn(true);
-    assertTrue(RepositoryCommands.save(mockRepository, "").perform().isSuccess());
+    assertTrue(commands.save(mockRepository, "").perform().isSuccess());
 
     when(mockRepository.save(anyString())).thenReturn(false);
-    assertFalse(RepositoryCommands.save(mockRepository, "").perform().isSuccess());
+    assertFalse(commands.save(mockRepository, "").perform().isSuccess());
   }
 
   @Test
   public void findByIdShouldBeCalledOnRepository() {
     long id = 1;
-    final RepositoryCommand<String> command  = RepositoryCommands.findById(mockRepository, id);
+    final RepositoryCommand<String> command  = commands.findById(mockRepository, id);
 
     command.perform();
     verify(mockRepository).findById(id);
@@ -77,7 +81,7 @@ public class RepositoryCommandsTest {
     final String expected = "drWho";
 
     when(mockRepository.findById(id)).thenReturn(expected);
-    final RepositoryCommand<String> command  = RepositoryCommands.findById(mockRepository, id);
+    final RepositoryCommand<String> command  = commands.findById(mockRepository, id);
 
     final RepositoryCommandResult<String> result = command.perform();
     assertTrue(result.isSuccess());
@@ -88,7 +92,7 @@ public class RepositoryCommandsTest {
   public void findByIdShouldReturnFailedResultWhenNothingFound() {
     long id = 1;
     when(mockRepository.findById(id)).thenReturn(null);
-    final RepositoryCommand<String> command  = RepositoryCommands.findById(mockRepository, id);
+    final RepositoryCommand<String> command  = commands.findById(mockRepository, id);
 
     final RepositoryCommandResult<String> result = command.perform();
     assertFalse(result.isSuccess());

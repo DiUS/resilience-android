@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import au.com.dius.resilience.model.Photo;
 
 public class CameraFacade {
@@ -23,7 +22,7 @@ public class CameraFacade {
   private static final String EXTENSION = ".jpg";
   private static final String STORAGE_DIRECTORY = "ResilienceIncidents";
   
-  private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
   
   private List<Photo> photos = new ArrayList<Photo>();
   
@@ -34,23 +33,22 @@ public class CameraFacade {
     this.callingActivity = callingActivity;
   }
 
-  // TODO - make async
+  /**
+   * Starts a camera Activity to capture a single photo.
+   * To be called before {@link #processPhoto(int, int)}
+   */
   public void captureImage() {
     photoFilename = getOutputMediaFile();
-    
-    if (photoFilename == null) { 
-      return;
-    }
     
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoFilename);
     callingActivity.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
   }
   
+  // TODO - make async (accesses filesystem)
   private Uri getOutputMediaFile() {
     if (! Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ) {
-      Log.d(Photo.class.getName(), "External storage was not detected!");
-      return null;
+      throw new RuntimeException("External storage was not detected!");
     }
 
     File mediaStorageDir = new File(
@@ -59,8 +57,7 @@ public class CameraFacade {
 
     if (!mediaStorageDir.exists()) {
       if (!mediaStorageDir.mkdirs()) {
-        Log.d(Photo.class.getName(), "Failed to create directory: " + mediaStorageDir);
-        return null;
+        throw new RuntimeException("Failed to create directory: " + mediaStorageDir);
       }
     }
 
@@ -73,9 +70,20 @@ public class CameraFacade {
     return Uri.fromFile(mediaFile);
   }
 
+  /**
+   * @param requestCode Request code 
+   * @param resultCode
+   * To be called after {@link #captureImage()}.
+   * i.e. within a {@link Activity#onActivityResult(int requestCode, int resultCode, Intent data)} method.
+   */
   public void processPhoto(int requestCode, int resultCode) {
+    if (photoFilename == null) {
+      return;
+    }
+    
     if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
       photos.add(new Photo(photoFilename));
+      photoFilename = null;
     }
   }
 

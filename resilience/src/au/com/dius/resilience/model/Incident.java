@@ -1,9 +1,10 @@
 package au.com.dius.resilience.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Incident {
+public class Incident implements Serializable {
 
   private Long id;
   private String name;

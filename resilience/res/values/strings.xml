@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Resilience</string>
+  <string name="app_name">Resilience</string>
 
-    <!-- Action bar menu -->
-    <string name="all_incidents">All incidents</string>
-    <string name="tracked_incidents">Tracked incidents</string>
-    <string name="raise_incident">Create</string>
-    <string name="menu_settings">Settings</string>
+  <!-- Action bar menu -->
+  <string name="all_incidents">All incidents</string>
+  <string name="tracked_incidents">Tracked incidents</string>
+  <string name="raise_incident">Create</string>
+  <string name="menu_settings">Settings</string>
 
-    <!-- View/create incident -->
-    <string name="extra_notes">Extra notes</string>
-    <string name="name">Name</string>
-    <string name="select_category">Category</string>
-    <string name="select_subcategory">Subcategory</string>
-    <string name="impact">Impact Scale</string>
-    <string name="camera">Camera</string>
-    <string name="photo">Photo</string>
-    <string name="map">Map</string>
+  <!-- View/create incident -->
+  <string name="extra_notes">Extra notes</string>
+  <string name="name">Name</string>
+  <string name="select_category">Category</string>
+  <string name="select_subcategory">Subcategory</string>
+  <string name="impact">Impact Scale</string>
+  <string name="camera">Camera</string>
+  <string name="photo">Photo</string>
+  <string name="map">Map</string>
 
-    <!-- List view -->
-    <string name="list_view_more_details_desc">More details</string>
-    <string name="list_view_category_desc">Incident category</string>
+  <!-- List view -->
+  <string name="list_view_more_details_desc">More details</string>
+  <string name="list_view_category_desc">Incident category</string>
+
+
+  <!-- Friendly date constants -->
+  <string name="friendly_date_less_than_a_minute">moments ago</string>
+  <string name="friendly_date_minute">minute ago</string>
+  <string name="friendly_date_minutes">minutes ago</string>
+  <string name="friendly_date_hour">an hour ago</string>
+  <string name="friendly_date_hours">hours ago</string>
+  <string name="friendly_date_yesterday">yesterday</string>
+  <string name="friendly_date_days">days ago</string>
+  <string name="friendly_date_last_week">last week</string>
+  <string name="friendly_date_weeks">weeks ago</string>
+  <string name="friendly_date_last_month">last month</string>
+  <string name="friendly_date_months">months ago</string>
+  <string name="friendly_date_last_year">last year</string>
+  <string name="friendly_date_years">years ago</string>
 
 </resources>

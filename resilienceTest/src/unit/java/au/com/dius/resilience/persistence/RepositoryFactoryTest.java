@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -16,10 +17,15 @@ import static junit.framework.Assert.assertTrue;
 @PrepareForTest({RuntimeProperties.class, RepositoryFactory.class})
 public class RepositoryFactoryTest {
 
+  private RepositoryFactory repositoryFactory;
   private Context context;
 
   @Before
   public void setUp() throws Exception {
+
+    repositoryFactory = new RepositoryFactory();
+    MockitoAnnotations.initMocks(this);
+
     PowerMockito.mockStatic(RuntimeProperties.class);
     context = PowerMockito.mock(Context.class);
     PowerMockito.whenNew(SqlLiteRepository.class).withArguments(context).thenReturn(Mockito.mock(SqlLiteRepository.class));
@@ -28,12 +34,12 @@ public class RepositoryFactoryTest {
   @Test
   public void testShouldReturnParseRepositoryWhenInLiveDbMode() {
     Mockito.when(RuntimeProperties.useLiveDb()).thenReturn(true);
-    assertTrue(RepositoryFactory.createIncidentRepository(context) instanceof ParseRepository);
+    assertTrue(repositoryFactory.createIncidentRepository(context) instanceof ParseRepository);
   }
 
   @Test
   public void testShouldReturnSqlLiteInstanceWhenNotInLiveMode() {
     PowerMockito.when(RuntimeProperties.useLiveDb()).thenReturn(false);
-    assertTrue(RepositoryFactory.createIncidentRepository(context) instanceof SqlLiteRepository);
+    assertTrue(repositoryFactory.createIncidentRepository(context) instanceof SqlLiteRepository);
   }
 }

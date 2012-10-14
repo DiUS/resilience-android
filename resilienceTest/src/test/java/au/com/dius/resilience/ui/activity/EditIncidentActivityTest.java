@@ -3,7 +3,11 @@ package au.com.dius.resilience.ui.activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.view.KeyEvent;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
@@ -23,7 +27,7 @@ public class EditIncidentActivityTest extends
 
   public void setUp() {
     activity = getActivity();
-    repository = RepositoryFactory.createIncidentRepository(getActivity());
+    repository = new RepositoryFactory().createIncidentRepository(getActivity());
     activity.getApplication().deleteDatabase(SqlLiteRepository.DB_NAME);
   }
   

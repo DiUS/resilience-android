@@ -7,8 +7,12 @@ import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
 
 /**
  * @author georgepapas
+ *
+ * Executes the given {@link RepositoryCommand} in a background thread.  Once the command completes calls the
+ * {@link RepositoryCommandResultListener#commandComplete(au.com.dius.resilience.persistence.RepositoryCommandResult)}
+ * method in the UI Thread.
  */
-public class BackgroundDataLoader<T> {
+public class BackgroundDataOperation<T> {
 
   public void execute(RepositoryCommandResultListener<T> listener, RepositoryCommand<T> command) {
 
