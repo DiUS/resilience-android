@@ -17,6 +17,7 @@ task buildDependencies(type:GradleBuild) {
 dependencies {
     compile "org.roboguice:roboguice:2.0"
     compile "com.google.android:support-v4:r6"  // required by RoboGuice
+    compile "Parse:Parse:1.1.6"
 }
 
 tasks.eclipse.dependsOn cleanEclipse
