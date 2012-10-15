@@ -72,7 +72,7 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
   }
 
   private Incident cursorToIncident(Cursor cursor) {
-    Long id = cursor.getLong(0);
+    String id = String.valueOf(cursor.getLong(0));
     String name = cursor.getString(1);
     String category = cursor.getString(2);
     String subCategory = cursor.getString(3);

@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import au.com.dius.resilience.Constants;
+import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.SaveCallback;
+import com.parse.ParseQuery;
 
 public class ParseIncidentRepository implements Repository<Incident> {
 
@@ -22,12 +23,11 @@ public class ParseIncidentRepository implements Repository<Incident> {
     testObject.put(Constants.COL_INCIDENT_CREATION_DATE, incident.getDateCreated());
     testObject.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
     
-    testObject.saveEventually(new SaveCallback() {
-      
-      @Override
-      public void done(ParseException arg0) {
-      }
-    });
+    try {
+      testObject.save();
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
     
     return true;
   }
@@ -39,8 +39,33 @@ public class ParseIncidentRepository implements Repository<Incident> {
 
   @Override
   public List<Incident> findAll() {
-//    throw new RuntimeException("Not implemented.");
+    ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
+    List<ParseObject> parseArray = null;
+    try {
+      parseArray = query.find();
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
     
-    return new ArrayList<Incident>();
+    return toIncidentList(parseArray);
+  }
+
+  private List<Incident> toIncidentList(List<ParseObject> parseArray) {
+    
+    List<Incident> incidents = new ArrayList<Incident>();
+    for (ParseObject pObject : parseArray) {
+      String id = pObject.getString(Constants.COL_ID);
+      String name = pObject.getString(Constants.COL_INCIDENT_NAME);
+      String category = pObject.getString(Constants.COL_INCIDENT_CATEGORY);
+      String subCategory = pObject.getString(Constants.COL_INCIDENT_SUBCATEGORY);
+      String impact = pObject.getString(Constants.COL_INCIDENT_IMPACT);
+      long creationDate = pObject.getLong(Constants.COL_INCIDENT_CREATION_DATE);
+      String note = pObject.getString(Constants.COL_INCIDENT_NOTE);
+      
+      ImpactScale impactScale = ImpactScale.valueOf(impact);
+      Incident incident = new Incident(id, name, creationDate, note, category, subCategory, impactScale);
+      incidents.add(incident);
+    }
+    return incidents;
   }
 }

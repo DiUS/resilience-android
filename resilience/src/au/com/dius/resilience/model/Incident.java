@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Incident implements Serializable {
 
-  private Long id;
+  private String id;
   private String name;
   private Long dateCreated;
   private String note;
@@ -16,7 +16,7 @@ public class Incident implements Serializable {
   
   private List<Photo> photos = new ArrayList<Photo>();
 
-  public Incident(Long id, String name, Long dateCreated, String note,
+  public Incident(String id, String name, Long dateCreated, String note,
       String category, String subCategory, ImpactScale scale) {
     this.id = id;
     this.name = name;
@@ -31,7 +31,7 @@ public class Incident implements Serializable {
     return scale;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 

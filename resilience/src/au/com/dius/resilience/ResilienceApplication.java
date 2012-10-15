@@ -8,7 +8,17 @@ public class ResilienceApplication extends Application {
 
   @Override
   public void onCreate() {
-    Parse.initialize(this, "RiO29avl2HCTX49CphzVrpRKawqUFSUJbHtZRitM",
-        "GO9aRT96Wmht7x6ztSTnm4CXNJcd46vSZcaIA9Jm");
+    
+    String appKey = null;
+    String clientKey = null;
+    if (RuntimeProperties.useLiveDb()) {
+      throw new RuntimeException("We don't have production Parse keys yet.");
+    }
+    else {
+      appKey = Constants.TEST_APP_KEY;
+      clientKey = Constants.TEST_CLIENT_KEY;
+    }
+    
+    Parse.initialize(this, appKey, clientKey);
   }
 }
