@@ -29,6 +29,7 @@ if (!android_home) {
 def androidJar = new File(android_home, '/platforms/android-14/android.jar')
 dependencies {
     compile project(":resilience")
+    compile "com.jayway.android.robotium:robotium-solo:3.1"
 
     robo 'com.pivotallabs:robolectric:1.1'
     junit 'junit:junit:4.8.2'
