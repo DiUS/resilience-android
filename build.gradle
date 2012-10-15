@@ -16,10 +16,14 @@ subprojects {
   apply plugin: 'idea'
   apply plugin: 'eclipse'
   apply plugin: 'android'
+  apply plugin: 'maven'
 }
 
 allprojects {
     repositories {
+        maven {
+            url "http://android-ci:8081/artifactory/ext-release-local"
+        }
         mavenCentral()
     }
 }

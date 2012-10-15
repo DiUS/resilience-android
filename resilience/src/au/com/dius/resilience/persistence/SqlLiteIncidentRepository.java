@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 
@@ -19,14 +20,14 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
   public boolean save(Incident incident) {
     ContentValues contentValues = new ContentValues();
     contentValues.put(COL_ID, incident.getId());
-    contentValues.put(COL_NAME, incident.getName());
-    contentValues.put(COL_CATEGORY, incident.getCategory());
-    contentValues.put(COL_SUBCATEGORY, incident.getSubCategory());
-    contentValues.put(COL_IMPACT, incident.getImpact().name());
-    contentValues.put(COL_CREATION_DATE, incident.getDateCreated());
-    contentValues.put(COL_NOTE, incident.getNote());
+    contentValues.put(Constants.COL_INCIDENT_NAME, incident.getName());
+    contentValues.put(Constants.COL_INCIDENT_CATEGORY, incident.getCategory());
+    contentValues.put(Constants.COL_INCIDENT_SUBCATEGORY, incident.getSubCategory());
+    contentValues.put(Constants.COL_INCIDENT_IMPACT, incident.getImpact().name());
+    contentValues.put(Constants.COL_INCIDENT_CREATION_DATE, incident.getDateCreated());
+    contentValues.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
     
-    long saved = getWritableDatabase().insertOrThrow(TABLE_INCIDENT, null, contentValues);
+    long saved = getWritableDatabase().insertOrThrow(Constants.TABLE_INCIDENT, null, contentValues);
     close();
 
     return saved > 0;
@@ -35,7 +36,7 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
   @Override
   public Incident findById(long id) {
     
-    Cursor cursor = getReadableDatabase().query(TABLE_INCIDENT,
+    Cursor cursor = getReadableDatabase().query(Constants.TABLE_INCIDENT,
         null, "WHERE _id = + " + id, null, null, null, null);
     
     if (cursor.getCount() > 1) {
@@ -56,8 +57,8 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
 
     // FIXME - passing null as the second parameter returns all columns.
     // If we only want specific data later this could be optimised.
-    Cursor cursor = getReadableDatabase().query(TABLE_INCIDENT,
-        null, null, null, null, null, COL_CREATION_DATE + " DESC");
+    Cursor cursor = getReadableDatabase().query(Constants.TABLE_INCIDENT,
+        null, null, null, null, null, Constants.COL_INCIDENT_CREATION_DATE + " DESC");
     
     cursor.moveToFirst();
     while (!cursor.isAfterLast()) {

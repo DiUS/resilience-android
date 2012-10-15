@@ -5,6 +5,7 @@ import android.net.Uri;
 public class Photo {
   
   private Uri uri;
+  private byte[] data;
 
   public Photo(Uri uri) {
     this.uri = uri;
@@ -12,5 +13,9 @@ public class Photo {
   
   public Uri getUri() {
     return uri;
+  }
+  
+  public byte[] data() {
+    return data;
   }
 }
