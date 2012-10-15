@@ -7,7 +7,7 @@ import au.com.dius.resilience.model.IncidentFactory;
 
 import java.util.List;
 
-public class SqlLiteRepositoryTest extends AndroidTestCase {
+public class SqlLiteIncidentRepositoryTest extends AndroidTestCase {
 
   public void testSqlLiteSaveAndLoad() {
     SqlLiteIncidentRepository sqlLiteRepository = new SqlLiteIncidentRepository(getContext());

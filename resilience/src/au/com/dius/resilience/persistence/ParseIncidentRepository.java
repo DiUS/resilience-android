@@ -14,7 +14,7 @@ public class ParseIncidentRepository implements Repository<Incident> {
 
   @Override
   public boolean save(Incident incident) {
-    ParseObject testObject = new ParseObject("Incident");
+    ParseObject testObject = new ParseObject(Constants.TABLE_INCIDENT);
     testObject.put(Constants.COL_INCIDENT_NAME, incident.getName());
     testObject.put(Constants.COL_INCIDENT_CATEGORY, incident.getCategory());
     testObject.put(Constants.COL_INCIDENT_SUBCATEGORY, incident.getSubCategory());
