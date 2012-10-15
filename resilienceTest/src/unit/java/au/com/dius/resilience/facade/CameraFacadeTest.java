@@ -1,14 +1,10 @@
 package au.com.dius.resilience.facade;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static android.os.Environment.DIRECTORY_PICTURES;
-import static au.com.dius.resilience.facade.CameraFacade.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE;
-
-import java.io.File;
-
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +14,12 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
+import java.io.File;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static android.os.Environment.DIRECTORY_PICTURES;
+import static au.com.dius.resilience.facade.CameraFacade.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Environment.class, Uri.class, CameraFacade.class})

@@ -1,36 +1,26 @@
 package au.com.dius.resilience.ui.activity;
 
-import java.util.Date;
-
-import au.com.dius.resilience.ui.Codes;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.SeekBar;
+import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.facade.CameraFacade;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.model.IncidentFactory;
 import au.com.dius.resilience.persistence.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
-import au.com.dius.resilience.persistence.RepositoryCommands;
-import au.com.dius.resilience.persistence.RepositoryFactory;
-import au.com.dius.resilience.persistence.async.BackgroundDataOperation;
-
+import au.com.dius.resilience.persistence.repository.IncidentRepository;
+import au.com.dius.resilience.ui.Codes;
 import com.google.inject.Inject;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
+
+import java.util.Date;
 
 public class EditIncidentActivity extends RoboActivity implements OnSeekBarChangeListener, RepositoryCommandResultListener<Incident> {
 
@@ -51,13 +41,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   private CameraFacade cameraFacade;
   
   @Inject
-  private RepositoryCommands repositoryCommands;
-
-  @Inject
-  private RepositoryFactory repositoryFactory;
-
-  @Inject
-  private IncidentFactory incidentFactory;
+  private IncidentRepository incidentRepository;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -102,14 +86,17 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     String subCategory = subCategorySpinner.getSelectedItem().toString();
     ImpactScale impact = ImpactScale.fromCode(impactScale.getProgress());
     
-    Incident incident = incidentFactory.createIncident(
-            category, Long.valueOf(new Date().getTime()), incidentNote, category, subCategory, impact);
+    Incident incident = new Incident(
+            category,
+            Long.valueOf(new Date().getTime()),
+            incidentNote,
+            category,
+            subCategory,
+            impact);
 
     incident.addPhotos(cameraFacade.getPhotos());
-    
-    new BackgroundDataOperation<Incident>().execute(
-            this,
-            repositoryCommands.save(repositoryFactory.createIncidentRepository(this), incident));
+
+    incidentRepository.save(this, incident);
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
   }

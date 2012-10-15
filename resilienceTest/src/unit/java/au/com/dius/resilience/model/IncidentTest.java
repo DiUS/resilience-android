@@ -1,24 +1,26 @@
 package au.com.dius.resilience.model;
 
-import static junit.framework.Assert.assertEquals;
-
+import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.xtremelabs.robolectric.RobolectricTestRunner;
+import static junit.framework.Assert.assertEquals;
 
+/**
+ * @author georgepapas
+ */
 @RunWith(RobolectricTestRunner.class)
-public class IncidentFactoryTest {
+public class IncidentTest {
 
   @Test
-	public void testCreateWithNameAndDateCreated() {
+	public void testConstructor() {
 		Long dateCreated = Long.valueOf(1000);
 		String name = "incident";
 		String note = "The monkeys are armed with nunchucks!";
 		String category = "Monkey Attack";
 		String subCategory = "Rabid Monkeys";
-		Incident incident = IncidentFactory.createIncident(name, dateCreated, note, category, subCategory, ImpactScale.HIGH);
-		
+		Incident incident = new Incident(name, dateCreated, note, category, subCategory, ImpactScale.HIGH);
+
 		assertEquals(name, incident.getName());
 		assertEquals(dateCreated, incident.getDateCreated());
 		assertEquals(note, incident.getNote());

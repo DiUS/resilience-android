@@ -2,8 +2,8 @@ package au.com.dius.resilience.persistence.async;
 
 import au.com.dius.resilience.persistence.RepositoryCommand;
 import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
-import au.com.dius.resilience.utils.DataLoaderHelper;
 import au.com.dius.resilience.utils.MutableBoolean;
+import au.com.dius.resilience.utils.TestHelper;
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Test;
@@ -23,10 +23,10 @@ public class BackgroundDataOperationTest {
   public void shouldCallBackToListenerWhenCommandCompletes() {
 
     final MutableBoolean yahIgotCalled = new MutableBoolean(false);
-    RepositoryCommandResultListener<String> resultListener = DataLoaderHelper.createCommandListener(yahIgotCalled);
+    RepositoryCommandResultListener<String> resultListener = TestHelper.createCommandListener(yahIgotCalled);
 
     BackgroundDataOperation<String> operation = new BackgroundDataOperation<String>();
-    operation.execute(resultListener, DataLoaderHelper.createRepositoryCommand());
+    operation.execute(resultListener, TestHelper.createRepositoryCommand());
 
     Robolectric.runBackgroundTasks();
     assertTrue(yahIgotCalled.isTrue());
@@ -35,7 +35,7 @@ public class BackgroundDataOperationTest {
   @Test
   public void shouldCallPerformOnCommand() {
     final MutableBoolean yayIgotCalled = new MutableBoolean(false);
-    RepositoryCommandResultListener<String> resultListener = DataLoaderHelper.createCommandListener(yayIgotCalled);
+    RepositoryCommandResultListener<String> resultListener = TestHelper.createCommandListener(yayIgotCalled);
 
     BackgroundDataOperation<String> operation = new BackgroundDataOperation<String>();
 
@@ -55,7 +55,7 @@ public class BackgroundDataOperationTest {
   @Test(expected = IllegalArgumentException.class)
   public void shouldThrowExceptionWhenCommandIsNull() {
     BackgroundDataOperation<String> operation = new BackgroundDataOperation<String>();
-    operation.execute(DataLoaderHelper.createCommandListener(null), null);
+    operation.execute(TestHelper.createCommandListener(null), null);
   }
 
 }

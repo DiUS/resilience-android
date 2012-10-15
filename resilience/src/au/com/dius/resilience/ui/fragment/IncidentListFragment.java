@@ -8,9 +8,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
-import au.com.dius.resilience.persistence.RepositoryCommands;
-import au.com.dius.resilience.persistence.RepositoryFactory;
-import au.com.dius.resilience.persistence.async.BackgroundDataOperation;
+import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import com.google.inject.Inject;
@@ -21,10 +19,7 @@ import java.util.Collections;
 public class IncidentListFragment extends RoboListFragment implements RepositoryCommandResultListener<Incident> {
 
   @Inject
-  private RepositoryFactory repositoryFactory;
-
-  @Inject
-  private RepositoryCommands repositoryCommands;
+  private IncidentRepository incidentRepository;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -50,9 +45,7 @@ public class IncidentListFragment extends RoboListFragment implements Repository
   }
 
   private void loadIncidents() {
-    new BackgroundDataOperation<Incident>().execute(
-            this,
-            repositoryCommands.findAll(repositoryFactory.createIncidentRepository(getActivity())));
+    incidentRepository.findAll(this);
   }
 
   @Override
