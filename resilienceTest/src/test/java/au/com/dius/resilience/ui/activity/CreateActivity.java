@@ -24,7 +24,6 @@ public class CreateActivity extends ActivityInstrumentationTestCase2<ResilienceA
     solo.finishOpenedActivities();
   }
 
-
   public void testCreateIncident() {
 
     final int incidentsBefore = solo.getCurrentListViews().get(0).getCount();
@@ -32,19 +31,16 @@ public class CreateActivity extends ActivityInstrumentationTestCase2<ResilienceA
     solo.assertCurrentActivity("expected edit activity", EditIncidentActivity.class);
 
     solo.pressSpinnerItem(0, 1);
-    solo.enterText(0, "Something really bad has happened and I need tor raise an incident");
+
+    solo.clickOnEditText(0);
+    solo.enterText(0, "Something really bad has happened and I need to raise an incident");
     solo.goBack();
     solo.clickOnButton("Create");
 
-    solo.assertCurrentActivity("should be in list view", ResilienceActivity.class);
-
-    int incidentsAfter = solo.getCurrentListViews().get(0).getCount();
-
     solo.sleep(500);
-
+    int incidentsAfter = solo.getCurrentListViews().get(0).getCount();
     assertEquals(incidentsBefore + 1, incidentsAfter);
 
   }
-
 
 }
