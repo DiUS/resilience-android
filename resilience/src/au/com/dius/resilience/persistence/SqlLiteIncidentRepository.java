@@ -34,7 +34,7 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
   }
 
   @Override
-  public Incident findById(long id) {
+  public Incident findById(Object id) {
     
     Cursor cursor = getReadableDatabase().query(Constants.TABLE_INCIDENT,
         null, "WHERE _id = + " + id, null, null, null, null);
