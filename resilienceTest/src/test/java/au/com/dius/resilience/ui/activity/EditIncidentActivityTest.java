@@ -22,11 +22,6 @@ public class EditIncidentActivityTest extends
     activity.getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
   }
   
-  // TODO - This test is rather big..
-  // also, this test depends on production values
-  // being present in the spinners, maybe we
-  // could hook in a test ArrayAdapter for spinners
-  // so it's more sand-boxy.
   public void testCreateAndSaveIncident() {
     
     Spinner categorySpinner = (Spinner) activity.findViewById(R.id.category_spinner);

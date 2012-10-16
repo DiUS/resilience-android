@@ -1,6 +1,7 @@
 package au.com.dius.resilience;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import com.parse.Parse;
 
@@ -20,5 +21,26 @@ public class ResilienceApplication extends Application {
     }
     
     Parse.initialize(this, appKey, clientKey);
+   
+    setStrictMode();
+  }
+  
+  private void setStrictMode() {
+    if (RuntimeProperties.useStrictMode()) {
+      StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+              .detectDiskReads()
+              .detectDiskWrites()
+//            .detectNetwork()   // or .detectAll() for all detectable problems
+              .detectAll()
+              .penaltyLog()
+              .build());
+
+      StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+              .detectLeakedSqlLiteObjects()
+              .detectLeakedClosableObjects()
+              .penaltyLog()
+              .penaltyDeath()
+              .build());
+    }
   }
 }

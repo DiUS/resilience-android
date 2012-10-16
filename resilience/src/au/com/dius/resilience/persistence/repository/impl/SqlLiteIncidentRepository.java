@@ -1,5 +1,11 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import roboguice.inject.ContextSingleton;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,14 +15,9 @@ import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import roboguice.inject.ContextSingleton;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @ContextSingleton
 public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Incident> implements IncidentRepository {
@@ -119,6 +120,12 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
     String note = cursor.getString(6);
 
     return new Incident(id, name, dateCreated, note, category, subCategory, impact);
+  }
+
+  @Override
+  public void saveAll(RepositoryCommandResultListener<Incident> listener,
+      Incident... incidents) {
+    throw new RuntimeException("Not implemented");
   }
 
 }

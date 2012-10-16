@@ -1,13 +1,15 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
-import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
-import org.junit.Test;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import org.junit.Test;
+
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 
 /**
  * @author georgepapas
@@ -21,7 +23,7 @@ public class RepositoryCommandResultTest {
 
   @Test
   public void hasResultsShouldReturnFalseWhenNull() {
-    assertFalse(new RepositoryCommandResult<String>(false, null).hasResults());
+    assertFalse(new RepositoryCommandResult<String>(false, new ArrayList<String>()).hasResults());
   }
 
   @Test

@@ -1,6 +1,8 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
+import au.com.dius.resilience.test.util.ParseTestUtils;
+
 import com.jayway.android.robotium.solo.Solo;
 
 /**
@@ -16,7 +18,10 @@ public class CreateActivity extends ActivityInstrumentationTestCase2<ResilienceA
 
   @Override
   public void setUp() throws Exception {
+    getInstrumentation().waitForIdleSync();
     solo = new Solo(getInstrumentation(), getActivity());
+    ParseTestUtils.setUp(getActivity());
+    ParseTestUtils.dropAll(getInstrumentation());
   }
 
   @Override
@@ -30,17 +35,21 @@ public class CreateActivity extends ActivityInstrumentationTestCase2<ResilienceA
     solo.clickOnImage(1);
     solo.assertCurrentActivity("expected edit activity", EditIncidentActivity.class);
 
-    solo.pressSpinnerItem(0, 1);
+    solo.clickOnText("Unknown", 0);
+    solo.clickOnText("Wildlife");
+    
+    solo.clickOnText("Unknown", 0);
+    solo.clickOnText("SubC1");
 
     solo.clickOnEditText(0);
     solo.enterText(0, "Something really bad has happened and I need to raise an incident");
     solo.goBack();
     solo.clickOnButton("Create");
 
-    solo.sleep(500);
+    solo.waitForText("ALL INCIDENTS", 1, 10000);
+    solo.waitForText("Wildlife", 1, 10000);
+    
     int incidentsAfter = solo.getCurrentListViews().get(0).getCount();
     assertEquals(incidentsBefore + 1, incidentsAfter);
-
   }
-
 }

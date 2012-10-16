@@ -1,5 +1,6 @@
 package au.com.dius.resilience.persistence.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,12 @@ public class RepositoryCommandResult<T> {
   public RepositoryCommandResult(boolean success, List<T> results) {
     this.success = success;
     this.results = results;
+  }
+  
+  public RepositoryCommandResult(boolean success, T result) {
+    this.success = success;
+    this.results = new ArrayList<T>();
+    results.add(result);
   }
 
   public boolean isSuccess() {

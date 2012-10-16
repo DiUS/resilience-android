@@ -1,13 +1,15 @@
 package au.com.dius.resilience.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-import com.google.inject.Provider;
+import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
 
-import java.util.List;
+import com.google.inject.Provider;
 
 /**
  * @author georgepapas
@@ -18,7 +20,7 @@ public class TestHelper {
     return new RepositoryCommand<String>() {
       @Override
       public RepositoryCommandResult<String> perform() {
-        return new RepositoryCommandResult<String>(true, null);
+        return new RepositoryCommandResult<String>(true, new ArrayList<String>());
       }
     };
   }

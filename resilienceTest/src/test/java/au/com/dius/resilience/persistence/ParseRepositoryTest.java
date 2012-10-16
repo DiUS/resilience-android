@@ -1,92 +1,156 @@
 package au.com.dius.resilience.persistence;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import roboguice.RoboGuice;
+import android.app.Application;
+import android.content.Context;
 import android.test.InstrumentationTestCase;
-import au.com.dius.resilience.persistence.repository.impl.ParseIncidentRepository;
+import au.com.dius.resilience.model.ImpactScale;
+import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.repository.IncidentRepository;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
+import au.com.dius.resilience.test.util.ParseTestUtils;
+
+import com.google.inject.Injector;
 
 public class ParseRepositoryTest extends InstrumentationTestCase {
 
-  private ParseIncidentRepository repository;
+  private IncidentRepository repository;
+  
+  final private CountDownLatch latch = new CountDownLatch(1);
 
+  @Override
   public void setUp() throws Exception {
-//    super.setUp();
-//    ParseTestUtils.setUp(getInstrumentation().getTargetContext());
-//    repository = new ParseIncidentRepository();
+    getInstrumentation().waitForIdleSync();
+    
+    Context targetContext = getInstrumentation().getTargetContext();
+    Injector applicationInjector = RoboGuice.getBaseApplicationInjector((Application) targetContext.getApplicationContext());
+    repository = applicationInjector.getInstance(IncidentRepository.class);
+    
+    ParseTestUtils.setUp(targetContext);
+    ParseTestUtils.dropAll(getInstrumentation());
   }
   
-  public void testSave() {
-//    Long time = new Date().getTime();
-//    Incident incident = IncidentFactory.createIncident("SomeName", time, "SomeNote", "Explosion", "Subby", ImpactScale.MEDIUM);
-//    repository.save(incident);
-//    
-//    sleep(2000);
-//    
-//    Incident foundIncident = repository.findById(incident.getId());
-//    
-//    assertNotNull(foundIncident);
-//    assertEquals(incident.getId(), foundIncident.getId());
-//    assertEquals("SomeName", foundIncident.getName());
-//    assertEquals(time, foundIncident.getDateCreated());
-//    assertEquals("SomeNote", foundIncident.getNote());
-//    assertEquals("Explosion", foundIncident.getCategory());
-//    assertEquals("Subby", foundIncident.getSubCategory());
-//    assertEquals(ImpactScale.MEDIUM, foundIncident.getImpact());
+  public void testSave() throws Exception {
+    final Long time = new Date().getTime();
+    final Incident incident = new Incident("SomeName", time, "SomeNote", "Explosion", "Subby", ImpactScale.MEDIUM);
+    
+    final CountDownLatch saveLatch = new CountDownLatch(1);
+    
+    final List<String> saveIdArr = new ArrayList<String>();
+    final RepositoryCommandResultListener<Incident> saveListener = new RepositoryCommandResultListener<Incident>() {
+      @Override
+      public void commandComplete(RepositoryCommandResult<Incident> result) {
+        assertTrue(result.isSuccess());
+        assertEquals(1, result.getResults().size());
+        Incident savedIncident = result.getResults().get(0);
+        
+        String id = savedIncident.getId();
+        assertNotNull(id);
+        saveIdArr.add(id);
+        
+        saveLatch.countDown();
+      }
+    };
+    
+    getInstrumentation().runOnMainSync(new Runnable() {
+      @Override
+      public void run() {
+        repository.save(saveListener, incident);
+      }
+    });
+    
+    saveLatch.await(30, TimeUnit.SECONDS);
+    
+    final RepositoryCommandResultListener<Incident> foundIncidentListener = new RepositoryCommandResultListener<Incident>() {
+      @Override
+      public void commandComplete(RepositoryCommandResult<Incident> result) {
+        assertTrue(result.isSuccess());
+        assertEquals(1, result.getResults().size());
+        
+        Incident foundIncident = result.getResults().get(0);
+        assertNotNull(foundIncident);
+        assertEquals(saveIdArr.get(0), foundIncident.getId());
+        assertEquals("SomeName", foundIncident.getName());
+        assertEquals(time, foundIncident.getDateCreated());
+        assertEquals("SomeNote", foundIncident.getNote());
+        assertEquals("Explosion", foundIncident.getCategory());
+        assertEquals("Subby", foundIncident.getSubCategory());
+        assertEquals(ImpactScale.MEDIUM, foundIncident.getImpact());
+        
+        latch.countDown();
+      }
+    };
+    
+    getInstrumentation().runOnMainSync(new Runnable() {
+      @Override
+      public void run() {
+        repository.findById(foundIncidentListener, saveIdArr.get(0));
+      }
+    });
+    
+    latch.await(30, TimeUnit.SECONDS);
   }
   
-  public void testUpdate() {
-//      Long time = new Date().getTime();
-//      Incident incident = IncidentFactory.createIncident("OrigName", time, "OrigNote", "OrigCat", "OrigSubCat", ImpactScale.MEDIUM);
-//      freakingLog("1", incident);
-//      repository.save(incident);
-//      freakingLog("2", incident);
-//      String id = incident.getId();
-//      sleep(2000);
+//  public void testUpdate() {
+//      final Long time = new Date().getTime();
+//      Incident incident = new Incident("OrigName", time, "OrigNote", "OrigCat", "OrigSubCat", ImpactScale.MEDIUM);
+//      repository.save(stubListener, incident);
+//      final String id = incident.getId();
 //      
 //      incident.setName("NewName");
 //      incident.setNote("NewNote");
 //      incident.setCategory("NewCat");
 //      incident.setSubCategory("NewSubCat");
 //      incident.setScale(ImpactScale.LOW);
-//      freakingLog("3", incident);
-//      repository.save(incident);
-//      freakingLog("4", incident);
+//      repository.save(stubListener, incident);
 //      
-//      Incident foundIncident = repository.findById(id);
+//      RepositoryCommandResultListener<Incident> foundIncidentListener = new RepositoryCommandResultListener<Incident>() {
+//        @Override
+//        public void commandComplete(RepositoryCommandResult<Incident> result) {
+//          assertTrue(result.isSuccess());
+//          Incident foundIncident = result.getResults().get(0);
+//          assertNotNull(foundIncident);
+//          assertEquals(id, foundIncident.getId());
+//          assertEquals("NewName", foundIncident.getName());
+//          assertEquals(time, foundIncident.getDateCreated());
+//          assertEquals("NewNote", foundIncident.getNote());
+//          assertEquals("NewCat", foundIncident.getCategory());
+//          assertEquals("NewSubCat", foundIncident.getSubCategory());
+//          assertEquals(ImpactScale.LOW, foundIncident.getImpact());
+//        }
+//      };
 //      
-//      assertNotNull(foundIncident);
-//      assertEquals(incident.getId(), foundIncident.getId());
-//      assertEquals("NewName", foundIncident.getName());
-//      assertEquals(time, foundIncident.getDateCreated());
-//      assertEquals("NewNote", foundIncident.getNote());
-//      assertEquals("NewCat", foundIncident.getCategory());
-//      assertEquals("NewSubCat", foundIncident.getSubCategory());
-//      assertEquals(ImpactScale.LOW, foundIncident.getImpact());
-  }
-  
-//  public void freakingLog(String idx, Incident incident) {
-//    System.out.println(idx + " , Incident id: " + incident.getId());
-//    Log.d("HELLO", idx + ", Incident idbla: " + incident.getId());
+//      repository.findById(foundIncidentListener, id);
 //  }
-  
-  public void testSaveMultiple() {
-    assertTrue(true);
-//    Incident incident1 = IncidentFactory.createIncident("Fooaaa", new Date().getTime(), "FooNote", "Wind", "SubC1", ImpactScale.MEDIUM);
-//    repository.save(incident1);
+//  
+//  public void testSaveMultiple() {
+//    final RepositoryCommandResultListener<Incident> findIncidentsListener = new RepositoryCommandResultListener<Incident>() {
+//      @Override
+//      public void commandComplete(RepositoryCommandResult<Incident> result) {
+//        assertTrue(result.isSuccess());
+//        assertEquals(3, result.getResults().size());
+//      }
+//    };
 //    
-//    Incident incident2 = IncidentFactory.createIncident("Bareee", new Date().getTime(), "BarNote", "Water", "SubC2", ImpactScale.LOW);
-//    repository.save(incident2);
-//    
-//    Incident incident3 = IncidentFactory.createIncident("Wharrr", new Date().getTime(), "WhaNote", "Fire", "SubC3", ImpactScale.HIGH);
-//    repository.save(incident3);
-//    
-//    sleep(2000);
-//    
-//    List<Incident> retrievedIncidents = repository.findAll();
-//    
-//    assertEquals(3, retrievedIncidents.size());
-  }
-  
-//  TODO
-//  public void testSaveWithIncompleteData() {
-//    
+//    RepositoryCommandResultListener<Incident> saveIncidentsListener = new RepositoryCommandResultListener<Incident>() {
+//      @Override
+//      public void commandComplete(RepositoryCommandResult<Incident> result) {
+//        assertTrue(result.isSuccess());
+//        repository.findAll(findIncidentsListener);
+//      }
+//    };
+//
+//    Incident incident1 = new Incident("Fooaaa", new Date().getTime(), "FooNote", "Wind", "SubC1", ImpactScale.MEDIUM);
+//    Incident incident2 = new Incident("Bareee", new Date().getTime(), "BarNote", "Water", "SubC2", ImpactScale.LOW);
+//    Incident incident3 = new Incident("Wharrr", new Date().getTime(), "WhaNote", "Fire", "SubC3", ImpactScale.HIGH);
+  // TODO use latch instead
+//    repository.saveAll(saveIncidentsListener, incident1, incident2, incident3);
 //  }
 }

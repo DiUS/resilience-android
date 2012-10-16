@@ -1,19 +1,23 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import roboguice.inject.ContextSingleton;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
+
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import roboguice.inject.ContextSingleton;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.parse.SaveCallback;
 
 /**
  * @author georgepapas
@@ -22,62 +26,60 @@ import java.util.List;
 public class ParseIncidentRepository implements IncidentRepository {
 
   @Override
-  public void findById(RepositoryCommandResultListener<Incident> listener, String id) {
-    ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-
-    Incident incident = null;
-    try {
-      ParseObject parseObject = query.get(id);
-      incident = parseObjectToIncident(parseObject);
-      incident.setId(id);
-    } catch (ParseException e) {
-      throw new RuntimeException("Failed to retrieve object with id " + id, e);
-    }
-
-    ArrayList<Incident> results = new ArrayList<Incident>();
-    if (incident != null) {
-      results.add(incident);
-    }
-    listener.commandComplete(new RepositoryCommandResult<Incident>(incident != null, results){});
+  public void findById(final RepositoryCommandResultListener<Incident> listener, final String id) {
+    final ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
+    query.getInBackground(id, new GetCallback() {
+      @Override
+      public void done(ParseObject parseObject, ParseException ex) {
+        Incident incident = parseObjectToIncident(parseObject);
+        incident.setId(id);
+        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incident));
+      }
+    });
   }
 
   @Override
-  public void save(RepositoryCommandResultListener<Incident> listener, Incident incident) {
-    ParseObject parseObject = new ParseObject(Constants.TABLE_INCIDENT);
-    if (incident.getId() != null) {
-      parseObject = retrieveParseObject(incident);
+  public void save(final RepositoryCommandResultListener<Incident> listener, final Incident incident) {
+    ParseObject parseObject = null;
+    if (incident.getId() == null) {
+      parseObject = new ParseObject(Constants.TABLE_INCIDENT);
+      parseObject = updateParseIncidentAttributes(parseObject, incident);
     }
+    else {
+      parseObject = retrieveParseObject(incident);
+      updateParseIncidentAttributes(parseObject, incident);
+    }
+
+    final ParseObject finalParseObject = parseObject;
+    parseObject.saveEventually(new SaveCallback() {
+      @Override
+      public void done(ParseException ex) {
+        incident.setId(finalParseObject.getObjectId());
+        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incident));   
+      }
+    });
+  }
+
+  private ParseObject updateParseIncidentAttributes(ParseObject parseObject, Incident incident) {
     parseObject.put(Constants.COL_INCIDENT_NAME, incident.getName());
     parseObject.put(Constants.COL_INCIDENT_CATEGORY, incident.getCategory());
     parseObject.put(Constants.COL_INCIDENT_SUBCATEGORY, incident.getSubCategory());
     parseObject.put(Constants.COL_INCIDENT_IMPACT, incident.getImpact().name());
     parseObject.put(Constants.COL_INCIDENT_CREATION_DATE, incident.getDateCreated());
     parseObject.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
-
-    try {
-      parseObject.save();
-
-      // FIXME - mutating the object might be unexpected here.
-      incident.setId(parseObject.getObjectId());
-    } catch (ParseException e) {
-      throw new RuntimeException(e);
-    }
-
-    listener.commandComplete(new RepositoryCommandResult<Incident>(true, Arrays.asList(new Incident[]{incident})));
+    
+    return parseObject;
   }
 
   @Override
-  public void findAll(RepositoryCommandResultListener<Incident> listener) {
+  public void findAll(final RepositoryCommandResultListener<Incident> listener) {
     ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-    List<ParseObject> parseArray = null;
-    try {
-      parseArray = query.find();
-    } catch (ParseException e) {
-      throw new RuntimeException(e);
-    }
-
-
-    listener.commandComplete(new RepositoryCommandResult<Incident>(true, toIncidentList(parseArray)));
+    query.findInBackground(new FindCallback() {
+      @Override
+      public void done(List<ParseObject> results, ParseException ex) {
+        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, toIncidentList(results)));
+      }
+    });
   }
 
   @Override
@@ -129,4 +131,20 @@ public class ParseIncidentRepository implements IncidentRepository {
     return incident;
   }
 
+  @Override
+  public void saveAll(final RepositoryCommandResultListener<Incident> listener,
+      final Incident... incidents) {
+    
+      List<ParseObject> parseIncidents = new ArrayList<ParseObject>();
+      for (Incident incident : incidents) {
+        parseIncidents.add(updateParseIncidentAttributes(new ParseObject(Constants.TABLE_INCIDENT), incident));
+      }
+      
+      ParseObject.saveAllInBackground(parseIncidents, new SaveCallback() {
+        @Override
+        public void done(ParseException ex) {
+          listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, Arrays.asList(incidents)));
+        }
+      });
+  }
 }
