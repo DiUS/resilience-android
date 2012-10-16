@@ -1,12 +1,15 @@
-package au.com.dius.resilience.persistence;
+package au.com.dius.resilience.persistence.repository;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
+import au.com.dius.resilience.persistence.RepositoryCommand;
+import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.async.BackgroundDataOperation;
 
-public abstract class AbstractSqlLiteRepository<T> extends SQLiteOpenHelper implements Repository<T> {
+public class AbstractSqlLiteRepository<T> extends SQLiteOpenHelper {
 
   protected static final int DATABASE_VERSION = 1;
   public static final String DB_NAME = "resilience.db";
@@ -38,5 +41,9 @@ public abstract class AbstractSqlLiteRepository<T> extends SQLiteOpenHelper impl
   @Override
   public void onCreate(SQLiteDatabase db) {
     db.execSQL(CREATE_DB_SQL);
+  }
+
+  protected void executeInBackground(RepositoryCommandResultListener<T> listener, RepositoryCommand<T> command) {
+    new BackgroundDataOperation<T>().execute(listener, command);
   }
 }

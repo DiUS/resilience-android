@@ -5,6 +5,7 @@ import java.util.List;
 
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.ImpactScale;
+import android.util.Log;
 import au.com.dius.resilience.model.Incident;
 
 import com.parse.ParseException;
@@ -22,19 +23,21 @@ public class ParseIncidentRepository implements Repository<Incident> {
     testObject.put(Constants.COL_INCIDENT_IMPACT, incident.getImpact().name());
     testObject.put(Constants.COL_INCIDENT_CREATION_DATE, incident.getDateCreated());
     testObject.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
-    
+
     try {
       testObject.save();
     } catch (ParseException e) {
       throw new RuntimeException(e);
     }
-    
+
     return true;
   }
 
   @Override
   public Incident findById(long id) {
-    throw new RuntimeException("Not implemented.");
+    Log.d("INCIDENT REPO", "findById");
+    return null;
+//    throw new RuntimeException("Not implemented.");
   }
 
   @Override
@@ -46,7 +49,7 @@ public class ParseIncidentRepository implements Repository<Incident> {
     } catch (ParseException e) {
       throw new RuntimeException(e);
     }
-    
+
     return toIncidentList(parseArray);
   }
 
@@ -67,5 +70,6 @@ public class ParseIncidentRepository implements Repository<Incident> {
       incidents.add(incident);
     }
     return incidents;
+
   }
 }

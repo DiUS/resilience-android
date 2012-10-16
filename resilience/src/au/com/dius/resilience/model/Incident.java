@@ -16,9 +16,20 @@ public class Incident implements Serializable {
   
   private List<Photo> photos = new ArrayList<Photo>();
 
-  public Incident(String id, String name, Long dateCreated, String note,
-      String category, String subCategory, ImpactScale scale) {
+  public Incident(
+          String id,
+          String name,
+          Long dateCreated,
+          String note,
+          String category,
+          String subCategory,
+          ImpactScale scale) {
+
+    this(name, dateCreated, note, category, subCategory, scale);
     this.id = id;
+  }
+
+  public Incident(String name, Long dateCreated, String note, String category, String subCategory, ImpactScale scale) {
     this.name = name;
     this.dateCreated = dateCreated;
     this.note = note;

@@ -1,13 +1,18 @@
 package au.com.dius.resilience.utils;
 
+import android.content.Context;
+import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.RepositoryCommand;
 import au.com.dius.resilience.persistence.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import com.google.inject.Provider;
+
+import java.util.List;
 
 /**
  * @author georgepapas
  */
-public class DataLoaderHelper {
+public class TestHelper {
 
   public static RepositoryCommand<String> createRepositoryCommand() {
     return new RepositoryCommand<String>() {
@@ -25,6 +30,27 @@ public class DataLoaderHelper {
           callbackFlag.setBool(true);
         }
       };
+  }
+
+  public static RepositoryCommandResultListener<Incident> createIncidentListener(
+          final MutableBoolean callbackFlag,
+          final List<Incident> resultList) {
+    return new RepositoryCommandResultListener<Incident>() {
+        @Override
+        public void commandComplete(RepositoryCommandResult<Incident> result) {
+          callbackFlag.setBool(result.isSuccess());
+          resultList.addAll(result.getResults());
+        }
+      };
+  }
+
+  public static Provider<Context> createContextProvider(final Context context) {
+    return new Provider<Context>() {
+      @Override
+      public Context get() {
+        return context;
+      }
+    };
   }
 
 }
