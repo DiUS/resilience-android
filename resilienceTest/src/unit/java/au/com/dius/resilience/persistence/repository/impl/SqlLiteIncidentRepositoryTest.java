@@ -1,9 +1,10 @@
-package au.com.dius.resilience.persistence;
+package au.com.dius.resilience.persistence.repository.impl;
 
 import android.content.Context;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.repository.SqlLiteIncidentRepository;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.repository.impl.SqlLiteIncidentRepository;
 import au.com.dius.resilience.utils.MutableBoolean;
 import au.com.dius.resilience.utils.SameDatabaseCustomTestRunner;
 import au.com.dius.resilience.utils.TestHelper;
@@ -24,7 +25,7 @@ import static junit.framework.Assert.*;
 
 @DatabaseConfig.UsingDatabaseMap(SQLiteMap.class)
 @RunWith(SameDatabaseCustomTestRunner.class)
-public class SqlLiteRepositoryTest {
+public class SqlLiteIncidentRepositoryTest {
 
   @Mock
   private Context mockContext;

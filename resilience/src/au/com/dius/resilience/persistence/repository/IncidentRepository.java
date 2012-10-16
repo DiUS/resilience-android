@@ -1,7 +1,6 @@
 package au.com.dius.resilience.persistence.repository;
 
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
 
 /**
  * @author georgepapas

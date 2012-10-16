@@ -1,8 +1,7 @@
 package au.com.dius.resilience.persistence;
 
 import android.test.InstrumentationTestCase;
-import au.com.dius.resilience.persistence.repository.ParseIncidentRepository;
-import au.com.dius.resilience.test.util.ParseTestUtils;
+import au.com.dius.resilience.persistence.repository.impl.ParseIncidentRepository;
 
 public class ParseRepositoryTest extends InstrumentationTestCase {
 

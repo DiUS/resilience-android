@@ -1,5 +1,6 @@
-package au.com.dius.resilience.persistence;
+package au.com.dius.resilience.persistence.repository.impl;
 
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import org.junit.Test;
 
 import java.util.Arrays;

@@ -6,7 +6,7 @@ import android.view.KeyEvent;
 import android.widget.*;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.ImpactScale;
-import au.com.dius.resilience.persistence.repository.AbstractSqlLiteRepository;
+import au.com.dius.resilience.persistence.repository.impl.AbstractSqlLiteRepository;
 
 public class EditIncidentActivityTest extends
     ActivityInstrumentationTestCase2<EditIncidentActivity> {

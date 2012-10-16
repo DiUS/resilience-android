@@ -1,10 +1,11 @@
-package au.com.dius.resilience.persistence.repository;
+package au.com.dius.resilience.persistence.repository.impl;
 
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.RepositoryCommandResult;
-import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.repository.IncidentRepository;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;

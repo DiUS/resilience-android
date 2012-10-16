@@ -1,7 +1,7 @@
 package au.com.dius.resilience.persistence.async;
 
-import au.com.dius.resilience.persistence.RepositoryCommand;
-import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 
 /**
  * @author georgepapas

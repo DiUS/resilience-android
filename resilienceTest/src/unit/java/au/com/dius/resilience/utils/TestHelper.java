@@ -2,9 +2,9 @@ package au.com.dius.resilience.utils;
 
 import android.content.Context;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.RepositoryCommand;
-import au.com.dius.resilience.persistence.RepositoryCommandResult;
-import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 import com.google.inject.Provider;
 
 import java.util.List;

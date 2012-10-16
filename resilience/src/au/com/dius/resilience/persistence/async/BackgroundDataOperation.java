@@ -1,15 +1,15 @@
 package au.com.dius.resilience.persistence.async;
 
 import android.os.AsyncTask;
-import au.com.dius.resilience.persistence.RepositoryCommand;
-import au.com.dius.resilience.persistence.RepositoryCommandResult;
-import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 
 /**
  * @author georgepapas
  *
  * Executes the given {@link RepositoryCommand} in a background thread.  Once the command completes calls the
- * {@link RepositoryCommandResultListener#commandComplete(au.com.dius.resilience.persistence.RepositoryCommandResult)}
+ * {@link RepositoryCommandResultListener#commandComplete(au.com.dius.resilience.persistence.repository.RepositoryCommandResult)}
  * method in the UI Thread.
  */
 public class BackgroundDataOperation<T> {

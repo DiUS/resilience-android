@@ -1,4 +1,4 @@
-package au.com.dius.resilience.persistence;
+package au.com.dius.resilience.persistence.repository;
 
 /**
  * @author georgepapas

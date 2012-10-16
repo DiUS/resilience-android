@@ -2,8 +2,8 @@ package au.com.dius.resilience.bootstrap;
 
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.PhotoRepository;
-import au.com.dius.resilience.persistence.repository.SqlLiteIncidentRepository;
-import au.com.dius.resilience.persistence.repository.SqlLitePhotoRepository;
+import au.com.dius.resilience.persistence.repository.impl.SqlLiteIncidentRepository;
+import au.com.dius.resilience.persistence.repository.impl.SqlLitePhotoRepository;
 import com.google.inject.AbstractModule;
 import roboguice.inject.ContextSingleton;
 

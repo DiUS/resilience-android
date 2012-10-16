@@ -1,4 +1,4 @@
-package au.com.dius.resilience.persistence.repository;
+package au.com.dius.resilience.persistence.repository.impl;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.database.Cursor;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.ImpactScale;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.RepositoryCommand;
-import au.com.dius.resilience.persistence.RepositoryCommandResult;
-import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.repository.IncidentRepository;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import roboguice.inject.ContextSingleton;

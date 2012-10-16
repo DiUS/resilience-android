@@ -1,13 +1,12 @@
-package au.com.dius.resilience.persistence.repository;
+package au.com.dius.resilience.persistence.repository.impl;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
-import au.com.dius.resilience.persistence.RepositoryCommand;
-import au.com.dius.resilience.persistence.RepositoryCommandResultListener;
 import au.com.dius.resilience.persistence.async.BackgroundDataOperation;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 
 public class AbstractSqlLiteRepository<T> extends SQLiteOpenHelper {
 
