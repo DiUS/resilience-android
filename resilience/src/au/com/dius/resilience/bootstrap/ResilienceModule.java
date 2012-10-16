@@ -14,9 +14,10 @@ public class ResilienceModule extends AbstractModule {
 
   @Override
   protected void configure() {
+
     bind(IncidentRepository.class).to(SqlLiteIncidentRepository.class).in(ContextSingleton.class);
     bind(PhotoRepository.class).to(SqlLitePhotoRepository.class).in(ContextSingleton.class);
-    bind(IncidentRepository.class).to(SqlLiteIncidentRepository.class).in(ContextSingleton.class);
+
   }
 
 }

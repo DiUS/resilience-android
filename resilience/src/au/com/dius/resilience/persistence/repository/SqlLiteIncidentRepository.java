@@ -32,7 +32,7 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
       @Override
       public RepositoryCommandResult<Incident> perform() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(Constants.COL_ID, incident.getId());
+        contentValues.put(COL_ID, incident.getId());
         contentValues.put(Constants.COL_INCIDENT_NAME, incident.getName());
         contentValues.put(Constants.COL_INCIDENT_CATEGORY, incident.getCategory());
         contentValues.put(Constants.COL_INCIDENT_SUBCATEGORY, incident.getSubCategory());
@@ -51,7 +51,7 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
   }
 
   @Override
-  public void findById(RepositoryCommandResultListener<Incident> listener, final long id) {
+  public void findById(RepositoryCommandResultListener<Incident> listener, final String id) {
     RepositoryCommand<Incident> command = new RepositoryCommand<Incident>() {
       @Override
       public RepositoryCommandResult<Incident> perform() {

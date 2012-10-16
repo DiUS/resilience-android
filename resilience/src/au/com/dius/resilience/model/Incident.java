@@ -50,7 +50,7 @@ public class Incident implements Serializable {
     return name;
   }
 
-  void setName(String name) {
+  public void setName(String name) {
     this.name = name;
   }
 
@@ -96,5 +96,9 @@ public class Incident implements Serializable {
   
   public void addPhotos(List<Photo> photos) {
     photos.addAll(photos);
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }
