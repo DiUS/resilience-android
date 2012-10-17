@@ -1,56 +1,39 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
-import android.view.KeyEvent;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
+import au.com.dius.resilience.AbstractResilienceTestCase;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.persistence.repository.impl.AbstractSqlLiteRepository;
+import com.jayway.android.robotium.solo.Solo;
 
-public class EditIncidentActivityTest extends
-    ActivityInstrumentationTestCase2<EditIncidentActivity> {
-
-  private EditIncidentActivity activity;
+public class EditIncidentActivityTest extends AbstractResilienceTestCase<EditIncidentActivity> {
 
   public EditIncidentActivityTest() {
-    super("au.com.dius.resilience", EditIncidentActivity.class);
+    super(EditIncidentActivity.class);
   }
 
-  public void setUp() {
-    activity = getActivity();
-    activity.getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
+  @Override
+  protected void beforeTest() {
+    getActivity().getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
   }
-  
+
+  @Override
+  protected void afterTest() {
+    getActivity().getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
+  }
+
   public void testCreateAndSaveIncident() {
     
-    Spinner categorySpinner = (Spinner) activity.findViewById(R.id.category_spinner);
-    TouchUtils.clickView(this, categorySpinner);
-    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
-    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
-    this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
+    solo.pressSpinnerItem(0, 2);
+    solo.pressSpinnerItem(1, 3);
+
+    EditText notes = (EditText) solo.getView(R.id.notes);
+    Button createButton = (Button) solo.getView(R.id.submit_incident);
     
-    Spinner subCategorySpinner = (Spinner) activity.findViewById(R.id.sub_category_spinner);
-    TouchUtils.clickView(this, subCategorySpinner);
-    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
-    this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
-    this.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
-    
-    EditText notes = (EditText) activity.findViewById(R.id.notes);
-    Button createButton = (Button) activity.findViewById(R.id.submit_incident);
-    
-    TouchUtils.clickView(this, notes);
-    
-    this.sendKeys(KeyEvent.KEYCODE_F, KeyEvent.KEYCODE_I, KeyEvent.KEYCODE_R, KeyEvent.KEYCODE_E);
-    this.sendKeys(KeyEvent.KEYCODE_BACK);
-    
-    sleep(2000);
-    
-    TouchUtils.clickView(this, createButton);
+    solo.typeText(notes, "fire");
+    solo.clickOnView(createButton);
 
     //TODO Should be part of the UI tests, not db.. Mixing concerns here
     // Check that it saved
@@ -64,37 +47,15 @@ public class EditIncidentActivityTest extends
   
   public void testImpactLabelChange() {
     // Test that the initial displayed impact is LOW
-    TextView impactRatingLbl = (TextView) activity.findViewById(R.id.impact_scale_desc);
+    TextView impactRatingLbl = (TextView) solo.getView(R.id.impact_scale_desc);
     assertEquals(Impact.LOW.name(), impactRatingLbl.getText().toString());
     
-    final SeekBar impactRating = (SeekBar) activity.findViewById(R.id.impact_scale);
-    activity.runOnUiThread(new Runnable() {
-      public void run() {
-        impactRating.setProgress(50);
-      }
-    });
-    sleep(2000);
+    final SeekBar impactRating = (SeekBar) solo.getView(R.id.impact_scale);
+    solo.setProgressBar(impactRating, 50);
     assertEquals(Impact.MEDIUM.name(), impactRatingLbl.getText().toString());
     
-    activity.runOnUiThread(new Runnable() {
-      public void run() {
-        impactRating.setProgress(100);
-      }
-    });
-    sleep(2000);
+    solo.setProgressBar(impactRating, 100);
     assertEquals(Impact.HIGH.name(), impactRatingLbl.getText().toString());
   }
 
-  private void sleep(long time) {
-    try {
-      Thread.sleep(2000);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-  }
-  
-  public void tearDown() {
-    activity.getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
-    activity.finish();
-  }
 }

@@ -31,6 +31,8 @@ import com.google.inject.Inject;
 
 public class EditIncidentActivity extends RoboActivity implements OnSeekBarChangeListener, RepositoryCommandResultListener<Incident> {
 
+  public static final String LOG_TAG = EditIncidentActivity.class.getName();
+
   @InjectView(R.id.category_spinner)
   private Spinner categorySpinner;
 
@@ -103,6 +105,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
     incident.addPhotos(cameraFacade.getPhotos());
 
+    Log.d(LOG_TAG, "Saving incident, thread is " +  Thread.currentThread().getName());
     incidentRepository.save(this, incident);
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
