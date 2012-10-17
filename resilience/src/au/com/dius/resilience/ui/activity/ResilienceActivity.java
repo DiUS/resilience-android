@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TabHost;
 import au.com.dius.resilience.R;
@@ -132,13 +131,9 @@ public class ResilienceActivity extends RoboFragmentActivity implements TabHost.
     Fragment fragment = fragmentManager.findFragmentById(fragmentIdToShow);
     if (fragment == null) {
       fragment = getFragment(fragmentIdToShow);
-      transaction.replace(containerViewId, fragment);
-    } else {
-      if (fragment.isHidden()) {
-        transaction.show(fragment);
-      }
     }
-  }
+    transaction.replace(containerViewId, fragment);
+}
 
   private Fragment getFragment(int fragmentId) {
     Fragment fragment;
