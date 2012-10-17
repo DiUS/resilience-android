@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import roboguice.inject.ContextSingleton;
+import android.os.AsyncTask;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
@@ -50,11 +51,16 @@ public class ParseIncidentRepository implements IncidentRepository {
       updateParseIncidentAttributes(parseObject, incident);
     }
     final ParseObject finalParseObject = parseObject;
-    parseObject.saveEventually(new SaveCallback() {
+    AsyncTask.execute(new Runnable() {
       @Override
-      public void done(ParseException ex) {
-        incident.setId(finalParseObject.getObjectId());
-        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incident));   
+      public void run() {
+        finalParseObject.saveEventually(new SaveCallback() {
+          @Override
+          public void done(ParseException ex) {
+            incident.setId(finalParseObject.getObjectId());
+            listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incident)); 
+          }
+        });
       }
     });
   }
