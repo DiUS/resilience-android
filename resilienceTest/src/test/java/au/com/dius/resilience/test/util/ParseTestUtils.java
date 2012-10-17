@@ -2,14 +2,13 @@ package au.com.dius.resilience.test.util;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import android.app.Instrumentation;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
 
-import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -18,8 +17,8 @@ import com.parse.ParseQuery;
 
 public class ParseTestUtils {
   public static void setUp(Context context) {
-    Parse
-        .initialize(context, Constants.TEST_APP_KEY, Constants.TEST_CLIENT_KEY);
+    Parse.initialize(context, Constants.TEST_APP_KEY, Constants.TEST_CLIENT_KEY);
+    Parse.setLogLevel(Parse.LOG_LEVEL_INFO);
   }
 
   public static void dropAll(Instrumentation instrumentation) {
@@ -50,17 +49,23 @@ public class ParseTestUtils {
 
           private void deleteObjects(List<ParseObject> parseObjects) throws InterruptedException {
             final CountDownLatch deleteLatch = new CountDownLatch(parseObjects.size());
-            for (ParseObject i : parseObjects) {
-              i.deleteInBackground(new DeleteCallback() {
+            for (final ParseObject i : parseObjects) {
+              AsyncTask.execute(new Runnable() {
                 @Override
-                public void done(ParseException ex) {
-                  deleteLatch.countDown();
+                public void run() {
+                  try {
+                    i.delete();
+                    Log.d(ParseTestUtils.class.getName(), "Done deleting object");
+                    deleteLatch.countDown();
+                  } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                  }
                 }
               });
             }
 
-            Log.d(ParseTestUtils.class.getName(), "Clearing data..");
-            deleteLatch.await(15, TimeUnit.SECONDS);
+            Log.d(ParseTestUtils.class.getName(), "Clearing " + parseObjects.size() + " data objects..");
+            deleteLatch.await();
           }
         });
 
