@@ -32,33 +32,26 @@ public class ParseTestUtils {
     public void run() {
       try {
         ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
+        Log.d(ParseTestUtils.class.getName(), "Finding list of objects..");
         query.findInBackground(new FindCallback() {
           @Override
           public void done(List<ParseObject> incidents, ParseException ex) {
-            if (ex != null) {
+            if (ex != null || incidents.size() == 0) {
               return;
             }
 
             try {
-              deleteIncidents(incidents);
+              deleteObjects(incidents);
             }
             catch(Exception e) {
               Log.e(DropTables.class.getName(), "Failed to delete objects!");
             }
           }
 
-          private void deleteIncidents(List<ParseObject> incidents) throws InterruptedException {
-            Log.d(ParseTestUtils.class.getName(), "Getting list of objects..");
-
-            if (incidents.size() == 0) {
-              return;
-            }
-
-            final CountDownLatch deleteLatch = new CountDownLatch(incidents
-                .size());
-            for (ParseObject i : incidents) {
+          private void deleteObjects(List<ParseObject> parseObjects) throws InterruptedException {
+            final CountDownLatch deleteLatch = new CountDownLatch(parseObjects.size());
+            for (ParseObject i : parseObjects) {
               i.deleteInBackground(new DeleteCallback() {
-
                 @Override
                 public void done(ParseException ex) {
                   deleteLatch.countDown();

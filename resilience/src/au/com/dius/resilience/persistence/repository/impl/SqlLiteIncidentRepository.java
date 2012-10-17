@@ -10,7 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import au.com.dius.resilience.Constants;
-import au.com.dius.resilience.model.ImpactScale;
+import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
@@ -115,7 +115,7 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
     String name = cursor.getString(1);
     String category = cursor.getString(2);
     String subCategory = cursor.getString(3);
-    ImpactScale impact = ImpactScale.valueOf(cursor.getString(4));
+    Impact impact = Impact.valueOf(cursor.getString(4));
     Long dateCreated = cursor.getLong(5);
     String note = cursor.getString(6);
 

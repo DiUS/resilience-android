@@ -12,7 +12,7 @@ public class Incident implements Serializable {
   private String note;
   private String category;
   private String subCategory;
-  private ImpactScale scale;
+  private Impact scale;
   
   private List<Photo> photos = new ArrayList<Photo>();
 
@@ -23,13 +23,13 @@ public class Incident implements Serializable {
           String note,
           String category,
           String subCategory,
-          ImpactScale scale) {
+          Impact scale) {
 
     this(name, dateCreated, note, category, subCategory, scale);
     this.id = id;
   }
 
-  public Incident(String name, Long dateCreated, String note, String category, String subCategory, ImpactScale scale) {
+  public Incident(String name, Long dateCreated, String note, String category, String subCategory, Impact scale) {
     this.name = name;
     this.dateCreated = dateCreated;
     this.note = note;
@@ -38,7 +38,7 @@ public class Incident implements Serializable {
     this.scale = scale;
   }
 
-  public ImpactScale getImpact() {
+  public Impact getImpact() {
     return scale;
   }
 
@@ -90,7 +90,7 @@ public class Incident implements Serializable {
     this.subCategory = subCategory;
   }
 
-  public void setScale(ImpactScale scale) {
+  public void setScale(Impact scale) {
     this.scale = scale;
   }
   

@@ -6,7 +6,7 @@ import java.util.List;
 
 import roboguice.inject.ContextSingleton;
 import au.com.dius.resilience.Constants;
-import au.com.dius.resilience.model.ImpactScale;
+import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
@@ -49,7 +49,6 @@ public class ParseIncidentRepository implements IncidentRepository {
       parseObject = retrieveParseObject(incident);
       updateParseIncidentAttributes(parseObject, incident);
     }
-
     final ParseObject finalParseObject = parseObject;
     parseObject.saveEventually(new SaveCallback() {
       @Override
@@ -77,7 +76,11 @@ public class ParseIncidentRepository implements IncidentRepository {
     query.findInBackground(new FindCallback() {
       @Override
       public void done(List<ParseObject> results, ParseException ex) {
-        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, toIncidentList(results)));
+        List<Incident> incidentList = new ArrayList<Incident>();
+        if (ex == null) {
+          incidentList.addAll(toIncidentList(results));
+        }
+        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incidentList));
       }
     });
   }
@@ -117,6 +120,7 @@ public class ParseIncidentRepository implements IncidentRepository {
   }
 
   private Incident parseObjectToIncident(ParseObject pObject) {
+    pObject.getJSONObject("");
     String id = pObject.getString(Constants.COL_ID);
     String name = pObject.getString(Constants.COL_INCIDENT_NAME);
     String category = pObject.getString(Constants.COL_INCIDENT_CATEGORY);
@@ -125,7 +129,7 @@ public class ParseIncidentRepository implements IncidentRepository {
     long creationDate = pObject.getLong(Constants.COL_INCIDENT_CREATION_DATE);
     String note = pObject.getString(Constants.COL_INCIDENT_NOTE);
 
-    ImpactScale impactScale = ImpactScale.valueOf(impact);
+    Impact impactScale = Impact.valueOf(impact);
     Incident incident = new Incident(id, name, creationDate, note, category, subCategory, impactScale);
 
     return incident;

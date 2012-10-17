@@ -10,7 +10,7 @@ import roboguice.RoboGuice;
 import android.app.Application;
 import android.content.Context;
 import android.test.InstrumentationTestCase;
-import au.com.dius.resilience.model.ImpactScale;
+import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
@@ -39,7 +39,7 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
   
   public void testSave() throws Exception {
     final Long time = new Date().getTime();
-    final Incident incident = new Incident("SomeName", time, "SomeNote", "Explosion", "Subby", ImpactScale.MEDIUM);
+    final Incident incident = new Incident("SomeName", time, "SomeNote", "Explosion", "Subby", Impact.MEDIUM);
     
     final CountDownLatch saveLatch = new CountDownLatch(1);
     
@@ -82,7 +82,7 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
         assertEquals("SomeNote", foundIncident.getNote());
         assertEquals("Explosion", foundIncident.getCategory());
         assertEquals("Subby", foundIncident.getSubCategory());
-        assertEquals(ImpactScale.MEDIUM, foundIncident.getImpact());
+        assertEquals(Impact.MEDIUM, foundIncident.getImpact());
         
         latch.countDown();
       }

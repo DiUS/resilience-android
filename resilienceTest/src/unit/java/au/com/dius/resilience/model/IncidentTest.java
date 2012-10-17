@@ -19,13 +19,13 @@ public class IncidentTest {
 		String note = "The monkeys are armed with nunchucks!";
 		String category = "Monkey Attack";
 		String subCategory = "Rabid Monkeys";
-		Incident incident = new Incident(name, dateCreated, note, category, subCategory, ImpactScale.HIGH);
+		Incident incident = new Incident(name, dateCreated, note, category, subCategory, Impact.HIGH);
 
 		assertEquals(name, incident.getName());
 		assertEquals(dateCreated, incident.getDateCreated());
 		assertEquals(note, incident.getNote());
 		assertEquals(category, incident.getCategory());
 		assertEquals(subCategory, incident.getSubCategory());
-		assertEquals(ImpactScale.HIGH, incident.getImpact());
+		assertEquals(Impact.HIGH, incident.getImpact());
 	}
 }

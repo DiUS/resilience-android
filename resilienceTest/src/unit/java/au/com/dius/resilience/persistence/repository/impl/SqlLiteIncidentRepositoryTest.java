@@ -1,7 +1,7 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
 import android.content.Context;
-import au.com.dius.resilience.model.ImpactScale;
+import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 import au.com.dius.resilience.persistence.repository.impl.SqlLiteIncidentRepository;
@@ -50,7 +50,7 @@ public class SqlLiteIncidentRepositoryTest {
 
     repository.save(
             saveListener,
-            new Incident("Test1", Long.valueOf(999), "Hello World", "Cat1", "Subcat1", ImpactScale.LOW));
+            new Incident("Test1", Long.valueOf(999), "Hello World", "Cat1", "Subcat1", Impact.LOW));
 
     Robolectric.runBackgroundTasks();
 

@@ -3,9 +3,13 @@ package au.com.dius.resilience.ui.activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.view.KeyEvent;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.model.ImpactScale;
+import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.persistence.repository.impl.AbstractSqlLiteRepository;
 
 public class EditIncidentActivityTest extends
@@ -61,24 +65,24 @@ public class EditIncidentActivityTest extends
   public void testImpactLabelChange() {
     // Test that the initial displayed impact is LOW
     TextView impactRatingLbl = (TextView) activity.findViewById(R.id.impact_scale_desc);
-    assertEquals(ImpactScale.LOW.name(), impactRatingLbl.getText().toString());
+    assertEquals(Impact.LOW.name(), impactRatingLbl.getText().toString());
     
     final SeekBar impactRating = (SeekBar) activity.findViewById(R.id.impact_scale);
     activity.runOnUiThread(new Runnable() {
       public void run() {
-        impactRating.setProgress(ImpactScale.MEDIUM.getCode());
+        impactRating.setProgress(50);
       }
     });
     sleep(2000);
-    assertEquals(ImpactScale.MEDIUM.name(), impactRatingLbl.getText().toString());
+    assertEquals(Impact.MEDIUM.name(), impactRatingLbl.getText().toString());
     
     activity.runOnUiThread(new Runnable() {
       public void run() {
-        impactRating.setProgress(ImpactScale.HIGH.getCode());
+        impactRating.setProgress(100);
       }
     });
     sleep(2000);
-    assertEquals(ImpactScale.HIGH.name(), impactRatingLbl.getText().toString());
+    assertEquals(Impact.HIGH.name(), impactRatingLbl.getText().toString());
   }
 
   private void sleep(long time) {

@@ -35,19 +35,16 @@ public class CreateActivity extends ActivityInstrumentationTestCase2<ResilienceA
     solo.clickOnImage(1);
     solo.assertCurrentActivity("expected edit activity", EditIncidentActivity.class);
 
-    solo.clickOnText("Unknown", 0);
-    solo.clickOnText("Wildlife");
+    solo.pressSpinnerItem(0, 1);
     
-    solo.clickOnText("Unknown", 0);
-    solo.clickOnText("SubC1");
-
     solo.clickOnEditText(0);
     solo.enterText(0, "Something really bad has happened and I need to raise an incident");
     solo.goBack();
+    
     solo.clickOnButton("Create");
 
     solo.waitForText("ALL INCIDENTS", 1, 10000);
-    solo.waitForText("Wildlife", 1, 10000);
+    solo.waitForText("Fire", 1, 10000);
     
     int incidentsAfter = solo.getCurrentListViews().get(0).getCount();
     assertEquals(incidentsBefore + 1, incidentsAfter);
