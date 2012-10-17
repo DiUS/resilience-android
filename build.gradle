@@ -3,7 +3,7 @@ buildscript {
     mavenLocal()
     mavenCentral()
   }
-    
+
   dependencies {
     // 1.2.0 version of the plugin is not able to sign the package under osx JDK 1.6
     // Recompiling fixes this
@@ -20,10 +20,11 @@ subprojects {
 }
 
 allprojects {
-    repositories {
-        maven {
-            url "http://android-ci:8081/artifactory/ext-release-local"
-        }
-        mavenCentral()
+  repositories {
+    maven {
+      url "http://android-ci:8081/artifactory/ext-release-local"
     }
+    mavenLocal()
+    mavenCentral()
+  }
 }
