@@ -1,8 +1,8 @@
 package au.com.dius.resilience.persistence;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +25,12 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
   
   final private CountDownLatch latch = new CountDownLatch(1);
 
+  private RepositoryCommandResultListener<Incident> saveListener;
+  private CountDownLatch saveLatch;
+
+  //A place to store variables across thread hell.
+  final Map<String, String> testValues = new HashMap<String, String>();
+  
   @Override
   public void setUp() throws Exception {
     getInstrumentation().waitForIdleSync();
@@ -35,29 +41,26 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
     
     ParseTestUtils.setUp(targetContext);
     ParseTestUtils.dropAll(getInstrumentation());
-  }
-  
-  public void testSave() throws Exception {
-    final Long time = new Date().getTime();
-    final Incident incident = new Incident("SomeName", time, "SomeNote", "Explosion", "Subby", Impact.MEDIUM);
     
-    final CountDownLatch saveLatch = new CountDownLatch(1);
-    
-    final List<String> saveIdArr = new ArrayList<String>();
-    final RepositoryCommandResultListener<Incident> saveListener = new RepositoryCommandResultListener<Incident>() {
+    testValues.clear();
+    saveLatch = new CountDownLatch(1);
+    saveListener = new RepositoryCommandResultListener<Incident>() {
       @Override
       public void commandComplete(RepositoryCommandResult<Incident> result) {
         assertTrue(result.isSuccess());
         assertEquals(1, result.getResults().size());
         Incident savedIncident = result.getResults().get(0);
         
-        String id = savedIncident.getId();
-        assertNotNull(id);
-        saveIdArr.add(id);
+        testValues.put("INCIDENT_ID",  savedIncident.getId());
         
         saveLatch.countDown();
       }
     };
+  }
+  
+  public void testSave() throws Exception {
+    final Long time = new Date().getTime();
+    final Incident incident = new Incident("SomeName", time, "SomeNote", "Explosion", "Subby", Impact.MEDIUM);
     
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
@@ -76,7 +79,7 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
         
         Incident foundIncident = result.getResults().get(0);
         assertNotNull(foundIncident);
-        assertEquals(saveIdArr.get(0), foundIncident.getId());
+        assertEquals(testValues.get("INCIDENT_ID"), foundIncident.getId());
         assertEquals("SomeName", foundIncident.getName());
         assertEquals(time, foundIncident.getDateCreated());
         assertEquals("SomeNote", foundIncident.getNote());
@@ -91,7 +94,7 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
       public void run() {
-        repository.findById(foundIncidentListener, saveIdArr.get(0));
+        repository.findById(foundIncidentListener, testValues.get("INCIDENT_ID"));
       }
     });
     
@@ -100,16 +103,16 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
   
 //  public void testUpdate() {
 //      final Long time = new Date().getTime();
-//      Incident incident = new Incident("OrigName", time, "OrigNote", "OrigCat", "OrigSubCat", ImpactScale.MEDIUM);
-//      repository.save(stubListener, incident);
+//      Incident incident = new Incident("OrigName", time, "OrigNote", "OrigCat", "OrigSubCat", Impact.MEDIUM);
+//      repository.save(saveListener, incident);
 //      final String id = incident.getId();
 //      
 //      incident.setName("NewName");
 //      incident.setNote("NewNote");
 //      incident.setCategory("NewCat");
 //      incident.setSubCategory("NewSubCat");
-//      incident.setScale(ImpactScale.LOW);
-//      repository.save(stubListener, incident);
+//      incident.setScale(Impact.LOW);
+//      repository.save(saveListener, incident);
 //      
 //      RepositoryCommandResultListener<Incident> foundIncidentListener = new RepositoryCommandResultListener<Incident>() {
 //        @Override
@@ -123,7 +126,7 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
 //          assertEquals("NewNote", foundIncident.getNote());
 //          assertEquals("NewCat", foundIncident.getCategory());
 //          assertEquals("NewSubCat", foundIncident.getSubCategory());
-//          assertEquals(ImpactScale.LOW, foundIncident.getImpact());
+//          assertEquals(Impact.LOW, foundIncident.getImpact());
 //        }
 //      };
 //      
@@ -150,7 +153,7 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
 //    Incident incident1 = new Incident("Fooaaa", new Date().getTime(), "FooNote", "Wind", "SubC1", ImpactScale.MEDIUM);
 //    Incident incident2 = new Incident("Bareee", new Date().getTime(), "BarNote", "Water", "SubC2", ImpactScale.LOW);
 //    Incident incident3 = new Incident("Wharrr", new Date().getTime(), "WhaNote", "Fire", "SubC3", ImpactScale.HIGH);
-  // TODO use latch instead
+//   TODO use latch instead
 //    repository.saveAll(saveIncidentsListener, incident1, incident2, incident3);
 //  }
 }

@@ -43,8 +43,7 @@ public class CreateActivity extends ActivityInstrumentationTestCase2<ResilienceA
     
     solo.clickOnButton("Create");
 
-    solo.waitForText("ALL INCIDENTS", 1, 10000);
-    solo.waitForText("Fire", 1, 10000);
+    solo.sleep(5000);
     
     int incidentsAfter = solo.getCurrentListViews().get(0).getCount();
     assertEquals(incidentsBefore + 1, incidentsAfter);
