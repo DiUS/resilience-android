@@ -1,51 +1,50 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.test.ActivityInstrumentationTestCase2;
-import au.com.dius.resilience.test.util.ParseTestUtils;
-
+import android.view.View;
+import android.widget.ListView;
+import au.com.dius.resilience.AbstractResilienceTestCase;
+import au.com.dius.resilience.R;
 import com.jayway.android.robotium.solo.Solo;
+
+import java.util.ArrayList;
 
 /**
  * @author georgepapas
  */
-public class CreateActivity extends ActivityInstrumentationTestCase2<ResilienceActivity> {
-
-  private Solo solo;
+public class CreateActivity extends AbstractResilienceTestCase<ResilienceActivity> {
 
   public CreateActivity() {
     super(ResilienceActivity.class);
   }
 
   @Override
-  public void setUp() throws Exception {
-    getInstrumentation().waitForIdleSync();
-    solo = new Solo(getInstrumentation(), getActivity());
-    ParseTestUtils.setUp(getActivity());
-    ParseTestUtils.dropAll(getInstrumentation());
+  protected void beforeTest() {
   }
 
   @Override
-  public void tearDown() {
-    solo.finishOpenedActivities();
+  protected void afterTest() {
   }
 
   public void testCreateIncident() {
 
-    final int incidentsBefore = solo.getCurrentListViews().get(0).getCount();
+    final int incidentsBefore = getNoOfIncidentsInList();
     solo.clickOnImage(1);
     solo.assertCurrentActivity("expected edit activity", EditIncidentActivity.class);
 
     solo.pressSpinnerItem(0, 1);
-    
-    solo.clickOnEditText(0);
-    solo.enterText(0, "Something really bad has happened and I need to raise an incident");
-    solo.goBack();
-    
-    solo.clickOnButton("Create");
+    solo.typeText(0, "Run for the hills");
 
-    solo.sleep(5000);
-    
-    int incidentsAfter = solo.getCurrentListViews().get(0).getCount();
+    final View createButton = solo.getView(R.id.submit_incident);
+    solo.clickOnView(createButton);
+
+    solo.waitForFragmentById(R.id.fragment_incident_list_view);
+    int incidentsAfter = getNoOfIncidentsInList();
     assertEquals(incidentsBefore + 1, incidentsAfter);
   }
+
+  private int getNoOfIncidentsInList() {
+    final ArrayList<ListView> listViews = solo.getCurrentListViews();
+    return listViews.get(0) != null ? listViews.get(0).getCount() : 0;
+  }
+
 }

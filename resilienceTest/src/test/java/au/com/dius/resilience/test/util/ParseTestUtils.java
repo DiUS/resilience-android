@@ -16,17 +16,19 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 public class ParseTestUtils {
+
   public static void setUp(Context context) {
     Parse.initialize(context, Constants.TEST_APP_KEY, Constants.TEST_CLIENT_KEY);
     Parse.setLogLevel(Parse.LOG_LEVEL_INFO);
   }
 
-  public static void dropAll(Instrumentation instrumentation) {
+  public static void dropAll(Instrumentation instrumentation) throws InterruptedException {
     instrumentation.runOnMainSync(new DropTables());
     instrumentation.waitForIdleSync();
   }
 
   private static class DropTables implements Runnable {
+
     @Override
     public void run() {
       try {

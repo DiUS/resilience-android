@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.util.Log;
 import roboguice.inject.ContextSingleton;
 import android.os.AsyncTask;
 import au.com.dius.resilience.Constants;
@@ -25,6 +26,8 @@ import com.parse.SaveCallback;
  */
 @ContextSingleton
 public class ParseIncidentRepository implements IncidentRepository {
+
+  public static final String LOG_TAG = ParseIncidentRepository.class.getName();
 
   @Override
   public void findById(final RepositoryCommandResultListener<Incident> listener, final String id) {
@@ -54,9 +57,13 @@ public class ParseIncidentRepository implements IncidentRepository {
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
+        Log.d(LOG_TAG, "Saving incident in async task, thread is " + Thread.currentThread().getName());
         finalParseObject.saveEventually(new SaveCallback() {
           @Override
           public void done(ParseException ex) {
+
+            Log.d(LOG_TAG, "Saved returned, in callback thread is " +  Thread.currentThread().getName());
+
             incident.setId(finalParseObject.getObjectId());
             listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incident)); 
           }

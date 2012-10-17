@@ -23,20 +23,8 @@
   <string name="list_view_more_details_desc">More details</string>
   <string name="list_view_category_desc">Incident category</string>
 
-
-  <!-- Friendly date constants -->
-  <string name="friendly_date_less_than_a_minute">moments ago</string>
-  <string name="friendly_date_minute">minute ago</string>
-  <string name="friendly_date_minutes">minutes ago</string>
-  <string name="friendly_date_hour">an hour ago</string>
-  <string name="friendly_date_hours">hours ago</string>
-  <string name="friendly_date_yesterday">yesterday</string>
-  <string name="friendly_date_days">days ago</string>
-  <string name="friendly_date_last_week">last week</string>
-  <string name="friendly_date_weeks">weeks ago</string>
-  <string name="friendly_date_last_month">last month</string>
-  <string name="friendly_date_months">months ago</string>
-  <string name="friendly_date_last_year">last year</string>
-  <string name="friendly_date_years">years ago</string>
+  <!-- List view selector toggle buttons -->
+  <string name="label_tab_map_view">Map</string>
+  <string name="label_tab_list_view">List</string>
 
 </resources>

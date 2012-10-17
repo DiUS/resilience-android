@@ -1,14 +1,15 @@
 package au.com.dius.resilience.ui.fragment;
 
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import com.google.inject.Inject;
