@@ -53,7 +53,7 @@ public class ParseIncidentRepository implements IncidentRepository,
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
-        ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+        final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
         try {
           if(parseObject.isDataAvailable()) {
             parseObject.fetchIfNeeded();
@@ -66,24 +66,29 @@ public class ParseIncidentRepository implements IncidentRepository,
         
         updateParseIncidentAttributes(parseObject, incident);
 
-        if (incident.getPhotos().size() > 0) {
-          photoRepository = new ParsePhotoRepository(incident);
-          photoRepository.save(listener, incident.getPhotos().get(0));
-        }
-        else {
-          final ParseObject finalParseObject = parseObject;
-          Log.d(LOG_TAG, "Saving incident in async task, thread is "
-              + Thread.currentThread().getName());
-          finalParseObject.saveEventually(new SaveCallback() {
-            @Override
-            public void done(ParseException ex) {
-              Log.d(LOG_TAG, "Saving incident " + incident.getId() + (ex == null ? " succeeded." : " failed."));
-              incident.setId(finalParseObject.getObjectId());
+        Log.d(LOG_TAG, "Saving incident in async task, thread is "
+            + Thread.currentThread().getName());
+        parseObject.saveEventually(new SaveCallback() {
+          @Override
+          public void done(ParseException ex) {
+            if (incident.getId() == null) {
+              Log.d(LOG_TAG, "Saved new incident " + parseObject.getObjectId() + " with photo " + (ex == null ? "succeeded." : "failed."));
+            }
+            else {
+              Log.d(LOG_TAG, "Updated incident " + incident.getId() + " with photo " + (ex == null ? "succeeded." : "failed."));
+            }
+            incident.setId(parseObject.getObjectId());
+            
+            if (incident.getPhotos().size() > 0) {
+              photoRepository = new ParsePhotoRepository(incident);
+              photoRepository.save(listener, incident.getPhotos().get(0));
+            }
+            else {
               listener.commandComplete(new RepositoryCommandResult<Incident>(
                   ex == null, incident));
             }
-          });
-        }
+          }
+        });
       }
     });
   }

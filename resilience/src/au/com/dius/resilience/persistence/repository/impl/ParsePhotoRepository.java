@@ -58,7 +58,7 @@ public class ParsePhotoRepository implements PhotoRepository {
         parseObject.saveEventually(new SaveCallback() {
           @Override
           public void done(ParseException ex) {
-            Log.d(LOG_TAG, "Saving incident " + incident.getId() + " with photo " + (ex == null ? "succeeded." : "failed."));
+            Log.d(LOG_TAG, "Updated incident " + incident.getId() + " with photo " + (ex == null ? "succeeded." : "failed."));
             incident.setId(parseObject.getObjectId());
             listener.commandComplete(new RepositoryCommandResult<Incident>(
                 ex == null, incident));
