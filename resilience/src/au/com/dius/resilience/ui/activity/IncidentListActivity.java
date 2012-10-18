@@ -1,4 +1,4 @@
-package au.com.dius.resilience.ui.fragment;
+package au.com.dius.resilience.ui.activity;
 
 import android.app.ListFragment;
 import android.content.Intent;
@@ -13,19 +13,20 @@ import au.com.dius.resilience.persistence.repository.RepositoryCommandResultList
 import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import com.google.inject.Inject;
+import roboguice.activity.RoboListActivity;
 import roboguice.fragment.RoboListFragment;
 
 import java.util.Collections;
 
-public class IncidentListFragment extends RoboListFragment implements RepositoryCommandResultListener<Incident> {
+public class IncidentListActivity extends RoboListActivity implements RepositoryCommandResultListener<Incident> {
 
   @Inject
   private IncidentRepository incidentRepository;
 
   @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    super.setListAdapter(new ListViewAdapter(getActivity(), R.layout.fragment_incident_list_view_item, Collections.EMPTY_LIST));
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    super.setListAdapter(new ListViewAdapter(this, R.layout.fragment_incident_list_view_item, Collections.EMPTY_LIST));
 
     //should show loading view...
     loadIncidents();
@@ -34,7 +35,7 @@ public class IncidentListFragment extends RoboListFragment implements Repository
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     Incident incident = (Incident) getListAdapter().getItem(position);
-    Intent viewIncident = new Intent(getActivity(), ViewIncidentActivity.class);
+    Intent viewIncident = new Intent(this, ViewIncidentActivity.class);
     viewIncident.putExtra("incident", incident);
     startActivityForResult(viewIncident, 0);
   }
@@ -52,7 +53,7 @@ public class IncidentListFragment extends RoboListFragment implements Repository
   @Override
   public void commandComplete(final RepositoryCommandResult<Incident> result) {
     this.setListAdapter(
-            new ListViewAdapter(getActivity(), R.layout.fragment_incident_list_view_item, result.getResults()));
+            new ListViewAdapter(this, R.layout.fragment_incident_list_view_item, result.getResults()));
   }
 
 }
