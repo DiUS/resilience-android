@@ -8,7 +8,7 @@ public class Constants {
   public static final String COL_INCIDENT_CATEGORY = "category";
   public static final String COL_INCIDENT_SUBCATEGORY = "subcategory";
   public static final String COL_INCIDENT_IMPACT = "impact";
-  public static final String COL_INCIDENT_CREATION_DATE = "dateCreated";
+  public static final String COL_INCIDENT_CREATION_DATE = "createdAt";
   public static final String COL_INCIDENT_NOTE = "note";
   public static final String COL_INCIDENT_PHOTO = "incident_photo";
   public static final String PHOTO_FILENAME = COL_INCIDENT_PHOTO + ".jpg";

@@ -33,7 +33,7 @@ public class SqlLitePhotoRepository extends AbstractSqlLiteRepository<Photo> imp
   }
 
   @Override
-  public void findByIncident(RepositoryCommandResultListener<Photo> listener, long id) {
+  public void findByIncident(RepositoryCommandResultListener<Incident> listener, long id) {
     throw new UnsupportedOperationException("Not implemented.");
   }
 }

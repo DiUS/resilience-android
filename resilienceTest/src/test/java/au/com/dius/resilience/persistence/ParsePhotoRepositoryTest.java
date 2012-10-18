@@ -68,4 +68,11 @@ public class ParsePhotoRepositoryTest extends InstrumentationTestCase {
     assertTrue(mutableBoolean2.isTrue());
     assertEquals(1, resultList2.size());
   }
+  
+  public void testRetrieve() {
+    MutableBoolean mutableBoolean1 = new MutableBoolean(false);
+    final List<Incident> resultList1 = new ArrayList<Incident>();
+    final CountDownLatch latch1 = new CountDownLatch(1);
+//    parsePhotoRepository.findByIncident(TestHelper.createIncidentListener(mutableBoolean1, resultList1, latch1), incident.getId());
+  }
 }

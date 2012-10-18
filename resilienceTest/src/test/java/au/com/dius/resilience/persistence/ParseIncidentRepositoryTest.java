@@ -57,8 +57,7 @@ public class ParseIncidentRepositoryTest extends InstrumentationTestCase {
   }
   
   public void testSave() throws Exception {
-    final Long time = new Date().getTime();
-    final Incident incident = new Incident("SomeName", time, "SomeNote", "Explosion", "Subby", Impact.MEDIUM);
+    final Incident incident = new Incident("SomeName", null, "SomeNote", "Explosion", "Subby", Impact.MEDIUM);
     
     getInstrumentation().runOnMainSync(new Runnable() {
       @Override
@@ -79,7 +78,7 @@ public class ParseIncidentRepositoryTest extends InstrumentationTestCase {
         assertNotNull(foundIncident);
         assertEquals(testValues.get("INCIDENT_ID"), foundIncident.getId());
         assertEquals("SomeName", foundIncident.getName());
-        assertEquals(time, foundIncident.getDateCreated());
+        assertNotNull(foundIncident.getDateCreated());
         assertEquals("SomeNote", foundIncident.getNote());
         assertEquals("Explosion", foundIncident.getCategory());
         assertEquals("Subby", foundIncident.getSubCategory());
@@ -100,8 +99,7 @@ public class ParseIncidentRepositoryTest extends InstrumentationTestCase {
   }
   
   public void testUpdate() throws Exception {
-      final Long time = new Date().getTime();
-      Incident incident = new Incident("OrigName", time, "OrigNote", "OrigCat", "OrigSubCat", Impact.MEDIUM);
+      Incident incident = new Incident("OrigName", null, "OrigNote", "OrigCat", "OrigSubCat", Impact.MEDIUM);
       repository.save(saveListener, incident);
       saveLatch.await();
       
@@ -127,7 +125,7 @@ public class ParseIncidentRepositoryTest extends InstrumentationTestCase {
           assertNotNull(foundIncident);
           assertEquals(id, foundIncident.getId());
           assertEquals("NewName", foundIncident.getName());
-          assertEquals(time, foundIncident.getDateCreated());
+          assertNotNull(foundIncident.getDateCreated());
           assertEquals("NewNote", foundIncident.getNote());
           assertEquals("NewCat", foundIncident.getCategory());
           assertEquals("NewSubCat", foundIncident.getSubCategory());

@@ -1,6 +1,7 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import roboguice.inject.ContextSingleton;
@@ -9,7 +10,6 @@ import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
@@ -25,8 +25,7 @@ import com.parse.SaveCallback;
  * @author georgepapas
  */
 @ContextSingleton
-public class ParseIncidentRepository implements IncidentRepository,
-    RepositoryCommandResultListener<Photo> {
+public class ParseIncidentRepository implements IncidentRepository {
 
   public static final String LOG_TAG = ParseIncidentRepository.class.getName();
 
@@ -55,6 +54,7 @@ public class ParseIncidentRepository implements IncidentRepository,
       public void run() {
         final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
         try {
+          // Update object if it has an ID, otherwise we'll use the one we just created.
           if(parseObject.isDataAvailable()) {
             parseObject.fetchIfNeeded();
           }
@@ -100,8 +100,6 @@ public class ParseIncidentRepository implements IncidentRepository,
     parseObject.put(Constants.COL_INCIDENT_SUBCATEGORY,
         incident.getSubCategory());
     parseObject.put(Constants.COL_INCIDENT_IMPACT, incident.getImpact().name());
-    parseObject.put(Constants.COL_INCIDENT_CREATION_DATE,
-        incident.getDateCreated());
     parseObject.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
 
     return parseObject;
@@ -150,18 +148,13 @@ public class ParseIncidentRepository implements IncidentRepository,
     String category = pObject.getString(Constants.COL_INCIDENT_CATEGORY);
     String subCategory = pObject.getString(Constants.COL_INCIDENT_SUBCATEGORY);
     String impact = pObject.getString(Constants.COL_INCIDENT_IMPACT);
-    long creationDate = pObject.getLong(Constants.COL_INCIDENT_CREATION_DATE);
+    Date creationDate = pObject.getCreatedAt();
     String note = pObject.getString(Constants.COL_INCIDENT_NOTE);
 
     Impact impactScale = Impact.valueOf(impact);
-    Incident incident = new Incident(id, name, creationDate, note, category,
+    Incident incident = new Incident(id, name, creationDate.getTime(), note, category,
         subCategory, impactScale);
 
     return incident;
-  }
-
-  @Override
-  public void commandComplete(RepositoryCommandResult<Photo> result) {
-
   }
 }

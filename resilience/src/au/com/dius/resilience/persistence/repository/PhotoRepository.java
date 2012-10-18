@@ -8,5 +8,5 @@ import au.com.dius.resilience.model.Photo;
  */
 public interface PhotoRepository {
   void save(RepositoryCommandResultListener<Incident> listener, Photo object);
-  void findByIncident(RepositoryCommandResultListener<Photo> listener, long id);
+  void findByIncident(RepositoryCommandResultListener<Incident> listener, long id);
 }

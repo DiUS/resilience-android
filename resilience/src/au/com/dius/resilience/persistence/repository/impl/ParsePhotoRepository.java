@@ -70,7 +70,7 @@ public class ParsePhotoRepository implements PhotoRepository {
   }
 
   @Override
-  public void findByIncident(RepositoryCommandResultListener<Photo> listener,
+  public void findByIncident(RepositoryCommandResultListener<Incident> listener,
       long id) {
     throw new UnsupportedOperationException("Not implemented yet!");
   }
