@@ -3,7 +3,7 @@ package au.com.dius.resilience.ui.activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.TabHost;
-import au.com.dius.resilience.AbstractResilienceTestCase;
+import au.com.dius.resilience.AbstractResilienceActivityTestCase;
 import au.com.dius.resilience.R;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -20,7 +20,7 @@ import java.util.Set;
  * -e class au.com.dius.resilience.ResilienceActivityTest \
  * au.com.dius.resilience.tests/android.test.InstrumentationTestRunner
  */
-public class ResilienceActivityTest extends AbstractResilienceTestCase<ResilienceActivity> {
+public class ResilienceActivityTest extends AbstractResilienceActivityTestCase<ResilienceActivity> {
 
   public ResilienceActivityTest() {
     super(ResilienceActivity.class);

@@ -2,6 +2,7 @@ package au.com.dius.resilience.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import android.content.Context;
 import au.com.dius.resilience.model.Incident;
@@ -35,15 +36,19 @@ public class TestHelper {
   }
 
   public static RepositoryCommandResultListener<Incident> createIncidentListener(
-          final MutableBoolean callbackFlag,
-          final List<Incident> resultList) {
+      final MutableBoolean callbackFlag,
+      final List<Incident> resultList, final CountDownLatch... latch) {
     return new RepositoryCommandResultListener<Incident>() {
-        @Override
-        public void commandComplete(RepositoryCommandResult<Incident> result) {
-          callbackFlag.setBool(result.isSuccess());
-          resultList.addAll(result.getResults());
+      @Override
+      public void commandComplete(RepositoryCommandResult<Incident> result) {
+        callbackFlag.setBool(result.isSuccess());
+        resultList.addAll(result.getResults());
+        
+        if (latch != null) {
+          latch[0].countDown();
         }
-      };
+      }
+    };
   }
 
   public static Provider<Context> createContextProvider(final Context context) {

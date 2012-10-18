@@ -1,17 +1,16 @@
 package au.com.dius.resilience.ui.activity;
 
+import java.util.ArrayList;
+
 import android.view.View;
 import android.widget.ListView;
-import au.com.dius.resilience.AbstractResilienceTestCase;
+import au.com.dius.resilience.AbstractResilienceActivityTestCase;
 import au.com.dius.resilience.R;
-import com.jayway.android.robotium.solo.Solo;
-
-import java.util.ArrayList;
 
 /**
  * @author georgepapas
  */
-public class CreateActivity extends AbstractResilienceTestCase<ResilienceActivity> {
+public class CreateActivity extends AbstractResilienceActivityTestCase<ResilienceActivity> {
 
   public CreateActivity() {
     super(ResilienceActivity.class);

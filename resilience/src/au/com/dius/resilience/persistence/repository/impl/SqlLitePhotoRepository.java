@@ -1,14 +1,15 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
+import javax.inject.Provider;
+
+import roboguice.inject.ContextSingleton;
 import android.content.Context;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-import com.google.inject.Inject;
-import roboguice.inject.ContextSingleton;
 
-import javax.inject.Provider;
+import com.google.inject.Inject;
 
 @ContextSingleton
 public class SqlLitePhotoRepository extends AbstractSqlLiteRepository<Photo> implements PhotoRepository {
@@ -28,11 +29,11 @@ public class SqlLitePhotoRepository extends AbstractSqlLiteRepository<Photo> imp
 
   @Override
   public void save(RepositoryCommandResultListener<Incident> listener, Photo object) {
-
+    throw new UnsupportedOperationException("Not implemented.");
   }
 
   @Override
-  public void findById(RepositoryCommandResultListener<Incident> listener, long id) {
-
+  public void findByIncident(RepositoryCommandResultListener<Photo> listener, long id) {
+    throw new UnsupportedOperationException("Not implemented.");
   }
 }

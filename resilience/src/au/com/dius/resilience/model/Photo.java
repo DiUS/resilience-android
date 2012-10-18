@@ -1,21 +1,16 @@
 package au.com.dius.resilience.model;
 
-import android.net.Uri;
+import java.io.File;
 
 public class Photo {
   
-  private Uri uri;
-  private byte[] data;
+  private File path;
 
-  public Photo(Uri uri) {
-    this.uri = uri;
+  public Photo(File path) {
+    this.path = path;
   }
   
-  public Uri getUri() {
-    return uri;
-  }
-  
-  public byte[] data() {
-    return data;
+  public File getPath() {
+    return path;
   }
 }

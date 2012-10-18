@@ -1,15 +1,14 @@
 sourceSets {
-    main {
-        java {
-            srcDirs 'src/test/java'
-        }
+  main {
+    java {
+      srcDirs 'src/test/java', 'src/shared/java'
     }
-
-    unit {
-        java {
-            srcDirs 'src/unit/java'
-        }
+  }
+  unit {
+    java {
+      srcDirs 'src/unit/java', 'src/shared/java'
     }
+  }
 }
 
 configurations {

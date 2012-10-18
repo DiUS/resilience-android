@@ -2,6 +2,7 @@ package au.com.dius.resilience.facade;
 
 import static android.app.Activity.RESULT_OK;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -23,11 +26,12 @@ public class CameraFacade {
   private static final String STORAGE_DIRECTORY = "ResilienceIncidents";
   
   public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+  private static final int PHOTO_QUALITY = 100;
   
   private List<Photo> photos = new ArrayList<Photo>();
   
   private Activity callingActivity;
-  private Uri photoFilename;
+  private File photoFilename;
   
   public CameraFacade(Activity callingActivity) {
     this.callingActivity = callingActivity;
@@ -41,12 +45,11 @@ public class CameraFacade {
     photoFilename = getOutputMediaFile();
     
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoFilename);
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFilename));
     callingActivity.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
   }
   
-  // TODO - make async (accesses filesystem)
-  private Uri getOutputMediaFile() {
+  private File getOutputMediaFile() {
     if (! Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ) {
       throw new RuntimeException("External storage was not detected!");
     }
@@ -67,7 +70,7 @@ public class CameraFacade {
     mediaFile = new File(mediaStorageDir.getPath() + File.separator + FILE_PREFIX
         + timeStamp + EXTENSION);
 
-    return Uri.fromFile(mediaFile);
+    return mediaFile;
   }
 
   /**
@@ -89,5 +92,13 @@ public class CameraFacade {
 
   public List<Photo> getPhotos() {
     return photos;
+  }
+  
+  public static byte[] extractBytes(Photo photo) {
+    File photoFile = photo.getPath();
+    Bitmap photoBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    photoBitmap.compress(Bitmap.CompressFormat.JPEG, PHOTO_QUALITY, stream);
+    return stream.toByteArray();
   }
 }

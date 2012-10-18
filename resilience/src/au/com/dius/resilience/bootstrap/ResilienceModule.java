@@ -5,7 +5,7 @@ import au.com.dius.resilience.RuntimeProperties;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.impl.ParseIncidentRepository;
-import au.com.dius.resilience.persistence.repository.impl.SqlLitePhotoRepository;
+import au.com.dius.resilience.persistence.repository.impl.ParsePhotoRepository;
 
 import com.google.inject.AbstractModule;
 
@@ -21,6 +21,6 @@ public class ResilienceModule extends AbstractModule {
     }
     else
       bind(IncidentRepository.class).to(ParseIncidentRepository.class).in(ContextSingleton.class);
-      bind(PhotoRepository.class).to(SqlLitePhotoRepository.class).in(ContextSingleton.class);
+      bind(PhotoRepository.class).to(ParsePhotoRepository.class).in(ContextSingleton.class);
     }
 }

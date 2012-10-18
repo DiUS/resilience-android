@@ -1,15 +1,15 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
 import roboguice.inject.ContextSingleton;
 import android.os.AsyncTask;
+import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
@@ -25,61 +25,80 @@ import com.parse.SaveCallback;
  * @author georgepapas
  */
 @ContextSingleton
-public class ParseIncidentRepository implements IncidentRepository {
+public class ParseIncidentRepository implements IncidentRepository,
+    RepositoryCommandResultListener<Photo> {
 
   public static final String LOG_TAG = ParseIncidentRepository.class.getName();
 
+  ParsePhotoRepository photoRepository;
+
   @Override
-  public void findById(final RepositoryCommandResultListener<Incident> listener, final String id) {
+  public void findById(
+      final RepositoryCommandResultListener<Incident> listener, final String id) {
     final ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
     query.getInBackground(id, new GetCallback() {
       @Override
       public void done(ParseObject parseObject, ParseException ex) {
         Incident incident = parseObjectToIncident(parseObject);
         incident.setId(id);
-        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incident));
+        listener.commandComplete(new RepositoryCommandResult<Incident>(
+            ex == null, incident));
       }
     });
   }
 
   @Override
-  public void save(final RepositoryCommandResultListener<Incident> listener, final Incident incident) {
-    ParseObject parseObject = null;
-    if (incident.getId() == null) {
-      parseObject = new ParseObject(Constants.TABLE_INCIDENT);
-      parseObject = updateParseIncidentAttributes(parseObject, incident);
-    }
-    else {
-      parseObject = retrieveParseObject(incident);
-      updateParseIncidentAttributes(parseObject, incident);
-    }
-    final ParseObject finalParseObject = parseObject;
+  public void save(final RepositoryCommandResultListener<Incident> listener,
+      final Incident incident) {
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
-        Log.d(LOG_TAG, "Saving incident in async task, thread is " + Thread.currentThread().getName());
-        finalParseObject.saveEventually(new SaveCallback() {
-          @Override
-          public void done(ParseException ex) {
-
-            Log.d(LOG_TAG, "Saved returned, in callback thread is " +  Thread.currentThread().getName());
-
-            incident.setId(finalParseObject.getObjectId());
-            listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incident)); 
+        ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+        try {
+          if(parseObject.isDataAvailable()) {
+            parseObject.fetchIfNeeded();
           }
-        });
+        } catch (ParseException e) {
+          listener.commandComplete(new RepositoryCommandResult<Incident>(
+              false, incident));
+          return;
+        }
+        
+        updateParseIncidentAttributes(parseObject, incident);
+
+        if (incident.getPhotos().size() > 0) {
+          photoRepository = new ParsePhotoRepository(incident);
+          photoRepository.save(listener, incident.getPhotos().get(0));
+        }
+        else {
+          final ParseObject finalParseObject = parseObject;
+          Log.d(LOG_TAG, "Saving incident in async task, thread is "
+              + Thread.currentThread().getName());
+          finalParseObject.saveEventually(new SaveCallback() {
+            @Override
+            public void done(ParseException ex) {
+              Log.d(LOG_TAG, "Saving incident " + incident.getId() + (ex == null ? " succeeded." : " failed."));
+              incident.setId(finalParseObject.getObjectId());
+              listener.commandComplete(new RepositoryCommandResult<Incident>(
+                  ex == null, incident));
+            }
+          });
+        }
       }
     });
   }
 
-  private ParseObject updateParseIncidentAttributes(ParseObject parseObject, Incident incident) {
+  private ParseObject updateParseIncidentAttributes(ParseObject parseObject,
+      Incident incident) {
     parseObject.put(Constants.COL_INCIDENT_NAME, incident.getName());
     parseObject.put(Constants.COL_INCIDENT_CATEGORY, incident.getCategory());
-    parseObject.put(Constants.COL_INCIDENT_SUBCATEGORY, incident.getSubCategory());
+    parseObject.put(Constants.COL_INCIDENT_SUBCATEGORY,
+        incident.getSubCategory());
     parseObject.put(Constants.COL_INCIDENT_IMPACT, incident.getImpact().name());
-    parseObject.put(Constants.COL_INCIDENT_CREATION_DATE, incident.getDateCreated());
+    parseObject.put(Constants.COL_INCIDENT_CREATION_DATE,
+        incident.getDateCreated());
     parseObject.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
-    
+
     return parseObject;
   }
 
@@ -93,7 +112,8 @@ public class ParseIncidentRepository implements IncidentRepository {
         if (ex == null) {
           incidentList.addAll(toIncidentList(results));
         }
-        listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, incidentList));
+        listener.commandComplete(new RepositoryCommandResult<Incident>(
+            ex == null, incidentList));
       }
     });
   }
@@ -119,19 +139,6 @@ public class ParseIncidentRepository implements IncidentRepository {
 
   }
 
-  private ParseObject retrieveParseObject(Incident incident) {
-    ParseObject parseObject = null;
-    try {
-      ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-      parseObject = query.get(incident.getId());
-    }
-    catch(ParseException e) {
-      throw new RuntimeException(e);
-    }
-
-    return parseObject;
-  }
-
   private Incident parseObjectToIncident(ParseObject pObject) {
     String id = pObject.getString(Constants.COL_ID);
     String name = pObject.getString(Constants.COL_INCIDENT_NAME);
@@ -142,25 +149,14 @@ public class ParseIncidentRepository implements IncidentRepository {
     String note = pObject.getString(Constants.COL_INCIDENT_NOTE);
 
     Impact impactScale = Impact.valueOf(impact);
-    Incident incident = new Incident(id, name, creationDate, note, category, subCategory, impactScale);
+    Incident incident = new Incident(id, name, creationDate, note, category,
+        subCategory, impactScale);
 
     return incident;
   }
 
   @Override
-  public void saveAll(final RepositoryCommandResultListener<Incident> listener,
-      final Incident... incidents) {
-    
-      List<ParseObject> parseIncidents = new ArrayList<ParseObject>();
-      for (Incident incident : incidents) {
-        parseIncidents.add(updateParseIncidentAttributes(new ParseObject(Constants.TABLE_INCIDENT), incident));
-      }
-      
-      ParseObject.saveAllInBackground(parseIncidents, new SaveCallback() {
-        @Override
-        public void done(ParseException ex) {
-          listener.commandComplete(new RepositoryCommandResult<Incident>(ex == null, Arrays.asList(incidents)));
-        }
-      });
+  public void commandComplete(RepositoryCommandResult<Photo> result) {
+
   }
 }

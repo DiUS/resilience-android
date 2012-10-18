@@ -51,7 +51,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   
   @Inject
   private IncidentRepository incidentRepository;
-
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

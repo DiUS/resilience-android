@@ -33,7 +33,7 @@ public class ParseTestUtils {
     public void run() {
       try {
         ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-        Log.d(ParseTestUtils.class.getName(), "Finding list of objects..");
+        Log.d(ParseTestUtils.class.getName(), "Finding list of objects for deletion..");
         query.findInBackground(new FindCallback() {
           @Override
           public void done(List<ParseObject> incidents, ParseException ex) {
@@ -57,7 +57,7 @@ public class ParseTestUtils {
                 public void run() {
                   try {
                     i.delete();
-                    Log.d(ParseTestUtils.class.getName(), "Done deleting object");
+                    Log.d(ParseTestUtils.class.getName(), "Deleting object " + i.getObjectId() + " succeeded.");
                     deleteLatch.countDown();
                   } catch (ParseException e) {
                     throw new RuntimeException(e);
@@ -66,7 +66,7 @@ public class ParseTestUtils {
               });
             }
 
-            Log.d(ParseTestUtils.class.getName(), "Clearing " + parseObjects.size() + " data objects..");
+            Log.d(ParseTestUtils.class.getName(), "Deleting " + parseObjects.size() + " data objects..");
             deleteLatch.await();
           }
         });

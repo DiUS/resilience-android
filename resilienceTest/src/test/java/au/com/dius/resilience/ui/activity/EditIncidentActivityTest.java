@@ -1,14 +1,15 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.test.TouchUtils;
-import android.widget.*;
-import au.com.dius.resilience.AbstractResilienceTestCase;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import au.com.dius.resilience.AbstractResilienceActivityTestCase;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.persistence.repository.impl.AbstractSqlLiteRepository;
-import com.jayway.android.robotium.solo.Solo;
 
-public class EditIncidentActivityTest extends AbstractResilienceTestCase<EditIncidentActivity> {
+public class EditIncidentActivityTest extends AbstractResilienceActivityTestCase<EditIncidentActivity> {
 
   public EditIncidentActivityTest() {
     super(EditIncidentActivity.class);
@@ -34,15 +35,6 @@ public class EditIncidentActivityTest extends AbstractResilienceTestCase<EditInc
     
     solo.typeText(notes, "fire");
     solo.clickOnView(createButton);
-
-    //TODO Should be part of the UI tests, not db.. Mixing concerns here
-    // Check that it saved
-//    Incident incident = repository.findAll(getActivity()).get(0);
-//
-//    assertEquals("fire", incident.getNote());
-//    assertEquals("Fire", incident.getCategory());
-//    assertEquals("SubC1", incident.getSubCategory());
-//    assertEquals(ImpactScale.LOW, incident.getImpact());
   }
   
   public void testImpactLabelChange() {

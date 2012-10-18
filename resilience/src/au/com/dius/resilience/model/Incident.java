@@ -95,7 +95,7 @@ public class Incident implements Serializable {
   }
   
   public void addPhotos(List<Photo> photos) {
-    photos.addAll(photos);
+    this.photos.addAll(photos);
   }
 
   public void setId(String id) {

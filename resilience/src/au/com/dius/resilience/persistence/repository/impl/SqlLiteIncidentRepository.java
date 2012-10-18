@@ -121,11 +121,4 @@ public class SqlLiteIncidentRepository extends AbstractSqlLiteRepository<Inciden
 
     return new Incident(id, name, dateCreated, note, category, subCategory, impact);
   }
-
-  @Override
-  public void saveAll(RepositoryCommandResultListener<Incident> listener,
-      Incident... incidents) {
-    throw new RuntimeException("Not implemented");
-  }
-
 }

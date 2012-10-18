@@ -19,7 +19,7 @@ import au.com.dius.resilience.test.util.ParseTestUtils;
 
 import com.google.inject.Injector;
 
-public class ParseRepositoryTest extends InstrumentationTestCase {
+public class ParseIncidentRepositoryTest extends InstrumentationTestCase {
 
   private IncidentRepository repository;
   
@@ -50,9 +50,7 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
         assertTrue(result.isSuccess());
         assertEquals(1, result.getResults().size());
         Incident savedIncident = result.getResults().get(0);
-        
         testValues.put("INCIDENT_ID",  savedIncident.getId());
-        
         saveLatch.countDown();
       }
     };
@@ -105,9 +103,10 @@ public class ParseRepositoryTest extends InstrumentationTestCase {
       final Long time = new Date().getTime();
       Incident incident = new Incident("OrigName", time, "OrigNote", "OrigCat", "OrigSubCat", Impact.MEDIUM);
       repository.save(saveListener, incident);
+      saveLatch.await();
+      
       final String id = incident.getId();
       
-      saveLatch.await();
       saveLatch = new CountDownLatch(1);
       
       incident.setName("NewName");
