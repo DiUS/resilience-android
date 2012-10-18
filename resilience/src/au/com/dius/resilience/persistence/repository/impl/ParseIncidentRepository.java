@@ -72,10 +72,10 @@ public class ParseIncidentRepository implements IncidentRepository,
           @Override
           public void done(ParseException ex) {
             if (incident.getId() == null) {
-              Log.d(LOG_TAG, "Saved new incident " + parseObject.getObjectId() + " with photo " + (ex == null ? "succeeded." : "failed."));
+              Log.d(LOG_TAG, "Saved new incident " + parseObject.getObjectId() + (ex == null ? "succeeded." : "failed."));
             }
             else {
-              Log.d(LOG_TAG, "Updated incident " + incident.getId() + " with photo " + (ex == null ? "succeeded." : "failed."));
+              Log.d(LOG_TAG, "Updated incident " + incident.getId() + (ex == null ? "succeeded." : "failed."));
             }
             incident.setId(parseObject.getObjectId());
             
