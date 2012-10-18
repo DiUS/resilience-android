@@ -11,9 +11,11 @@ import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
+import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 
+import com.google.inject.Inject;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -29,7 +31,8 @@ public class ParseIncidentRepository implements IncidentRepository {
 
   public static final String LOG_TAG = ParseIncidentRepository.class.getName();
 
-  ParsePhotoRepository photoRepository;
+  @Inject
+  PhotoRepository photoRepository;
 
   @Override
   public void findById(
@@ -80,8 +83,7 @@ public class ParseIncidentRepository implements IncidentRepository {
             incident.setId(parseObject.getObjectId());
             
             if (incident.getPhotos().size() > 0) {
-              photoRepository = new ParsePhotoRepository(incident);
-              photoRepository.save(listener, incident.getPhotos().get(0));
+              photoRepository.save(listener, incident.getPhotos().get(0), incident);
             }
             else {
               listener.commandComplete(new RepositoryCommandResult<Incident>(

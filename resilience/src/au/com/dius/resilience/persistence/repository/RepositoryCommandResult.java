@@ -19,7 +19,9 @@ public class RepositoryCommandResult<T> {
   public RepositoryCommandResult(boolean success, T result) {
     this.success = success;
     this.results = new ArrayList<T>();
-    results.add(result);
+    if (result != null) {
+      results.add(result);
+    }
   }
 
   public boolean isSuccess() {
