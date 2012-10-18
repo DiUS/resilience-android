@@ -6,6 +6,7 @@ import java.util.concurrent.CountDownLatch;
 
 import android.content.Context;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
@@ -41,6 +42,22 @@ public class TestHelper {
     return new RepositoryCommandResultListener<Incident>() {
       @Override
       public void commandComplete(RepositoryCommandResult<Incident> result) {
+        callbackFlag.setBool(result.isSuccess());
+        resultList.addAll(result.getResults());
+        
+        if (latch != null) {
+          latch[0].countDown();
+        }
+      }
+    };
+  }
+  
+  public static RepositoryCommandResultListener<Photo> createPhotoListener(
+      final MutableBoolean callbackFlag,
+      final List<Photo> resultList, final CountDownLatch... latch) {
+    return new RepositoryCommandResultListener<Photo>() {
+      @Override
+      public void commandComplete(RepositoryCommandResult<Photo> result) {
         callbackFlag.setBool(result.isSuccess());
         resultList.addAll(result.getResults());
         
