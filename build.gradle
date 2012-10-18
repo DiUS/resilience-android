@@ -17,6 +17,20 @@ subprojects {
   apply plugin: 'eclipse'
   apply plugin: 'android'
   apply plugin: 'maven'
+
+  configurations {
+      provided
+  }
+
+  dependencies {
+      compile "com.google.android.maps:maps:15_r2"
+  }
+
+  sourceSets {
+      main {
+          compileClasspath += configurations.provided
+      }
+  }
 }
 
 allprojects {

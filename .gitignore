@@ -20,7 +20,7 @@ build/
 local.properties
 
 
-project.properties
+#project.properties
 
 .idea/
 out/
