@@ -2,16 +2,10 @@ package au.com.dius.resilience.test.unit.model;
 
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * @author georgepapas
- */
-@RunWith(RobolectricTestRunner.class)
 public class IncidentTest {
 
   @Test

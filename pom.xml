@@ -18,8 +18,15 @@
 
     <properties>
       <platform.version>4.0.1.2</platform.version>
+
       <google.maps.version>15r2</google.maps.version>
+
       <robo.guice.version>2.0</robo.guice.version>
+      <robotium.version>3.5.1</robotium.version>
+      <junit.version>4.8.2</junit.version>
+
+      <android.maven.plugin.version>3.1.1</android.maven.plugin.version>
+
   </properties>
 
   <repositories>
@@ -51,12 +58,12 @@
                 <version>1.0.5</version>
             </dependency>
 
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.8.2</version>
-                <scope>provided</scope>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>junit</groupId>-->
+                <!--<artifactId>junit</artifactId>-->
+                <!--&lt;!&ndash;<version>4.8.2</version>&ndash;&gt;-->
+                <!--<scope>provided</scope>-->
+            <!--</dependency>-->
         </dependencies>
     </dependencyManagement>
 
@@ -66,7 +73,7 @@
                 <plugin>
                     <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                     <artifactId>android-maven-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>${android.maven.plugin.version}</version>
                     <inherited>true</inherited>
                     <configuration>
                         <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
@@ -76,10 +83,10 @@
                         <sdk>
                             <platform>14</platform>
                         </sdk>
-                                                <emulator>
+                        <emulator>
                             <avd>Resilience</avd>
                         </emulator>
-                                                <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                        <undeployBeforeDeploy>true</undeployBeforeDeploy>
                     </configuration>
                 </plugin>
                 <plugin>

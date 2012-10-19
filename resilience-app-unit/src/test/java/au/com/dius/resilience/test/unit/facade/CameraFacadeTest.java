@@ -57,7 +57,6 @@ public class CameraFacadeTest {
     Mockito.verify(activity).startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     
     Assert.assertEquals(1, cameraFacade.getPhotos().size());
-    fail("AAaa");
   }
   
   @Test

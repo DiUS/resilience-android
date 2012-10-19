@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -16,11 +16,9 @@
   <name>resilience-app-unit - Unit tests</name>
 
   <properties>
-      <!--
-        When not running a release, we are deploying the plain artifact (so no classifier)
-        This is overridden during the release.
-      -->
-      <zipaligned-classifier></zipaligned-classifier>
+    <powermock.version>1.4.12</powermock.version>
+    <robolectric.version>1.1</robolectric.version>
+    <mockito.version>1.9.0</mockito.version>
   </properties>
 
   <dependencies>
@@ -28,135 +26,93 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.2</version>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
+      <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.google.android</groupId>
-      <artifactId>android-test</artifactId>
-    </dependency>
-
-    <!--<dependency>-->
-      <!--<groupId>au.com.dius.resilience</groupId>-->
-      <!--<artifactId>resilience-app</artifactId>-->
-      <!--<type>jar</type>-->
-      <!--<version>1.0-SNAPSHOT</version>-->
-    <!--</dependency>-->
-
-    <dependency>
-      <groupId>au.com.dius.resilience</groupId>
-      <artifactId>resilience-app</artifactId>
-      <type>apk</type>
-      <version>1.0-SNAPSHOT</version>
-      <classifier>${zipaligned-classifier}</classifier> <!--  classifier set according to the ran profile -->
-    </dependency>
-
-    <dependency>
-      <groupId>au.com.dius.resilience</groupId>
-      <artifactId>resilience-app-test-shared</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-
 
     <dependency>
       <groupId>au.com.dius.resilience</groupId>
       <artifactId>resilience-app</artifactId>
       <type>jar</type>
-      <version>1.0-SNAPSHOT</version>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>au.com.dius.resilience</groupId>
+      <artifactId>resilience-app-test-shared</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>com.jayway.android.robotium</groupId>
       <artifactId>robotium-solo</artifactId>
-      <version>3.5.1</version>
+      <version>${robotium.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.pivotallabs</groupId>
       <artifactId>robolectric</artifactId>
-      <version>1.1</version>
+      <version>${robolectric.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
-      <version>1.9.0</version>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-core</artifactId>
-      <version>1.4.12</version>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
-      <version>1.4.12</version>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito</artifactId>
-      <version>1.4.12</version>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.google.android.maps</groupId>
       <artifactId>maps</artifactId>
       <version>${google.maps.version}</version>
+      <scope>test</scope>
     </dependency>
-
 
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-        <artifactId>android-maven-plugin</artifactId>
-        <extensions>true</extensions>
-      </plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.12.4</version>
+          <configuration>
+            <workingDirectory>${project.parent.basedir}/resilience-app</workingDirectory>
+          </configuration>
+        </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>release</id>
-      <properties>
-        <!--
-          When running a release, we must deployed the final artifact (signed and zipaligned).
-        -->
-        <zipaligned-classifier>aligned</zipaligned-classifier>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jarsigner-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign-application-it-apk</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-            <artifactId>android-maven-plugin</artifactId>
-            <configuration>
-              <sign>
-                <debug>false</debug>
-              </sign>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>
