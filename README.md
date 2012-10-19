@@ -4,55 +4,70 @@ Resilience for Android
 Prerequisite software
 ---------------------
 
-* Gradle version 1.1 to 1.2 *
-* Groovy version 2.0.1 *
+* Java 1.6
+* Google Android Developer SDK
+	* Android 4.0.3 (API 15)
+	* Android 2.3.3 (API 10) - Required by one of the testing libraries, Robolectric
+* Maven 3.x
 * Eclipse + ADT plugin *or* IntelliJ *or* whatever works for you
 
-\* Later versions may work.
+
+Setup procedure
+----------------
+There are a few jars that are not available in any public maven repositories which are hosted on DiUS Resilience artifactory instance which is on the same box as the CI Server.  Therefore if you are not on the DiUS network when you do your first build, you will need the following jars to be in your local maven repository.  They are checked in to the libs/external folder for convenience.  Run the install command in that folder.
+
+	./install-local-libs.sh
+
+  * Parse.jar, required for integration with the parse service.
+  * maps-15r2.jar, required to integrate with google maps
+
+Emulator
+--------
+  An emulator is required, follow the steps in this article to setup a performant emulator.
+
+  http://codebutler.com/2012/10/10/configuring-a-usable-android-emualtor
+
+  ** Deviations from this article
+	* Set the SD card size to 256 MB, not 512
+	* When pushing the google maps libraries to your new emulator, use the files int repository directory libraries/emulator
+	* Creating a system image did is problematic.  If it works for you, GREAT!  Otherwise, each time you power down your emulator, you will need to re push the libraries and ensure they are installed onto the device. Copying the files does NOT install them and make them available.  You need to do a software restart to ensure they are installed.  Do this by issuing the following commands
+	
+	adb shell stop
+	adb shell start
+	
+	This will restart the software.
 
 Building
 --------
 
-    android update project -p . -s
-    gradle buildDependencies assemble
+	mvn clean install
+
 
 Running tests:
 --------------
 
   Unit tests:
 
-    gradle unitTests
+    mvn test
 
-  Integration (instrumentation) tests:
+  Integration (instrumentation) tests
 
-    gradle androidInstrumentationTests
+    mvn clean install 
+  or 
+	mvn android:instrument
 
-  Running tests from the IDE
-	Ensure the working directory for JUnit tests is set to resilience-android/resilienceTest
+  Running unit tests from the IDE
+	Ensure the working directory for JUnit tests is set to resilience/resilience-app
 
 
 Integration with Eclipse:
 -------------------------
 
-    gradle eclipse
+    mvn eclipse:eclipse
 
-  Then use File -> Import -> Existing Projects into Workspace and select the location of the *top level* build.gradle file.
 
 Integration with IntelliJ
 -------------------------
-
-  Integration with intellij is pretty woeful.  Once you configure it, it's ok, but getting there can be a pain.  Once thing to note, we have created a custom gradle unitTests configuration which is used to run unit tests in the resilienceTest project. The JetGradle plugin knows nothing about this due to a gradle limitation apparently, so there are some manual steps to get the unitTests dependencies recognised by intelliJ
-
-  NOTE:  Due to gradle api limitation and intelliJ not recognising non default configurations you will need to ensure that each "unitCompile" dependency is also specified as a "compile" dependency during the import.  Alter the file for import to do this.  I know, it's ugly...
-
-  -  Import an existing gradle project
-  -  Once imported, in the project settings, remove the top level resilience-android module.  This should leave two modules, resilience and resilienceTest	
-  - Remove the module root resilience-android from each of the remaining two modules.
-  -  Remove references to the source folders that do not exist i.e. src/main/resources e.t.c	
-  -  Add src/unit/java as a test source root for the resilienceTest module.	
-  -  Select the Android 4.0 Google APIs SDK as a dependency if not already set.	
-  -  Ensure the 'Android' facet for each module is configured to use the modules directory for its compiler output.  By default, it will use the 'resilience-android' directory for things like the AndroindManifest.xml and gen directory. This needs to be changed to resilience-android/resilience and resilience-android/resilienceTest respectively.  Make these changes for both modules on the 'Structure' and 'Compiler' tabs	
-  -  Ensure 'Adroid' is the last dependency in the resilienceTest module.  This will allow the unit tests to run from the IDE as they require junit-4.x and android contains a version of 3.x
-	
-
-**NOTE**: Each of the above build commands should be invoked form the top level, i.e. the parent  build.gradle file.
+  * Import the project as a regular maven project, ensuring all submodules are imported
+  * IntelliJ should pick up the two Android facets, resilience-app and resilience-it
+  * When running integration tests from the IDE, you will need to change the classpath to ensure that the Junit 4.x dependency is before the Android dependency
