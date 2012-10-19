@@ -12,6 +12,8 @@
 bin/
 gen/
 build/
+target/
+out/
 
 # jar dependencies
 *.jar

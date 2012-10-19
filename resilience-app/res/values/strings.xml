@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="app_name">Resilience Dev</string>
+
+  <!-- Action bar menu -->
+  <string name="all_incidents">All incidents</string>
+  <string name="tracked_incidents">Tracked incidents</string>
+  <string name="raise_incident">Create</string>
+  <string name="menu_settings">Settings</string>
+
+  <!-- View/create incident -->
+  <string name="extra_notes">Extra notes</string>
+  <string name="name">Name</string>
+  <string name="select_category">Category</string>
+  <string name="select_subcategory">Subcategory</string>
+  <string name="impact">Impact Scale</string>
+  <string name="camera">Camera</string>
+  <string name="photo">Photo</string>
+  <string name="map">Map</string>
+
+  <!-- List view -->
+  <string name="list_view_more_details_desc">More details</string>
+  <string name="list_view_category_desc">Incident category</string>
+
+  <!-- List view selector toggle buttons -->
+  <string name="label_tab_map_view">Map</string>
+  <string name="label_tab_list_view">List</string>
+
+  <string name="map_key">0BC4AdJd_1vQYEuaUA52yGxVkRTwqJmbWONQbiQ</string>
+
+</resources>
