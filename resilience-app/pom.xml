@@ -15,10 +15,15 @@
   <packaging>apk</packaging>
   <name>resilience-app - Application</name>
 
+  <properties>
+    <parse.version>1.1.6</parse.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>de.akquinet.android.androlog</groupId>
@@ -35,7 +40,7 @@
     <dependency>
       <groupId>Parse</groupId>
       <artifactId>Parse</artifactId>
-      <version>1.1.6</version>
+      <version>${parse.version}</version>
     </dependency>
 
     <dependency>
@@ -50,7 +55,6 @@
       <artifactId>support-v4</artifactId>
       <version>r6</version>
     </dependency>
-
 
   </dependencies>
 

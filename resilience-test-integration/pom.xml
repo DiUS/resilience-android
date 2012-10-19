@@ -24,41 +24,17 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
+      <scope>provided</scope>
     </dependency>
+
     <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>android-test</artifactId>
     </dependency>
-    <dependency>
-      <groupId>au.com.dius.resilience</groupId>
-      <artifactId>resilience-app</artifactId>
-      <type>apk</type>
-      <version>${project.version}</version>
-      <classifier>${zipaligned-classifier}</classifier>
-      <!--  classifier set according to the ran profile -->
-    </dependency>
-    <dependency>
-      <groupId>au.com.dius.resilience</groupId>
-      <artifactId>resilience-app-test-shared</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>au.com.dius.resilience</groupId>
-      <artifactId>resilience-app</artifactId>
-      <type>jar</type>
-      <version>${project.version}</version>
-    </dependency>
-
 
     <dependency>
       <groupId>com.jayway.android.robotium</groupId>
@@ -66,6 +42,28 @@
       <version>${robotium.version}</version>
     </dependency>
 
+
+    <dependency>
+      <groupId>au.com.dius.resilience</groupId>
+      <artifactId>resilience-app</artifactId>
+      <type>apk</type>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>au.com.dius.resilience</groupId>
+      <artifactId>resilience-app</artifactId>
+      <type>jar</type>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>au.com.dius.resilience</groupId>
+      <artifactId>resilience-app-test-shared</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
   </dependencies>
 

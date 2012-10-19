@@ -12,9 +12,9 @@ import java.util.ArrayList;
 /**
  * @author georgepapas
  */
-public class CreateActivity extends AbstractResilienceActivityTestCase<ResilienceActivity> {
+public class CreateActivityTest extends AbstractResilienceActivityTestCase<ResilienceActivity> {
 
-  public CreateActivity() {
+  public CreateActivityTest() {
     super(ResilienceActivity.class);
   }
 

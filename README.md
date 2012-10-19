@@ -30,9 +30,14 @@ Emulator
   Deviations from this article
   ----------------------------
 
-  Set the SD card size to 256 MB, not 512
+  Set the SD card size to 256 MB, not 512.
+  
   When pushing the google maps libraries to your new emulator, use the files int repository directory libraries/emulator
-  Creating a system image did is problematic.  If it works for you, GREAT!  Otherwise, each time you power down your emulator, you will need to re push the libraries and ensure they are installed onto the device. Copying the files does NOT install them and make them available.  You need to do a software restart to ensure they are installed.  Do this by issuing the following commands
+  
+  Creating a system image can be problematic and in may not actually work!.  
+  If it works for you, GREAT!  Otherwise, each time you power down your emulator, you will need to re push the libraries and  ensure they are installed onto the device. 
+
+  Copying the files does NOT install them and make them available.  You need to do a software restart to ensure they are installed.  Do this by issuing the following commands
 	
 	adb shell stop
 	adb shell start
