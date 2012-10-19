@@ -1,6 +1,8 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.app.ListFragment;
+import java.util.Collections;
+
+import roboguice.activity.RoboListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,13 +12,9 @@ import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
-import com.google.inject.Inject;
-import roboguice.activity.RoboListActivity;
-import roboguice.fragment.RoboListFragment;
 
-import java.util.Collections;
+import com.google.inject.Inject;
 
 public class IncidentListActivity extends RoboListActivity implements RepositoryCommandResultListener<Incident> {
 

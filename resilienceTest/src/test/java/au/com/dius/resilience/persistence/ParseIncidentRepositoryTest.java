@@ -157,6 +157,10 @@ public class ParseIncidentRepositoryTest extends InstrumentationTestCase {
         assertTrue(result.isSuccess());
         assertEquals(3, result.getResults().size());
         
+        for (Incident incident : result.getResults()) { 
+          assertNotNull(incident.getId());
+        }
+        
         findLatch.countDown();
       }
     };

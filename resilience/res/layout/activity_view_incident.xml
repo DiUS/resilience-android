@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top" >
 
     <ImageButton
         android:id="@+id/category_icon"
@@ -11,7 +11,7 @@
         android:contentDescription="@string/select_category"
         android:src="@drawable/ic_launcher" />
 
-    <EditText
+    <TextView
         android:id="@+id/incident_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,10 +20,11 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/category_icon"
         android:ems="10"
-        android:hint="@string/name" >
-
+        android:hint="@string/name" 
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical">
         <requestFocus />
-    </EditText>
+    </TextView>
 
     <TableLayout
         android:id="@+id/detailed_info_table"
@@ -37,51 +38,70 @@
         <TableRow
             android:id="@+id/di_tr1"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent" 
-            android:padding="5dip"
-            android:layout_weight="0.25">
+            android:layout_height="fill_parent"
+            android:layout_weight="0"
+            android:padding="5dip" >
 
-            <ImageView
-                android:id="@+id/incident_photo"
-                android:paddingLeft="10dp"
-                android:layout_height="110dp"
+            <RelativeLayout
+                android:layout_weight="1"
                 android:layout_width="150dp"
-                android:contentDescription="@string/photo"
-                android:src="@drawable/livestock"
-                android:layout_weight="1"/>
+                android:layout_height="110dp">
+
+                <ImageView
+                    android:id="@+id/incident_photo"
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent"
+                    android:contentDescription="@string/photo"
+                    android:visibility="invisible"
+                    android:paddingLeft="10dp" 
+                    />
+
+                <TextView
+                    android:id="@+id/no_image_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignBottom="@id/incident_photo"
+                    android:layout_alignTop="@id/incident_photo"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/no_image"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <ProgressBar
+                    android:id="@+id/image_load_progress_bar"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_alignBottom="@id/incident_photo"
+                    android:layout_alignTop="@id/incident_photo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" />
+
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/incident_map"
-                android:layout_height="110dp"
                 android:layout_width="170dp"
+                android:layout_height="110dp"
+                android:layout_weight="1"
                 android:contentDescription="@string/map"
-                android:src="@drawable/map_icon"
-                android:layout_weight="1"/>
+                android:src="@drawable/map_icon" />
         </TableRow>
 
         <TableRow
             android:id="@+id/di_tr2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:layout_weight="0.5">
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" >
 
-            <EditText
+            <TextView
                 android:id="@+id/incident_note"
                 android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:layout_span="2"
+                android:layout_weight="1"
                 android:ems="10"
                 android:gravity="top"
-                android:hint="@string/extra_notes"
-                android:inputType="textMultiLine"
-                android:layout_span="2" 
-                android:layout_weight="1"/>
+                android:hint="@string/extra_notes" />
         </TableRow>
-
-        <TableRow
-            android:id="@+id/di_tr3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
-
     </TableLayout>
 
 </RelativeLayout>

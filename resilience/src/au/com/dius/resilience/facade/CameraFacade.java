@@ -94,11 +94,15 @@ public class CameraFacade {
     return photos;
   }
   
+  public static Bitmap decodeBytes(byte[] bytes) {
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+  }
+  
   public static byte[] extractBytes(Photo photo) {
     File photoFile = photo.getPath();
     Bitmap photoBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    photoBitmap.compress(Bitmap.CompressFormat.JPEG, PHOTO_QUALITY, stream);
+    photoBitmap.compress(Bitmap.CompressFormat.PNG, PHOTO_QUALITY, stream);
     return stream.toByteArray();
   }
 }

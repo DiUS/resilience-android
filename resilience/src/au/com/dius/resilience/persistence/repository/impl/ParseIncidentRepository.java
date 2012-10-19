@@ -145,7 +145,7 @@ public class ParseIncidentRepository implements IncidentRepository {
   }
 
   private Incident parseObjectToIncident(ParseObject pObject) {
-    String id = pObject.getString(Constants.COL_ID);
+    String id = pObject.getObjectId();
     String name = pObject.getString(Constants.COL_INCIDENT_NAME);
     String category = pObject.getString(Constants.COL_INCIDENT_CATEGORY);
     String subCategory = pObject.getString(Constants.COL_INCIDENT_SUBCATEGORY);
