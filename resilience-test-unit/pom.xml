@@ -10,7 +10,7 @@
   </parent>
 
   <groupId>au.com.dius.resilience</groupId>
-  <artifactId>resilience-app-unit</artifactId>
+  <artifactId>resilience-test-unit</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>resilience-app-unit - Unit tests</name>

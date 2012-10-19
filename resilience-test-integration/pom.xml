@@ -10,7 +10,7 @@
   </parent>
 
   <groupId>au.com.dius.resilience</groupId>
-  <artifactId>resilience-app-it</artifactId>
+  <artifactId>resilience-test-integration</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>apk</packaging>
   <name>resilience-app-it - Integration tests</name>

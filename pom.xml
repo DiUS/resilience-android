@@ -11,9 +11,9 @@
 
     <modules>
         <module>resilience-app</module>
-        <module>resilience-app-test-shared</module>
-        <module>resilience-app-unit</module>
-        <module>resilience-app-it</module>
+        <module>resilience-test-lib</module>
+        <module>resilience-test-unit</module>
+        <module>resilience-test-integration</module>
     </modules>
 
     <properties>

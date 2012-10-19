@@ -10,10 +10,10 @@
   </parent>
 
   <groupId>au.com.dius.resilience</groupId>
-  <artifactId>resilience-app-test-shared</artifactId>
+  <artifactId>resilience-test-lib</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>resilience-app-test-shared - Shared testing classes</name>
+  <name>resilience-test-lib - Shared testing classes</name>
 
   <properties>
   </properties>
