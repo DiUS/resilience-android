@@ -21,6 +21,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static au.com.dius.resilience.facade.CameraFacade.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE;
+import static junit.framework.Assert.fail;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Environment.class, Uri.class, CameraFacade.class})
@@ -56,6 +57,7 @@ public class CameraFacadeTest {
     Mockito.verify(activity).startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     
     Assert.assertEquals(1, cameraFacade.getPhotos().size());
+    fail("AAaa");
   }
   
   @Test
