@@ -2,10 +2,16 @@ package au.com.dius.resilience.test.unit.model;
 
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.Point;
+import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
 
+@RunWith(RobolectricTestRunner.class)
 public class IncidentTest {
 
   @Test
@@ -24,4 +30,14 @@ public class IncidentTest {
 		assertEquals(subCategory, incident.getSubCategory());
 		assertEquals(Impact.HIGH, incident.getImpact());
 	}
+
+  @Test
+  public void shouldSetLocation() {
+    Point point = new Point(10, 10);
+
+    Incident incident = new Incident();
+    incident.setPoint(point);
+
+    assertThat(incident.getPoint(), sameInstance(point));
+  }
 }

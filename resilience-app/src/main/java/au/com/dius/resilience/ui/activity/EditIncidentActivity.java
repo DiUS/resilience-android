@@ -12,6 +12,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.facade.CameraFacade;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
@@ -95,6 +96,8 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
             category,
             subCategory,
             impact);
+
+    incident.setPoint(new Point(-30.00, 34.00));
 
     incident.addPhotos(cameraFacade.getPhotos());
 

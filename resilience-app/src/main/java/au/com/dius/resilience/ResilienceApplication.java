@@ -16,8 +16,8 @@ public class ResilienceApplication extends Application {
       throw new RuntimeException("We don't have production Parse keys yet.");
     }
     else {
-      appKey = Constants.TEST_APP_KEY;
-      clientKey = Constants.TEST_CLIENT_KEY;
+      appKey = getResources().getString(R.string.key_parse_application);
+      clientKey = getResources().getString(R.string.key_parse_client);
     }
     
     Parse.initialize(this, appKey, clientKey);

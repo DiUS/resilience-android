@@ -1,27 +1,19 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import roboguice.inject.ContextSingleton;
 import android.os.AsyncTask;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
-import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-
 import com.google.inject.Inject;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
+import com.parse.*;
+import roboguice.inject.ContextSingleton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author georgepapas
@@ -34,6 +26,9 @@ public class ParseIncidentRepository implements IncidentRepository {
   @Inject
   PhotoRepository photoRepository;
 
+  @Inject
+  private ModelAdapter<Incident, ParseObject> parseIncidentAdapter;
+
   @Override
   public void findById(
       final RepositoryCommandResultListener<Incident> listener, final String id) {
@@ -41,7 +36,7 @@ public class ParseIncidentRepository implements IncidentRepository {
     query.getInBackground(id, new GetCallback() {
       @Override
       public void done(ParseObject parseObject, ParseException ex) {
-        Incident incident = parseObjectToIncident(parseObject);
+        Incident incident = parseIncidentAdapter.deserialise(parseObject);
         incident.setId(id);
         listener.commandComplete(new RepositoryCommandResult<Incident>(
             ex == null, incident));
@@ -50,8 +45,7 @@ public class ParseIncidentRepository implements IncidentRepository {
   }
 
   @Override
-  public void save(final RepositoryCommandResultListener<Incident> listener,
-      final Incident incident) {
+  public void save(final RepositoryCommandResultListener<Incident> listener, final Incident incident) {
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
@@ -67,10 +61,10 @@ public class ParseIncidentRepository implements IncidentRepository {
           return;
         }
         
-        updateParseIncidentAttributes(parseObject, incident);
+        parseIncidentAdapter.serialise(parseObject, incident);
 
-        Log.d(LOG_TAG, "Saving incident in async task, thread is "
-            + Thread.currentThread().getName());
+        Log.d(LOG_TAG, "Saving incident in async task, thread is " + Thread.currentThread().getName());
+
         parseObject.saveEventually(new SaveCallback() {
           @Override
           public void done(ParseException ex) {
@@ -95,17 +89,6 @@ public class ParseIncidentRepository implements IncidentRepository {
     });
   }
 
-  private ParseObject updateParseIncidentAttributes(ParseObject parseObject,
-      Incident incident) {
-    parseObject.put(Constants.COL_INCIDENT_NAME, incident.getName());
-    parseObject.put(Constants.COL_INCIDENT_CATEGORY, incident.getCategory());
-    parseObject.put(Constants.COL_INCIDENT_SUBCATEGORY,
-        incident.getSubCategory());
-    parseObject.put(Constants.COL_INCIDENT_IMPACT, incident.getImpact().name());
-    parseObject.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
-
-    return parseObject;
-  }
 
   @Override
   public void findAll(final RepositoryCommandResultListener<Incident> listener) {
@@ -137,26 +120,10 @@ public class ParseIncidentRepository implements IncidentRepository {
 
     List<Incident> incidents = new ArrayList<Incident>();
     for (ParseObject pObject : parseArray) {
-      Incident incident = parseObjectToIncident(pObject);
-      incidents.add(incident);
+      incidents.add(parseIncidentAdapter.deserialise(pObject));
     }
     return incidents;
 
   }
 
-  private Incident parseObjectToIncident(ParseObject pObject) {
-    String id = pObject.getString(Constants.COL_ID);
-    String name = pObject.getString(Constants.COL_INCIDENT_NAME);
-    String category = pObject.getString(Constants.COL_INCIDENT_CATEGORY);
-    String subCategory = pObject.getString(Constants.COL_INCIDENT_SUBCATEGORY);
-    String impact = pObject.getString(Constants.COL_INCIDENT_IMPACT);
-    Date creationDate = pObject.getCreatedAt();
-    String note = pObject.getString(Constants.COL_INCIDENT_NOTE);
-
-    Impact impactScale = Impact.valueOf(impact);
-    Incident incident = new Incident(id, name, creationDate.getTime(), note, category,
-        subCategory, impactScale);
-
-    return incident;
-  }
 }

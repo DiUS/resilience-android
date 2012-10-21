@@ -1,5 +1,7 @@
 package au.com.dius.resilience.model;
 
+import android.location.Location;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,11 @@ public class Incident implements Serializable {
   private String category;
   private String subCategory;
   private Impact scale;
-  
+  private Point point;
+
   private List<Photo> photos = new ArrayList<Photo>();
+
+  public Incident(){}
 
   public Incident(
           String id,
@@ -100,5 +105,13 @@ public class Incident implements Serializable {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public Point getPoint() {
+    return point;
+  }
+
+  public void setPoint(Point point) {
+    this.point = point;
   }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
+import au.com.dius.resilience.R;
 import com.parse.*;
 
 import java.util.List;
@@ -13,7 +14,11 @@ import java.util.concurrent.CountDownLatch;
 public class ParseTestUtils {
 
   public static void setUp(Context context) {
-    Parse.initialize(context, Constants.TEST_APP_KEY, Constants.TEST_CLIENT_KEY);
+    Parse.initialize(
+            context,
+            context.getResources().getString(R.string.key_parse_application),
+            context.getResources().getString(R.string.key_parse_client));
+
     Parse.setLogLevel(Parse.LOG_LEVEL_INFO);
   }
 
