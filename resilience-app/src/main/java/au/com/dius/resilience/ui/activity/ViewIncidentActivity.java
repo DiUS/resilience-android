@@ -50,12 +50,14 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
 
   private Bitmap photoBitmap;
 
+  private Incident incident;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_view_incident);
 
-    Incident incident = (Incident) getIntent().getSerializableExtra("incident");
+    incident = (Incident) getIntent().getSerializableExtra("incident");
     Log.d(LOG_TAG, "Incident retrieved with name " + incident.getName());
 
     name.setText(incident.getName());
@@ -67,6 +69,12 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
   public void onImageClick(View view) {
     Intent intent = new Intent(this, PhotoViewActivity.class);
     intent.putExtra(Constants.EXTRA_PHOTO, photoBitmap);
+    startActivity(intent);
+  }
+
+  public void onMapClick(View view) {
+    Intent intent = new Intent(this, MapViewActivity.class);
+    intent.putExtra(Constants.INCIDENT_POINT, incident.getPoint());
     startActivity(intent);
   }
 

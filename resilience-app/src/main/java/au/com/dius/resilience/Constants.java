@@ -16,9 +16,5 @@ public class Constants {
 
   public static final String EXTRA_PHOTO = "photo";
 
-  // FIXME - We need a way to make these keys private (these keys are just junk, btw!)
-  public static final String TEST_APP_KEY = "RiO29avl2HCTX49CphzVrpRKawqUFSUJbHtZRitM";
-  public static final String TEST_CLIENT_KEY = "GO9aRT96Wmht7x6ztSTnm4CXNJcd46vSZcaIA9Jm";
-
-
+  public static final String INCIDENT_POINT = "incidentPoint";
 }

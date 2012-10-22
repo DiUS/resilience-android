@@ -41,6 +41,9 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
   @InjectView(R.id.notes)
   private EditText notes;
+
+  @InjectView(R.id.submit_photo)
+  private Button cameraButton;
   
   // TODO - This object is shared between calls to another activity.
   // It may need to be bundled/deserialised during onPause/onResume?
@@ -105,6 +108,9 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
     Log.d(LOG_TAG, "Saving incident, thread is " +  Thread.currentThread().getName());
     incidentRepository.save(this, incident);
+
+    button.setEnabled(false);
+    cameraButton.setEnabled(false);
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
   }

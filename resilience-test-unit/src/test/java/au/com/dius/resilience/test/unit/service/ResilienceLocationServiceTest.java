@@ -5,10 +5,8 @@ import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import roboguice.inject.ContextSingleton;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class ResilienceLocationServiceTest {
@@ -18,6 +16,12 @@ public class ResilienceLocationServiceTest {
   @Before
   public void setup() {
     locationService = new ResilienceLocationService();
+  }
+
+  @Test
+  public void shouldDoSomething() {
+    //TODO  Implement it!!!
+    assertTrue(true);
   }
 
 }
