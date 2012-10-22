@@ -3,22 +3,11 @@
                 android:layout_height="match_parent"
                 android:gravity="top" >
 
-    <ImageButton
-            android:id="@+id/category_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:contentDescription="@string/select_category"
-            android:src="@drawable/ic_launcher" />
-
     <TextView
             android:id="@+id/incident_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/category_icon"
-            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/category_icon"
             android:ems="10"
             android:hint="@string/name"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -33,7 +22,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/category_icon" >
+            android:layout_below="@+id/incident_name" >
 
         <TableRow
                 android:id="@+id/di_tr1"
@@ -87,21 +76,30 @@
                     android:src="@drawable/map_icon" />
         </TableRow>
 
+        <TableRow>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/extra_notes"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:gravity="center_vertical">
+            </TextView>
+        </TableRow>
+
         <TableRow
                 android:id="@+id/di_tr2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" >
+                android:layout_weight="0" >
 
             <TextView
                     android:id="@+id/incident_note"
                     android:layout_height="fill_parent"
                     android:layout_width="fill_parent"
                     android:layout_span="2"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:ems="10"
-                    android:gravity="top"
-                    android:hint="@string/extra_notes" />
+                    android:gravity="top" />
         </TableRow>
     </TableLayout>
 
