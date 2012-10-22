@@ -14,8 +14,7 @@ public class Constants {
   public static final String COL_INCIDENT_LOCATION = "location";
   public static final String PHOTO_FILENAME = COL_INCIDENT_PHOTO + ".jpg";
 
-  public static final String COL_PHOTO_URI = "uri";
-  public static final String COL_PHOTO_DATA = "data";
+  public static final String EXTRA_PHOTO = "photo";
 
   // FIXME - We need a way to make these keys private (these keys are just junk, btw!)
   public static final String TEST_APP_KEY = "RiO29avl2HCTX49CphzVrpRKawqUFSUJbHtZRitM";

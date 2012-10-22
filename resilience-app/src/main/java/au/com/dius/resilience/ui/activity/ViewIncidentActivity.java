@@ -2,6 +2,7 @@ package au.com.dius.resilience.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
@@ -43,10 +45,10 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
   @InjectView(R.id.image_load_progress_bar)
   private ProgressBar progressBar;
 
-  private FullscreenImageDialog fullscreenDialog;
-
   @Inject
   private PhotoRepository photoRepository;
+
+  private Bitmap photoBitmap;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,9 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
   }
 
   public void onImageClick(View view) {
-    fullscreenDialog.show(getFragmentManager(), "dialog");
-  }
-
-  public void onCloseImageClick(View button) {
-    fullscreenDialog.dismiss();
+    Intent intent = new Intent(this, PhotoViewActivity.class);
+    intent.putExtra(Constants.EXTRA_PHOTO, photoBitmap);
+    startActivity(intent);
   }
 
   @Override
@@ -83,14 +83,9 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
     }
     else {
       Photo photo = result.getResults().get(0);
-      Bitmap bitmap = photo.getBitmap();
-      incidentPhoto.setImageBitmap(bitmap);
+      photoBitmap = photo.getBitmap();
+      incidentPhoto.setImageBitmap(photoBitmap);
       incidentPhoto.setVisibility(View.VISIBLE);
-
-      ImageView view = new ImageView(this);
-      view.setImageBitmap(bitmap);
-      fullscreenDialog = new FullscreenImageDialog(view);
-
     }
 
     progressBar.setVisibility(View.GONE);
