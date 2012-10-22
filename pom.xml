@@ -23,6 +23,7 @@
       <robo.guice.version>2.0</robo.guice.version>
       <robotium.version>3.5.1</robotium.version>
       <junit.version>4.8.2</junit.version>
+      <junit.addons.version>1.4</junit.addons.version>
 
       <android.maven.plugin.version>3.1.1</android.maven.plugin.version>
 

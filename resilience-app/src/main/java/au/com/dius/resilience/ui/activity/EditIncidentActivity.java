@@ -2,6 +2,7 @@ package au.com.dius.resilience.ui.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +26,9 @@ import java.util.Date;
 
 public class EditIncidentActivity extends RoboActivity implements OnSeekBarChangeListener, RepositoryCommandResultListener<Incident> {
 
-  public static final String LOG_TAG = EditIncidentActivity.class.getName();
+  public static final String LOCATION = "location";
+
+  private static final String LOG_TAG = EditIncidentActivity.class.getName();
 
   @InjectView(R.id.category_spinner)
   private Spinner categorySpinner;
@@ -38,11 +41,14 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
   @InjectView(R.id.notes)
   private EditText notes;
+
+  @InjectView(R.id.submit_photo)
+  private Button cameraButton;
   
   // TODO - This object is shared between calls to another activity.
   // It may need to be bundled/deserialised during onPause/onResume?
   private CameraFacade cameraFacade;
-  
+
   @Inject
   private IncidentRepository incidentRepository;
   
@@ -53,7 +59,6 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     initialiseSpinners();
     
     impactScale.setOnSeekBarChangeListener(this);
-    
 
     // FIXME - test this (-xxx-camera args not taking effect on my emulator)
     PackageManager pm = getPackageManager();
@@ -97,12 +102,15 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
             subCategory,
             impact);
 
-    incident.setPoint(new Point(-30.00, 34.00));
+    incident.setPoint((Point) getIntent().getSerializableExtra(LOCATION));
 
     incident.addPhotos(cameraFacade.getPhotos());
 
     Log.d(LOG_TAG, "Saving incident, thread is " +  Thread.currentThread().getName());
     incidentRepository.save(this, incident);
+
+    button.setEnabled(false);
+    cameraButton.setEnabled(false);
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
   }

@@ -1,13 +1,6 @@
 package au.com.dius.resilience.test.persistence;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -19,12 +12,23 @@ import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
+import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-import au.com.dius.resilience.persistence.repository.impl.ParseIncidentRepository;
 import au.com.dius.resilience.persistence.repository.impl.ParsePhotoRepository;
-import au.com.dius.resilience.test.util.ParseTestUtils;
 import au.com.dius.resilience.test.shared.utils.MutableBoolean;
 import au.com.dius.resilience.test.shared.utils.TestHelper;
+import au.com.dius.resilience.test.util.ParseTestUtils;
+import com.google.inject.Injector;
+import roboguice.RoboGuice;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+
 
 public class ParsePhotoRepositoryTest extends InstrumentationTestCase {
 
@@ -35,10 +39,13 @@ public class ParsePhotoRepositoryTest extends InstrumentationTestCase {
   public void setUp() throws Exception {
     getInstrumentation().waitForIdleSync();
     incident = new Incident("name", new Date().getTime(), "note", "cat", "subCat", Impact.MEDIUM);
-    parsePhotoRepository = new ParsePhotoRepository();
-    incidentRepository = new ParseIncidentRepository();
 
     Context targetContext = getInstrumentation().getTargetContext();
+    Injector applicationInjector = RoboGuice.getBaseApplicationInjector((Application) targetContext.getApplicationContext());
+
+    parsePhotoRepository = (ParsePhotoRepository) applicationInjector.getInstance(PhotoRepository.class);
+    incidentRepository = applicationInjector.getInstance(IncidentRepository.class);
+
     ParseTestUtils.setUp(targetContext);
     ParseTestUtils.dropAll(getInstrumentation());
   }

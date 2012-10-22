@@ -73,7 +73,8 @@
                     android:layout_height="110dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/map"
-                    android:src="@drawable/map_icon" />
+                    android:src="@drawable/map_icon"
+                    android:onClick="onMapClick"/>
         </TableRow>
 
         <TableRow>
