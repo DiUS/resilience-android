@@ -47,7 +47,7 @@
 
     <dependency>
       <groupId>au.com.dius.resilience</groupId>
-      <artifactId>resilience-app-test-shared</artifactId>
+      <artifactId>resilience-test-lib</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>

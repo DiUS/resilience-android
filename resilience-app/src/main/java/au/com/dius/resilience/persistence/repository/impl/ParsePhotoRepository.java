@@ -1,5 +1,8 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
+import java.util.ArrayList;
+
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,21 +15,20 @@ import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 
 import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
-import roboguice.inject.ContextSingleton;
 
-@ContextSingleton
 public class ParsePhotoRepository implements PhotoRepository {
 
   public static final String LOG_TAG = ParsePhotoRepository.class.getName();
-  
+
   @Override
   public void save(final RepositoryCommandResultListener<Incident> listener,
-      final Photo photo, final Incident incident) {
+                   final Photo photo, final Incident incident) {
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
@@ -37,13 +39,13 @@ public class ParsePhotoRepository implements PhotoRepository {
         } catch (ParseException e) {
           Log.d(LOG_TAG, "Saving incident " + incident.getId() + " with photo failed.");
           listener.commandComplete(new RepositoryCommandResult<Incident>(
-              false, incident));
+            false, incident));
         }
       }
 
       private void saveIncidentWithPhoto(
-          final RepositoryCommandResultListener<Incident> listener,
-          final ParseFile parseFile) throws ParseException {
+        final RepositoryCommandResultListener<Incident> listener,
+        final ParseFile parseFile) throws ParseException {
         parseFile.save();
         final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
         if (parseObject.isDataAvailable()) {
@@ -56,7 +58,7 @@ public class ParsePhotoRepository implements PhotoRepository {
             Log.d(LOG_TAG, "Updated incident " + incident.getId() + " with photo " + (ex == null ? "succeeded." : "failed."));
             incident.setId(parseObject.getObjectId());
             listener.commandComplete(new RepositoryCommandResult<Incident>(
-                ex == null, incident));
+              ex == null, incident));
           }
         });
       }
@@ -66,19 +68,32 @@ public class ParsePhotoRepository implements PhotoRepository {
 
   @Override
   public void findByIncident(final RepositoryCommandResultListener<Photo> listener,
-      final Incident incident) {
-    
+                             final Incident incident) {
+
+    if (incident.getId() == null) {
+      throw new RuntimeException("Incident has not yet been persisted!");
+    }
+
     ParseQuery parseQuery = new ParseQuery(Constants.TABLE_INCIDENT);
     parseQuery.getInBackground(incident.getId(), new GetCallback() {
       @Override
       public void done(ParseObject parseIncident, ParseException ex) {
-        ParseFile parseFile = (ParseFile) parseIncident.get(Constants.COL_INCIDENT_PHOTO);
-        Photo photo = null;
-        if (parseFile != null) {
-          Log.d(LOG_TAG, "Found photo for incident " + incident.getId());
-          photo = new Photo(Uri.parse(parseFile.getUrl()));
+        final ParseFile parseFile = (ParseFile) parseIncident.get(Constants.COL_INCIDENT_PHOTO);
+        if (parseFile == null) {
+          listener.commandComplete(new RepositoryCommandResult<Photo>(false, new ArrayList<Photo>()));
+          return;
         }
-        listener.commandComplete(new RepositoryCommandResult<Photo>(ex == null && parseFile != null, photo));        
+
+        Log.d(LOG_TAG, "Found photo for incident " + incident.getId() + ", retriving data..");
+        parseFile.getDataInBackground(new GetDataCallback() {
+          @Override
+          public void done(byte[] data, ParseException ex) {
+            Log.d(LOG_TAG, "Retrieved " + (data == null ? 0 : data.length) + " bytes of data.");
+            Bitmap bitmap = CameraFacade.decodeBytes(data);
+            Photo photo = new Photo(Uri.parse(parseFile.getUrl()), bitmap);
+            listener.commandComplete(new RepositoryCommandResult<Photo>(ex == null, photo));
+          }
+        });
       }
     });
   }

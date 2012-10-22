@@ -35,5 +35,6 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
 
   @Override
   protected void tearDown() throws Exception {
+    getActivity().finish();
   }
 }

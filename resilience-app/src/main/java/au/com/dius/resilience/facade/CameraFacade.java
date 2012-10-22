@@ -16,23 +16,27 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import au.com.dius.resilience.model.Photo;
 
 public class CameraFacade {
-  
+
   private static final String FILENAME_DATE_FORMAT = "yyyyMMdd_HHmmss";
   private static final String FILE_PREFIX = "IMG_";
   private static final String EXTENSION = ".jpg";
   private static final String STORAGE_DIRECTORY = "ResilienceIncidents";
-  
+  private static final String LOG_TAG = CameraFacade.class.getName();
+
   public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-  private static final int PHOTO_QUALITY = 100;
-  
+  private static final int PHOTO_QUALITY = 75;
+  private static final double PHOTO_WIDTH_SCALE = 0.10;
+  private static final double PHOTO_HEIGHT_SCALE = 0.10;
+
   private List<Photo> photos = new ArrayList<Photo>();
-  
+
   private Activity callingActivity;
   private File photoFilename;
-  
+
   public CameraFacade(Activity callingActivity) {
     this.callingActivity = callingActivity;
   }
@@ -43,20 +47,20 @@ public class CameraFacade {
    */
   public void captureImage() {
     photoFilename = getOutputMediaFile();
-    
+
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFilename));
     callingActivity.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
   }
-  
+
   private File getOutputMediaFile() {
     if (! Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ) {
       throw new RuntimeException("External storage was not detected!");
     }
 
     File mediaStorageDir = new File(
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-        STORAGE_DIRECTORY);
+      Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+      STORAGE_DIRECTORY);
 
     if (!mediaStorageDir.exists()) {
       if (!mediaStorageDir.mkdirs()) {
@@ -65,16 +69,16 @@ public class CameraFacade {
     }
 
     String timeStamp = new SimpleDateFormat(FILENAME_DATE_FORMAT)
-        .format(new Date());
+      .format(new Date());
     File mediaFile;
     mediaFile = new File(mediaStorageDir.getPath() + File.separator + FILE_PREFIX
-        + timeStamp + EXTENSION);
+      + timeStamp + EXTENSION);
 
     return mediaFile;
   }
 
   /**
-   * @param requestCode Request code 
+   * @param requestCode Request code
    * @param resultCode
    * To be called after {@link #captureImage()}.
    * i.e. within a {@link Activity#onActivityResult(int requestCode, int resultCode, Intent data)} method.
@@ -83,7 +87,7 @@ public class CameraFacade {
     if (photoFilename == null) {
       return;
     }
-    
+
     if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
       photos.add(new Photo(photoFilename));
       photoFilename = null;
@@ -93,12 +97,22 @@ public class CameraFacade {
   public List<Photo> getPhotos() {
     return photos;
   }
-  
+
+  public static Bitmap decodeBytes(byte[] bytes) {
+    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    return bitmap;
+  }
+
   public static byte[] extractBytes(Photo photo) {
     File photoFile = photo.getPath();
     Bitmap photoBitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+    int width = (int)(photoBitmap.getWidth() * PHOTO_WIDTH_SCALE);
+    int height = (int)(photoBitmap.getHeight() * PHOTO_HEIGHT_SCALE);
+    photoBitmap = Bitmap.createScaledBitmap(photoBitmap, width, height, false);
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    photoBitmap.compress(Bitmap.CompressFormat.JPEG, PHOTO_QUALITY, stream);
-    return stream.toByteArray();
+    photoBitmap.compress(Bitmap.CompressFormat.PNG, PHOTO_QUALITY, stream);
+    byte[] bytes = stream.toByteArray();
+    Log.d(LOG_TAG, "Uploading " + width + "x" + height + " photo (" + bytes.length + " bytes).");
+    return bytes;
   }
 }
