@@ -9,6 +9,7 @@ import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.persistence.repository.impl.AbstractSqlLiteRepository;
 import au.com.dius.resilience.test.AbstractResilienceActivityTestCase;
 import au.com.dius.resilience.ui.activity.EditIncidentActivity;
+import com.jayway.android.robotium.solo.Solo;
 
 public class EditIncidentActivityTest extends AbstractResilienceActivityTestCase<EditIncidentActivity> {
 
@@ -44,10 +45,10 @@ public class EditIncidentActivityTest extends AbstractResilienceActivityTestCase
     assertEquals(Impact.LOW.name(), impactRatingLbl.getText().toString());
     
     final SeekBar impactRating = (SeekBar) solo.getView(R.id.impact_scale);
-    solo.setProgressBar(impactRating, 50);
+    setProgressBar(impactRating, 50);
     assertEquals(Impact.MEDIUM.name(), impactRatingLbl.getText().toString());
     
-    solo.setProgressBar(impactRating, 100);
+    setProgressBar(impactRating, 100);
     assertEquals(Impact.HIGH.name(), impactRatingLbl.getText().toString());
   }
 
