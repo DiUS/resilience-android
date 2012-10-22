@@ -20,6 +20,7 @@
     <robolectric.version>1.1</robolectric.version>
     <mockito.version>1.9.0</mockito.version>
     <hamcrest.version>1.1</hamcrest.version>
+    <junit.addons.version>1.4</junit.addons.version>
   </properties>
 
   <dependencies>
@@ -98,6 +99,12 @@
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
       <version>${hamcrest.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit-addons</groupId>
+      <artifactId>junit-addons</artifactId>
+      <version>${junit.addons.version}</version>
     </dependency>
 
     <dependency>

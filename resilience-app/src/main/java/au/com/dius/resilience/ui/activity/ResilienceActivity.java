@@ -1,19 +1,23 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.ui.Codes;
 import roboguice.activity.RoboTabActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.main)
-public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTabChangeListener {
+public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTabChangeListener, LocationListener {
 
   private static final String LOG_TAG = "ResilienceActivity";
   private static final String TAB_TAG_LIST_VIEW = "list_view";
@@ -24,6 +28,9 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   private String currentTabTag;
 
+  //TODO Very lame implementation, will neeed to change to use intents and broadcast listeners
+  private Point lastKnownLocation;
+
   /**
    * Called when the activity is first created.
    */
@@ -33,6 +40,8 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
     super.onCreate(savedInstanceState);
     setupTabs();
+
+    setupLocationListener();
   }
 
   private void setupTabs() {
@@ -75,7 +84,9 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
       case R.id.raise_incident:
         Intent raiseIncident = new Intent(this, EditIncidentActivity.class);
+        raiseIncident.putExtra(EditIncidentActivity.LOCATION, lastKnownLocation);
         startActivityForResult(raiseIncident, Codes.CreateIncident.REQUEST_CODE);
+
         Log.d(LOG_TAG, "Raise incident selected");
         break;
 
@@ -89,9 +100,34 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   @Override
   public void onTabChanged(String tabTag) {
     Log.d(LOG_TAG, "onTabChanged(): tabId=" + tabTag);
-
     currentTabTag = tabTag;
-
   }
 
+  private void setupLocationListener() {
+    LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+    for (String provider : lm.getAllProviders()) {
+      lm.requestLocationUpdates(provider, 10000, 0, this);
+    }
+  }
+
+  @Override
+  public void onLocationChanged(Location location) {
+    Log.d(LOG_TAG, "location changed " + location);
+    lastKnownLocation = new Point(location.getLatitude(), location.getLongitude());
+  }
+
+  @Override
+  public void onStatusChanged(String s, int i, Bundle bundle) {
+    Log.d(LOG_TAG, (String.format("status changed %s - %d", s, i)));
+  }
+
+  @Override
+  public void onProviderEnabled(String s) {
+   Log.d(LOG_TAG, "Provider enabled " + s);
+  }
+
+  @Override
+  public void onProviderDisabled(String s) {
+    Log.d(LOG_TAG, "Provider disabled " + s);
+  }
 }

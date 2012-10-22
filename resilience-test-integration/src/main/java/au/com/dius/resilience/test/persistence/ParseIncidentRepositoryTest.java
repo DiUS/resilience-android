@@ -1,4 +1,4 @@
-package au.com.dius.resilience.persistence;
+package au.com.dius.resilience.test.persistence;
 
 import java.util.Date;
 import java.util.HashMap;

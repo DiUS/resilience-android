@@ -10,7 +10,7 @@ public class RuntimeProperties {
    */
 
   public static final boolean useStrictMode() {
-    return true;
+    return false;
   }
 
   public static final boolean useLiveDb() {
