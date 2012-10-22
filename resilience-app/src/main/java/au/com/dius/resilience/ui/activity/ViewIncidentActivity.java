@@ -1,23 +1,30 @@
 package au.com.dius.resilience.ui.activity;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-
+import au.com.dius.resilience.ui.dialog.FullscreenImageDialog;
 import com.google.inject.Inject;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 
 public class ViewIncidentActivity extends RoboActivity implements RepositoryCommandResultListener<Photo> {
 
@@ -41,6 +48,8 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
   @Inject
   private PhotoRepository photoRepository;
 
+  private Bitmap photoBitmap;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -53,6 +62,12 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
     note.setText(incident.getNote());
 
     photoRepository.findByIncident(this, incident);
+  }
+
+  public void onImageClick(View view) {
+    Intent intent = new Intent(this, PhotoViewActivity.class);
+    intent.putExtra(Constants.EXTRA_PHOTO, photoBitmap);
+    startActivity(intent);
   }
 
   @Override
@@ -68,8 +83,8 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
     }
     else {
       Photo photo = result.getResults().get(0);
-      Bitmap bitmap = photo.getBitmap();
-      incidentPhoto.setImageBitmap(bitmap);
+      photoBitmap = photo.getBitmap();
+      incidentPhoto.setImageBitmap(photoBitmap);
       incidentPhoto.setVisibility(View.VISIBLE);
     }
 

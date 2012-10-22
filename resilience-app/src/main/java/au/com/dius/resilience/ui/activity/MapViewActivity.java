@@ -3,9 +3,12 @@ package au.com.dius.resilience.ui.activity;
 import android.os.Bundle;
 import au.com.dius.resilience.R;
 import com.google.android.maps.MapView;
+import com.google.android.maps.OverlayItem;
 import roboguice.activity.RoboMapActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
+
+import java.util.ArrayList;
 
 /**
  * @author georgepapas
