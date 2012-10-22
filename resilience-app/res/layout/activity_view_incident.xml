@@ -54,6 +54,7 @@
                         android:contentDescription="@string/photo"
                         android:visibility="invisible"
                         android:paddingLeft="10dp"
+                        android:onClick="onImageClick"
                         />
 
                 <TextView
