@@ -19,6 +19,7 @@ import java.util.List;
  * @author georgepapas
  */
 @ContextSingleton
+@Deprecated
 public class ParseIncidentRepository implements IncidentRepository {
 
   public static final String LOG_TAG = ParseIncidentRepository.class.getName();

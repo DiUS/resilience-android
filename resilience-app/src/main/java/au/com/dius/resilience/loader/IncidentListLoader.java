@@ -1,14 +1,13 @@
 package au.com.dius.resilience.loader;
 
 import android.content.AsyncTaskLoader;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
-import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.observer.IncidentListObserver;
 import au.com.dius.resilience.persistence.repository.impl.ParseIncidentAdapter;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -24,7 +23,7 @@ public class IncidentListLoader extends AsyncTaskLoader<List<Incident>> {
   private static final String LOG_TAG = IncidentListLoader.class.getName();
 
   private List<Incident> data;
-  private IncidentListObserver refreshObserver;
+  private BroadcastReceiver refreshObserver;
 
   public IncidentListLoader(Context context) {
     super(context);
@@ -33,6 +32,8 @@ public class IncidentListLoader extends AsyncTaskLoader<List<Incident>> {
   @Override
   public List<Incident> loadInBackground() {
     Log.d(LOG_TAG, "Loader loading data");
+
+    //TODO Delegate onto Parse Repository
 
     ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
     List<ParseObject> parseObjects = new ArrayList<ParseObject>();
@@ -67,7 +68,7 @@ public class IncidentListLoader extends AsyncTaskLoader<List<Incident>> {
   }
 
   @Override
-  protected void onStartLoading() {
+  public void onStartLoading() {
     Log.d(LOG_TAG, "Starting loader");
 
     if (data != null) {
@@ -84,13 +85,12 @@ public class IncidentListLoader extends AsyncTaskLoader<List<Incident>> {
   }
 
   @Override
-  protected void onReset() {
+  public void onReset() {
     super.onReset();
-    Log.d(LOG_TAG, "Resetting loader.");
+    Log.d(LOG_TAG, "Resetting loader, clearing data and unregistering observer.");
 
-      data = null;
+    data = null;
 
-    // Stop observer here
     getContext().unregisterReceiver(refreshObserver);
     refreshObserver = null;
   }

@@ -7,7 +7,7 @@ import au.com.dius.resilience.persistence.repository.RepositoryCommandResultList
 import au.com.dius.resilience.persistence.repository.impl.SqlLiteIncidentRepository;
 import au.com.dius.resilience.test.shared.utils.MutableBoolean;
 import au.com.dius.resilience.test.shared.utils.TestHelper;
-import au.com.dius.resilience.test.unit.utils.SameDatabaseCustomTestRunner;
+import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.google.inject.Provider;
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.util.DatabaseConfig;
@@ -24,7 +24,7 @@ import java.util.List;
 import static junit.framework.Assert.*;
 
 @DatabaseConfig.UsingDatabaseMap(SQLiteMap.class)
-@RunWith(SameDatabaseCustomTestRunner.class)
+@RunWith(ResilienceTestRunner.class)
 public class SqlLiteIncidentRepositoryTest {
 
   @Mock

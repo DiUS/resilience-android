@@ -5,6 +5,7 @@ import au.com.dius.resilience.model.Incident;
 /**
  * @author georgepapas
  */
+@Deprecated
 public interface IncidentRepository {
 
   void findById(RepositoryCommandResultListener<Incident> listener, String id);
