@@ -11,9 +11,6 @@ import com.google.inject.TypeLiteral;
 import com.parse.ParseObject;
 import roboguice.inject.ContextSingleton;
 
-/**
- * @author georgepapas
- */
 public class ResilienceModule extends AbstractModule {
 
   @Override

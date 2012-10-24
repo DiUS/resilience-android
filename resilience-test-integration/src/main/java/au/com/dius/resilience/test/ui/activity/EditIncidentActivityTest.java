@@ -6,25 +6,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Impact;
-import au.com.dius.resilience.persistence.repository.impl.AbstractSqlLiteRepository;
 import au.com.dius.resilience.test.AbstractResilienceActivityTestCase;
 import au.com.dius.resilience.ui.activity.EditIncidentActivity;
-import com.jayway.android.robotium.solo.Solo;
 
 public class EditIncidentActivityTest extends AbstractResilienceActivityTestCase<EditIncidentActivity> {
 
   public EditIncidentActivityTest() {
     super(EditIncidentActivity.class);
-  }
-
-  @Override
-  protected void beforeTest() {
-    getActivity().getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
-  }
-
-  @Override
-  protected void afterTest() {
-    getActivity().getApplication().deleteDatabase(AbstractSqlLiteRepository.DB_NAME);
   }
 
   public void testCreateAndSaveIncident() {
