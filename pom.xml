@@ -29,13 +29,6 @@
 
   </properties>
 
-  <repositories>
-      <repository>
-          <id>local</id>
-          <url>file:///Users/justin/.m2/repository</url>
-      </repository>
-   </repositories>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
