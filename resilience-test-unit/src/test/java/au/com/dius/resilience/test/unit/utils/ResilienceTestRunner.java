@@ -1,7 +1,6 @@
 package au.com.dius.resilience.test.unit.utils;
 
-import au.com.dius.resilience.test.unit.loader.AsyncTaskLoaderShadow;
-import au.com.dius.resilience.test.unit.loader.LoaderShadow;
+import au.com.dius.resilience.test.unit.loader.ShadowLoader;
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import com.xtremelabs.robolectric.bytecode.ShadowWrangler;
@@ -23,7 +22,6 @@ public class ResilienceTestRunner extends RobolectricTestRunner {
   @Override
   public void beforeTest(Method method) {
     Robolectric.bindShadowClass(SameDatabaseShadowSqlLiteOpenHelper.class);
-    Robolectric.bindShadowClass(LoaderShadow.class);
-    Robolectric.bindShadowClass(AsyncTaskLoaderShadow.class);
+    Robolectric.bindShadowClass(ShadowLoader.class);
   }
 }

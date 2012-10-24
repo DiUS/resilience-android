@@ -36,7 +36,7 @@ public class IncidentListLoaderTest {
   private BroadcastReceiver observer;
 
   private IncidentListLoader listLoader;
-  private AsyncTaskLoaderShadow shadow;
+  private ShadowLoader shadowLoader;
 
   @Before
   public void setUp() throws NoSuchFieldException {
@@ -45,16 +45,16 @@ public class IncidentListLoaderTest {
     listLoader = new IncidentListLoader(context);
     PrivateAccessor.setField(listLoader, REFRESH_OBSERVER, observer);
 
-    shadow = (AsyncTaskLoaderShadow) Robolectric.shadowOf_(listLoader);
+    shadowLoader = (ShadowLoader) Robolectric.shadowOf_(listLoader);
   }
 
   @Test
   public void shouldOnlyDeliverResultWhenInStartedState() {
-    shadow.setStarted(true);
+    shadowLoader.setStarted(true);
     ArrayList<Incident> incidents = new ArrayList<Incident>();
 
     listLoader.deliverResult(incidents);
-    Assert.assertSame(incidents, shadow.getDeliveredResult());
+    Assert.assertSame(incidents, shadowLoader.getDeliveredResult());
   }
 
   @Test
@@ -79,13 +79,13 @@ public class IncidentListLoaderTest {
 
   @Test
   public void shouldNotDeliverResultWhenStarted() {
-    shadow.setStarted(false);
+    shadowLoader.setStarted(false);
     ArrayList originalData = new ArrayList();
-    shadow.deliverResult(originalData);
+    shadowLoader.deliverResult(originalData);
 
     listLoader.deliverResult(new ArrayList<Incident>());
 
-    assertSame(shadow.getDeliveredResult(), originalData);
+    assertSame(shadowLoader.getDeliveredResult(), originalData);
   }
 
   @Test
@@ -102,40 +102,40 @@ public class IncidentListLoaderTest {
 
   @Test
   public void startLoadingShouldForceLoadWhenContentChanged() {
-    shadow.setTakeContentChanged(true);
+    shadowLoader.setTakeContentChanged(true);
 
     listLoader.onStartLoading();
-    assertThat(shadow.isForceLoadCalled(), is(true));
+    assertThat(shadowLoader.isForceLoadCalled(), is(true));
   }
 
   @Test
   public void startLoadingShouldForceLoadWhenDataIsNull() throws NoSuchFieldException {
-    shadow.setTakeContentChanged(false);
+    shadowLoader.setTakeContentChanged(false);
     PrivateAccessor.setField(listLoader, DATA, null);
 
     listLoader.onStartLoading();
-    assertThat(shadow.isForceLoadCalled(), is(true));
+    assertThat(shadowLoader.isForceLoadCalled(), is(true));
   }
 
   @Test
   public void startLoadingShouldDeliverResultIfDataAlreadySet() throws NoSuchFieldException {
     ArrayList<Incident> data = new ArrayList<Incident>();
     PrivateAccessor.setField(listLoader, DATA, data);
-    shadow.setStarted(true);
+    shadowLoader.setStarted(true);
 
     listLoader.onStartLoading();
 
-    assertSame(data, shadow.getDeliveredResult());
-    assertThat(shadow.isForceLoadCalled(), is(false));
+    assertSame(data, shadowLoader.getDeliveredResult());
+    assertThat(shadowLoader.isForceLoadCalled(), is(false));
   }
 
   @Test
   public void startLoadingShouldNotForceLoadWhenDataIsNullOrContentHasNotChanged() throws NoSuchFieldException {
-    shadow.setTakeContentChanged(false);
+    shadowLoader.setTakeContentChanged(false);
     PrivateAccessor.setField(listLoader, DATA, new ArrayList<Incident>());
 
     listLoader.onStartLoading();
-    assertThat(shadow.isForceLoadCalled(), is(false));
+    assertThat(shadowLoader.isForceLoadCalled(), is(false));
   }
 
   private BroadcastReceiver getObserver() {

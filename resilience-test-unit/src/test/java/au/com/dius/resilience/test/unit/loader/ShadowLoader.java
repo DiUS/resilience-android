@@ -7,7 +7,7 @@ import com.xtremelabs.robolectric.internal.Implementation;
 import com.xtremelabs.robolectric.internal.Implements;
 
 @Implements(Loader.class)
-public class LoaderShadow {
+public class ShadowLoader {
 
   private Context context;
   private boolean started = false;
