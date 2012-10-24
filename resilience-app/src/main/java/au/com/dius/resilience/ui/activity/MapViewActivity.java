@@ -12,11 +12,13 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.ui.map.ResilienceItemisedOverlay;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.google.inject.Inject;
 import roboguice.activity.RoboMapActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
@@ -37,6 +39,9 @@ import java.util.List;
   @InjectResource(R.drawable.blue_poi)
   private Drawable itemIcon;
 
+  @Inject
+  private Repository repository;
+
   private static final String LOG_TAG = MapViewActivity.class.getName();
 
   @Override
@@ -55,7 +60,7 @@ import java.util.List;
 
   @Override
   public Loader<List<Incident>> onCreateLoader(int id, Bundle args) {
-    return new IncidentListLoader(this);
+    return new IncidentListLoader(this, repository);
   }
 
   @Override

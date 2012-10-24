@@ -2,7 +2,6 @@ package au.com.dius.resilience.ui.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +10,7 @@ import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.facade.CameraFacade;
+import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
@@ -111,6 +111,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
     button.setEnabled(false);
     cameraButton.setEnabled(false);
+    finish();
 
     Log.d(getClass().getName(), "Saving incident: " + incident.toString());
   }
@@ -153,9 +154,12 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   }
 
   public void commandComplete(RepositoryCommandResult<Incident> result) {
-    Toast.makeText(this, "Incident was " + (result.isSuccess() ? " saved" : " not saved"), Toast.LENGTH_SHORT).show();
-
+    Toast.makeText(this, "Incident was " + (result.isSuccess() ? "saved" : "not saved"), Toast.LENGTH_SHORT).show();
     setResult(Codes.CreateIncident.RESULT_OK);
-    finish();
+
+    if (result.isSuccess()) {
+      Intent intent = new Intent(IncidentListLoader.INCIDENT_LIST_LOADER_FILTER);
+      sendBroadcast(intent);
+    }
   }
 }

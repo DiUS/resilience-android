@@ -29,7 +29,7 @@ public class CreateActivityTest extends AbstractResilienceActivityTestCase<Resil
   public void testCreateIncident() {
 
     final int incidentsBefore = getNoOfIncidentsInList();
-    solo.clickOnImage(1);
+    solo.clickOnImage(2);
     solo.assertCurrentActivity("expected edit activity", EditIncidentActivity.class);
 
     solo.pressSpinnerItem(0, 1);
@@ -39,6 +39,7 @@ public class CreateActivityTest extends AbstractResilienceActivityTestCase<Resil
     solo.clickOnView(createButton);
 
     solo.waitForFragmentById(R.id.fragment_incident_list_view);
+
     int incidentsAfter = getNoOfIncidentsInList();
     assertEquals(incidentsBefore + 1, incidentsAfter);
   }

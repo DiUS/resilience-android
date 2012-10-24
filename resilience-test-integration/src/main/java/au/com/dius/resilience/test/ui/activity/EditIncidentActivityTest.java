@@ -37,6 +37,7 @@ public class EditIncidentActivityTest extends AbstractResilienceActivityTestCase
     assertEquals(Impact.MEDIUM.name(), impactRatingLbl.getText().toString());
     
     setProgressBar(impactRating, 100);
+    solo.sleep(500);
     assertEquals(Impact.HIGH.name(), impactRatingLbl.getText().toString());
   }
 

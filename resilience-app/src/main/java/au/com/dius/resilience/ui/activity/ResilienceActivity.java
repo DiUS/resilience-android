@@ -29,7 +29,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   private String currentTabTag;
 
-  //TODO Very lame implementation, will neeed to change to use intents and broadcast listeners
+  //TODO Very lame implementation, will need to change to use intents and broadcast listeners
   private Point lastKnownLocation;
 
   /**
