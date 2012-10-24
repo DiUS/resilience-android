@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.xtremelabs.robolectric.Robolectric;
 import junitx.util.PrivateAccessor;
@@ -16,36 +17,50 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(ResilienceTestRunner.class)
 public class IncidentListLoaderTest {
 
   public static final String REFRESH_OBSERVER = "refreshObserver";
   public static final String DATA = "data";
-  @Mock
-  private Context context;
 
   @Mock
-  private BroadcastReceiver observer;
+  private Context mockContext;
+
+  @Mock
+  private BroadcastReceiver mockObserver;
+
+  @Mock
+  private Repository mockRepository;
 
   private IncidentListLoader listLoader;
   private ShadowLoader shadowLoader;
+
 
   @Before
   public void setUp() throws NoSuchFieldException {
     MockitoAnnotations.initMocks(this);
 
-    listLoader = new IncidentListLoader(context);
-    PrivateAccessor.setField(listLoader, REFRESH_OBSERVER, observer);
+    listLoader = new IncidentListLoader(mockContext, mockRepository);
+    PrivateAccessor.setField(listLoader, REFRESH_OBSERVER, mockObserver);
 
     shadowLoader = (ShadowLoader) Robolectric.shadowOf_(listLoader);
+  }
+
+  @Test
+  public void onBackgroudLoadShouldDelegateToRepository() {
+    List<Incident> incidents = new ArrayList<Incident>();
+    when(mockRepository.findIncidents()).thenReturn(incidents);
+
+    assertThat(listLoader.loadInBackground(), sameInstance(incidents));
   }
 
   @Test
@@ -59,22 +74,22 @@ public class IncidentListLoaderTest {
 
   @Test
   public void onStartLoadingShouldUseExistingObserver() {
-    BroadcastReceiver refreshObserver = getObserver();
+    BroadcastReceiver refreshObserver = getMockObserver();
 
     assertNotNull(refreshObserver);
 
     listLoader.onStartLoading();
-    assertSame(refreshObserver, getObserver());
+    assertSame(refreshObserver, getMockObserver());
   }
 
   @Test
   public void onStartLoadingShouldCreateNewObserverIfNotAlreadySet() throws NoSuchFieldException {
     PrivateAccessor.setField(listLoader, REFRESH_OBSERVER, null);
 
-    assertNull(getObserver());
+    assertNull(getMockObserver());
 
     listLoader.onStartLoading();
-    assertNotNull(getObserver() );
+    assertNotNull(getMockObserver() );
   }
 
   @Test
@@ -92,8 +107,8 @@ public class IncidentListLoaderTest {
   public void onResetShouldUnregisterObserver() {
     listLoader.onReset();
 
-    Mockito.verify(context).unregisterReceiver(observer);
-    Object refreshObserver = getObserver();
+    Mockito.verify(mockContext).unregisterReceiver(mockObserver);
+    Object refreshObserver = getMockObserver();
     Assert.assertThat(refreshObserver, nullValue());
 
     Object data = getData();
@@ -138,7 +153,7 @@ public class IncidentListLoaderTest {
     assertThat(shadowLoader.isForceLoadCalled(), is(false));
   }
 
-  private BroadcastReceiver getObserver() {
+  private BroadcastReceiver getMockObserver() {
     try {
       return (BroadcastReceiver) PrivateAccessor.getField(listLoader, REFRESH_OBSERVER);
     } catch (NoSuchFieldException e) {

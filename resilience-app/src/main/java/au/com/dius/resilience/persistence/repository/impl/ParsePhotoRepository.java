@@ -22,6 +22,10 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+@Deprecated
+/**
+ * To be moved into {@link ParseRepository}
+ */
 public class ParsePhotoRepository implements PhotoRepository {
 
   public static final String LOG_TAG = ParsePhotoRepository.class.getName();
@@ -67,6 +71,10 @@ public class ParsePhotoRepository implements PhotoRepository {
   }
 
   @Override
+  @Deprecated
+  /**
+   * To be moved into the parse repository and accessed by the photo loader
+   */
   public void findByIncident(final RepositoryCommandResultListener<Photo> listener,
                              final Incident incident) {
 

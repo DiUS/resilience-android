@@ -8,15 +8,26 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import roboguice.inject.ContextSingleton;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ContextSingleton
 public class ParseIncidentAdapter implements ModelAdapter<Incident, ParseObject> {
 
   @Override
+  public List<Incident> deserialise(List<ParseObject> persistable) {
+    List<Incident> incidents = new ArrayList<Incident>();
+    for (ParseObject parseObject : persistable) {
+      incidents.add(deserialise(parseObject));
+    }
+    return incidents;
+  }
+
+  @Override
   public Incident deserialise(ParseObject persistable) {
     final Date dateCreated = persistable.getCreatedAt();
-    Incident incident =  new Incident(
+    Incident incident = new Incident(
             persistable.getObjectId(),
             persistable.getString(Constants.COL_INCIDENT_NAME),
             dateCreated != null ? dateCreated.getTime() : 0,

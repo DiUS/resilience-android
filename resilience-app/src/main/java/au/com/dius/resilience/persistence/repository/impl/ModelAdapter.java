@@ -1,9 +1,13 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
+import java.util.List;
+
 /**
  * @author georgepapas
  */
 public interface ModelAdapter<D, P> {
+
+  List<D> deserialise(List<P> persistable);
 
   /**
    * Builds a source object into a domain object
