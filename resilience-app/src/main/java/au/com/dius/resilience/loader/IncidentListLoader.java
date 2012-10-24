@@ -7,7 +7,9 @@ import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.observer.IncidentListObserver;
+import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.persistence.repository.impl.ParseIncidentAdapter;
+import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -25,32 +27,18 @@ public class IncidentListLoader extends AsyncTaskLoader<List<Incident>> {
   private List<Incident> data;
   private BroadcastReceiver refreshObserver;
 
-  public IncidentListLoader(Context context) {
+  private Repository repository;
+
+  public IncidentListLoader(Context context, Repository repository) {
     super(context);
+    this.repository = repository;
   }
 
   @Override
   public List<Incident> loadInBackground() {
     Log.d(LOG_TAG, "Loader loading data");
 
-    //TODO Delegate onto Parse Repository
-
-    ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-    List<ParseObject> parseObjects = new ArrayList<ParseObject>();
-    try {
-      parseObjects = query.find();
-    } catch (ParseException e) {
-      Log.d(LOG_TAG, "Loading all incidents failed with: ", e);
-      throw new RuntimeException(e);
-    }
-
-    ParseIncidentAdapter parseIncidentAdapter = new ParseIncidentAdapter();
-    List<Incident> incidents = new ArrayList<Incident>();
-    for (ParseObject parseIncident : parseObjects) {
-      incidents.add(parseIncidentAdapter.deserialise(parseIncident));
-    }
-
-    return incidents;
+    return repository.findIncidents();
   }
 
   @Override

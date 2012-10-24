@@ -13,6 +13,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.inject.ContextSingleton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -102,12 +105,21 @@ public class ParseIncidentAdapterTest {
     parse = createStubParseObject();
 
     Incident incident = adapter.deserialise(parse);
-    assertThat(incident.getName(), equalTo(EXPECTED_NAME));
-    assertThat(incident.getCategory(), equalTo(EXPECTED_CATEGORY));
-    assertThat(incident.getSubCategory(), equalTo(EXPECTED_SUB_CATEGORY));
-    assertThat(incident.getImpact(), equalTo(EXPECTED_IMPACT));
-    assertThat(incident.getNote(), equalTo(EXPECTED_NOTE));
+    assertDeserialisedStub(incident);
+  }
 
+  @Test
+  public void shouldAdaptListOfPersistables() {
+    List<ParseObject> persistables = new ArrayList<ParseObject>();
+    persistables.add(createStubParseObject());
+    persistables.add(createStubParseObject());
+    persistables.add(createStubParseObject());
+
+    List<Incident> incidents = adapter.deserialise(persistables);
+    assertThat(incidents.size(), is(persistables.size()));
+    for(Incident incident : incidents) {
+      assertDeserialisedStub(incident);
+    }
   }
 
   private ParseObject createStubParseObject() {
@@ -120,6 +132,15 @@ public class ParseIncidentAdapterTest {
     stub.put(Constants.COL_INCIDENT_IMPACT, EXPECTED_IMPACT.name());
 
     return stub;
+  }
+
+
+  private void assertDeserialisedStub(Incident incident) {
+    assertThat(incident.getName(), equalTo(EXPECTED_NAME));
+    assertThat(incident.getCategory(), equalTo(EXPECTED_CATEGORY));
+    assertThat(incident.getSubCategory(), equalTo(EXPECTED_SUB_CATEGORY));
+    assertThat(incident.getImpact(), equalTo(EXPECTED_IMPACT));
+    assertThat(incident.getNote(), equalTo(EXPECTED_NOTE));
   }
 
   private Incident createStubIncident() {

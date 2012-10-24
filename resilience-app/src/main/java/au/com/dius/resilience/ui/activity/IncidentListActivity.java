@@ -10,7 +10,7 @@ import android.widget.ListView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.repository.IncidentRepository;
+import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import com.google.inject.Inject;
 import roboguice.activity.RoboListActivity;
@@ -23,7 +23,7 @@ public class IncidentListActivity extends RoboListActivity implements LoaderMana
   private static final String LOG_TAG = IncidentListActivity.class.getName();
 
   @Inject
-  private IncidentRepository incidentRepository;
+  private Repository repository;
 
   private ListViewAdapter adapter;
 
@@ -48,7 +48,7 @@ public class IncidentListActivity extends RoboListActivity implements LoaderMana
   @Override
   public Loader<List<Incident>> onCreateLoader(int i, Bundle bundle) {
     Log.d(LOG_TAG, "Creating IncidentListLoader.");
-    return new IncidentListLoader(this);
+    return new IncidentListLoader(this, repository);
   }
 
   @Override
