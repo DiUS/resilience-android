@@ -12,11 +12,13 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.repository.impl.ParseRepository;
 import au.com.dius.resilience.ui.map.ResilienceItemisedOverlay;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.google.inject.Inject;
 import roboguice.activity.RoboMapActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
@@ -39,6 +41,9 @@ import java.util.List;
 
   private static final String LOG_TAG = MapViewActivity.class.getName();
 
+  @Inject
+  ParseRepository repository;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -55,14 +60,14 @@ import java.util.List;
 
   @Override
   public Loader<List<Incident>> onCreateLoader(int id, Bundle args) {
-    return new IncidentListLoader(this);
+    return new IncidentListLoader(this, repository);
   }
 
   @Override
   public void onLoadFinished(Loader<List<Incident>> loader, List<Incident> data) {
 
     Log.d(LOG_TAG, "Load finished with " + data.size() + " incidents.");
-    ResilienceItemisedOverlay overlay = new ResilienceItemisedOverlay(this, itemIcon);
+    ResilienceItemisedOverlay overlay = new ResilienceItemisedOverlay(itemIcon, mapView);
     for (Incident incident : data) {
       Point point = incident.getPoint();
       if (point != null) {
@@ -76,6 +81,7 @@ import java.util.List;
     if (overlay.hasItems()) {
       mapView.getOverlays().clear();
       mapView.getOverlays().add(overlay);
+      mapView.refreshDrawableState();
     }
   }
 

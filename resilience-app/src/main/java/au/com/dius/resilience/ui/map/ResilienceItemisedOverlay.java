@@ -1,22 +1,25 @@
 package au.com.dius.resilience.ui.map;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import com.google.android.maps.ItemizedOverlay;
+import android.widget.Toast;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResilienceItemisedOverlay extends ItemizedOverlay {
+public class ResilienceItemisedOverlay extends BalloonItemizedOverlay {
 
   private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
   private Context context;
 
-  public ResilienceItemisedOverlay(Context context, Drawable defaultMarker) {
-    super(boundCenterBottom(defaultMarker));
-    this.context = context;
+  public ResilienceItemisedOverlay(Drawable defaultMarker, MapView mapView) {
+    super(boundCenter(defaultMarker), mapView);
+    context = mapView.getContext();
   }
 
   public void addOverlay(OverlayItem overlayItem) {
@@ -39,12 +42,7 @@ public class ResilienceItemisedOverlay extends ItemizedOverlay {
   }
 
   @Override
-  public boolean onTap(int index) {
-    OverlayItem item = overlays.get(index);
-    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-    dialog.setTitle(item.getTitle());
-    dialog.setMessage(item.getSnippet());
-    dialog.show();
+  protected boolean onBalloonTap(int index, OverlayItem item) {
     return true;
   }
 }

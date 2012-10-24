@@ -31,8 +31,8 @@
 
   <repositories>
       <repository>
-        <id>dius.artifactory</id>
-        <url>http://android-ci:8081/artifactory/ext-release-local</url>
+          <id>local</id>
+          <url>file:///Users/justin/.m2/repository</url>
       </repository>
    </repositories>
 
