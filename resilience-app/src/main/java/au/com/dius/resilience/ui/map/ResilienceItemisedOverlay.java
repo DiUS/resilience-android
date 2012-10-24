@@ -24,8 +24,12 @@ public class ResilienceItemisedOverlay extends ItemizedOverlay {
     populate();
   }
 
+  public boolean hasItems() {
+    return size() > 0;
+  }
+
   @Override
-  protected OverlayItem createItem(int i) {
+  public OverlayItem createItem(int i) {
     return overlays.get(i);
   }
 
@@ -35,7 +39,7 @@ public class ResilienceItemisedOverlay extends ItemizedOverlay {
   }
 
   @Override
-  protected boolean onTap(int index) {
+  public boolean onTap(int index) {
     OverlayItem item = overlays.get(index);
     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
     dialog.setTitle(item.getTitle());
