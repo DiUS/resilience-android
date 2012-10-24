@@ -28,6 +28,8 @@ public class ParseRepository implements Repository {
   @Override
   public List<Incident> findIncidents() {
     ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
+    query.orderByDescending(Constants.COL_INCIDENT_CREATION_DATE);
+
     List<ParseObject> parseObjects = loadIncidents(query);
 
     List<Incident> incidents = new ArrayList<Incident>();
