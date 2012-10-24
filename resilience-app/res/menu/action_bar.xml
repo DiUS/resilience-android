@@ -5,12 +5,17 @@
           android:title="@string/all_incidents"
           android:showAsAction="always|withText" android:visible="true"/>
 
-    <item android:id="@+id/tracked_issues"
-          android:title="@string/tracked_incidents"
-          android:showAsAction="always|withText" android:enabled="true"/>
+    <!--<item android:id="@+id/tracked_issues"-->
+          <!--android:title="@string/tracked_incidents"-->
+          <!--android:showAsAction="always|withText" android:enabled="true"/>-->
 
     <item android:id="@+id/raise_incident"
           android:icon="@drawable/create_incident"
           android:title="@string/raise_incident"
+          android:showAsAction="always" android:enabled="true" android:visible="true"/>
+
+    <item android:id="@+id/refresh"
+          android:icon="@drawable/ic_menu_refresh"
+          android:title="@string/refresh"
           android:showAsAction="always" android:enabled="true" android:visible="true"/>
 </menu>

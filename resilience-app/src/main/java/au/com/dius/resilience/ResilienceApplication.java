@@ -22,7 +22,7 @@ public class ResilienceApplication extends Application {
     
     Parse.initialize(this, appKey, clientKey);
    
-    setStrictMode();
+//    setStrictMode();
   }
   
   private void setStrictMode() {

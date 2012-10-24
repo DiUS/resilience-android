@@ -17,11 +17,8 @@ import java.util.List;
  */
 public class ListViewAdapter extends ArrayAdapter<Incident> {
 
-  private List<Incident> incidents;
-
   public ListViewAdapter(Context context, int textViewResourceId, List<Incident> incidents) {
     super(context, textViewResourceId, incidents);
-    this.incidents = incidents;
   }
 
   @Override
@@ -30,7 +27,7 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
 
     View rowView = inflater.inflate(R.layout.incident_list_view_item, null);
 
-    Incident incident = incidents.get(position);
+    Incident incident = getItem(position);
 
     TextView nameField = (TextView) rowView.findViewById(R.id.list_view_item_name);
     nameField.setText(incident.getName());
@@ -45,5 +42,12 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
     return rowView;
   }
 
+  public void setData(List<Incident> incidents) {
+    clear();
+    if (incidents == null) {
+      return;
+    }
 
+    addAll(incidents);
+  }
 }
