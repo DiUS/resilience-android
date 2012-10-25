@@ -2,8 +2,9 @@ package au.com.dius.resilience.loader;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import au.com.dius.resilience.model.Photo;
-import au.com.dius.resilience.observer.PhotoObserver;
+import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.persistence.repository.Repository;
 import de.akquinet.android.androlog.Log;
 
@@ -26,7 +27,7 @@ private static final String LOG_TAG = PhotoListLoader.class.getName();
 
   @Override
   protected BroadcastReceiver createBroadcastReceiver() {
-    return new PhotoObserver(this);
+    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(PHOTO_LOADED));
   }
 
   @Override

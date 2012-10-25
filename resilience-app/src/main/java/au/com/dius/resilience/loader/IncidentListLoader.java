@@ -2,9 +2,10 @@ package au.com.dius.resilience.loader;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.util.Log;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.observer.IncidentListObserver;
+import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.persistence.repository.Repository;
 
 import java.util.List;
@@ -29,6 +30,6 @@ public class IncidentListLoader extends AbstractAsyncListLoader<Incident> {
 
   @Override
   protected BroadcastReceiver createBroadcastReceiver() {
-    return new IncidentListObserver(this);
+    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(INCIDENT_LIST_LOADER_FILTER));
   }
 }
