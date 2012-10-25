@@ -48,6 +48,14 @@ Building
 --------
 
 	mvn clean install
+	
+  We have externalised parse API keys and Google maps api keys as they differ per developer.  Create a *resilience-local.properties* in the resilience-app directory and ensure you have the relevant key values specified, then run the maven resources target generate the filtered resource. e.g. add the the following keys
+
+	map.key=some_key
+	parse.client.key=some_other_key
+	parse.app.key=some_other_other_key
+
+	mvn resource:resources
 
 
 Running tests:
@@ -78,3 +86,4 @@ Integration with IntelliJ
   * Import the project as a regular maven project, ensuring all submodules are imported
   * IntelliJ should pick up the two Android facets, resilience-app and resilience-it
   * When running integration tests from the IDE, you will need to change the classpath to ensure that the Junit 4.x dependency is before the Android dependency
+  * We use an external apklib to generate balloon tips on the map view.  In the project dependecies for this android module, you will need to ensure the maps.jar is added as a 'provided' dependency in order to be able to deploy from within your IDE.

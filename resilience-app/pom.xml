@@ -79,7 +79,7 @@
       <resource>
         <directory>src/main/resources/values</directory>
         <filtering>true</filtering>
-        <targetPath>res/values</targetPath>
+        <targetPath>${basedir}/res/values</targetPath>
         <includes>
           <include>**/*.xml</include>
         </includes>

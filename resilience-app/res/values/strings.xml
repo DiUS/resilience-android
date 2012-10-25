@@ -30,13 +30,4 @@
   <string name="label_tab_map_view">Map</string>
   <string name="label_tab_list_view">List</string>
 
-  <!-- Application Keys -->
-  <!--<string name="key_map_api">05tAfpv55WeD2sP3GNfDGX1BJpuxb1P87EayMCw</string>-->
-  <string name="key_map_api">0BC4AdJd_1vQYEuaUA52yGxVkRTwqJmbWONQbiQ</string>
-
-  <!-- Parse client keys -->
-  <!-- TODO Placeholdes and maven resource plugin replacement?? -->
-  <string name="key_parse_client">iy0ap4H7iKxLkMhDohFSrWkjXe9srN2BCG9rhTfj</string>
-  <string name="key_parse_application">ScsNTWt69fS1f4ETv7hee7KNZVSpEK6v3xk9w7lr</string>
-
 </resources>
