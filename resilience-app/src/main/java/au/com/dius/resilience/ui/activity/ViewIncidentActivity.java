@@ -89,6 +89,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
 
   @Override
   public void onLoadFinished(Loader<List<Photo>> listLoader, List<Photo> photos) {
+    Log.d(LOG_TAG, "Photo loader finished");
     displayPhotos(photos);
   }
 
@@ -98,6 +99,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
   }
 
   public void displayPhotos(List<Photo> photos) {
+    Log.d(LOG_TAG, "Displaying photos");
     if (photos.size() == 0) {
       noPhoto();
     } else {
