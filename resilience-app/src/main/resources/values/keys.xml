@@ -1,0 +1,10 @@
+<resources>
+  <!-- Application Keys -->
+  <!--<string name="key_map_api">05tAfpv55WeD2sP3GNfDGX1BJpuxb1P87EayMCw</string>-->
+  <string name="key_map_api">${map.key}</string>
+
+  <!-- Parse client keys -->
+  <!-- TODO Placeholdes and maven resource plugin replacement?? -->
+  <string name="key_parse_client">${parse.client.key}</string>
+  <string name="key_parse_application">${parse.app.key}</string>
+</resources>

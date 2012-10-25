@@ -9,9 +9,9 @@ import au.com.dius.resilience.loader.IncidentListLoader;
 
 public class IncidentListObserver extends BroadcastReceiver {
 
-  private IncidentListLoader loader;
-
   private static final String LOG_TAG = IncidentListObserver.class.getName();
+
+  private IncidentListLoader loader;
 
   public IncidentListObserver(IncidentListLoader loader) {
     this.loader = loader;

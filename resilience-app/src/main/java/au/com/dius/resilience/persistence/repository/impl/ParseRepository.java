@@ -1,13 +1,16 @@
 package au.com.dius.resilience.persistence.repository.impl;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
+import au.com.dius.resilience.facade.CameraFacade;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.Repository;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import com.google.inject.Inject;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.parse.*;
 import roboguice.inject.ContextSingleton;
 
 import java.util.ArrayList;
@@ -38,6 +41,40 @@ public class ParseRepository implements Repository {
     }
 
     return incidents;
+  }
+
+  @Override
+  public Photo findPhotoByIncident(final String incidentId) {
+    ParseQuery parseQuery = new ParseQuery(Constants.TABLE_INCIDENT);
+
+    final Photo[] photos = new Photo[1];
+
+    parseQuery.getInBackground(incidentId, new GetCallback() {
+      @Override
+
+      public void done(ParseObject parseIncident, ParseException ex) {
+        final ParseFile parseFile = (ParseFile) parseIncident.get(Constants.COL_INCIDENT_PHOTO);
+        if (parseFile == null) {
+          return;
+        }
+
+        Log.d(TAG, "Found photo for incident " + incidentId + ", retrieving data..");
+
+        parseFile.getDataInBackground(new GetDataCallback() {
+
+          @Override
+          public void done(byte[] data, ParseException ex) {
+            Log.d(TAG, "Retrieved " + (data == null ? 0 : data.length) + " bytes of data.");
+            Bitmap bitmap = CameraFacade.decodeBytes(data);
+            Photo photo = new Photo(Uri.parse(parseFile.getUrl()), bitmap);
+
+            photos[0] = photo;
+          }
+        });
+      }
+    });
+
+    return photos[0];
   }
 
   private List<ParseObject> loadIncidents(ParseQuery query) {

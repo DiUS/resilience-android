@@ -1,6 +1,8 @@
 package au.com.dius.resilience.ui.activity;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,16 +13,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.loader.PhotoListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
-import au.com.dius.resilience.persistence.repository.PhotoRepository;
-import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
-import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
+import au.com.dius.resilience.persistence.repository.Repository;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
-public class ViewIncidentActivity extends RoboActivity implements RepositoryCommandResultListener<Photo> {
+import java.util.List;
+
+public class ViewIncidentActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<Photo>> {
 
   private static final String LOG_TAG = ViewIncidentActivity.class.getName();
 
@@ -40,7 +43,7 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
   private ProgressBar progressBar;
 
   @Inject
-  private PhotoRepository photoRepository;
+  private Repository repository;
 
   private Bitmap photoBitmap;
 
@@ -57,7 +60,7 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
     name.setText(incident.getName());
     note.setText(incident.getNote());
 
-    photoRepository.findByIncident(this, incident);
+    getLoaderManager().initLoader(PhotoListLoader.PHOTO_LIST_LOADER, null, this);
   }
 
   public void onImageClick(View view) {
@@ -78,13 +81,27 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
     return true;
   }
 
+
   @Override
-  public void commandComplete(RepositoryCommandResult<Photo> result) {
-    if (result.getResults().size() == 0) {
-      noImageLabel.setVisibility(View.VISIBLE);
-    }
-    else {
-      Photo photo = result.getResults().get(0);
+  public Loader<List<Photo>> onCreateLoader(int i, Bundle bundle) {
+    return new PhotoListLoader(this, repository, incident.getId());
+  }
+
+  @Override
+  public void onLoadFinished(Loader<List<Photo>> listLoader, List<Photo> photos) {
+    displayPhotos(photos);
+  }
+
+  @Override
+  public void onLoaderReset(Loader<List<Photo>> listLoader) {
+    noPhoto();
+  }
+
+  public void displayPhotos(List<Photo> photos) {
+    if (photos.size() == 0) {
+      noPhoto();
+    } else {
+      Photo photo = photos.get(0);
       photoBitmap = photo.getBitmap();
       incidentPhoto.setImageBitmap(photoBitmap);
       incidentPhoto.setVisibility(View.VISIBLE);
@@ -92,4 +109,9 @@ public class ViewIncidentActivity extends RoboActivity implements RepositoryComm
 
     progressBar.setVisibility(View.GONE);
   }
+
+  private void noPhoto() {
+    noImageLabel.setVisibility(View.VISIBLE);
+  }
+
 }

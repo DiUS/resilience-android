@@ -99,8 +99,7 @@ public class CameraFacade {
   }
 
   public static Bitmap decodeBytes(byte[] bytes) {
-    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    return bitmap;
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
   }
 
   public static byte[] extractBytes(Photo photo) {
