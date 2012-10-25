@@ -60,7 +60,7 @@
     <dependency>
       <groupId>com.readystatesoftware</groupId>
       <artifactId>mapviewballoons</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>${mapviewballoons.version}</version>
       <type>apklib</type>
     </dependency>
 
@@ -80,6 +80,9 @@
         <directory>src/main/resources/values</directory>
         <filtering>true</filtering>
         <targetPath>res/values</targetPath>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
       </resource>
     </resources>
     <filters>

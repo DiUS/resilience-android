@@ -44,11 +44,10 @@ public class PhotoListLoaderTest {
 
   @Test
   public void onBackgroudLoadShouldDelegateToRepository() {
-    List<Photo> photos = new ArrayList<Photo>();
     when(mockRepository.findPhotoByIncident(INCIDENT_ID)).thenReturn(mockPhoto);
 
     final List<Photo> photoList = listLoader.loadInBackground();
-    assertThat(photoList.size(), equalTo(photos.size()));
+    assertThat(photoList.size(), equalTo(1));
 
     assertThat(photoList.get(0), sameInstance(mockPhoto));
   }

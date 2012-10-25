@@ -29,13 +29,6 @@
 
   </properties>
 
-  <repositories>
-      <repository>
-          <id>local</id>
-          <url>file:///Users/justin/.m2/repository</url>
-      </repository>
-   </repositories>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -60,6 +53,13 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>dius.artifactory</id>
+            <url>http://android-ci:8081/artifactory/ext-release-local</url>
+        </repository>
+    </repositories>
 
     <build>
         <pluginManagement>

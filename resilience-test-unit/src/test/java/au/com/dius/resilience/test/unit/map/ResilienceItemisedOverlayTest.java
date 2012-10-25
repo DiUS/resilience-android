@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import au.com.dius.resilience.ui.map.ResilienceItemisedOverlay;
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Before;
@@ -33,7 +34,8 @@ public class ResilienceItemisedOverlayTest {
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    overlay = new ResilienceItemisedOverlay(context, drawable);
+    MapView mapView = new MapView(context, "");
+    overlay = new ResilienceItemisedOverlay(drawable, mapView);
     overlayItem = new OverlayItem(new GeoPoint(0, 0), "", "");
   }
 
