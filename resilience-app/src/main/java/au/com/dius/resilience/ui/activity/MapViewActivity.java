@@ -60,18 +60,8 @@ import java.util.List;
 
   @Override
   public void onLoadFinished(Loader<List<Incident>> loader, List<Incident> data) {
-
-    Log.d(LOG_TAG, "Load finished with " + data.size() + " incidents.");
     ResilienceItemisedOverlay overlay = new ResilienceItemisedOverlay(itemIcon, mapView);
-    for (Incident incident : data) {
-      Point point = incident.getPoint();
-      if (point != null) {
-        Log.d(LOG_TAG, "Adding point: " + point.getLatitude() + ", " + point.getLongitude());
-        GeoPoint geoPoint = new GeoPoint((int) (point.getLatitude() * 1E6), (int) (point.getLongitude() * 1E6));
-        OverlayItem overlayItem = new OverlayItem(geoPoint, incident.getCategory(), incident.getNote());
-        overlay.addOverlay(overlayItem);
-      }
-    }
+    overlay.populateWith(data);
 
     if (overlay.hasItems()) {
       mapView.getOverlays().clear();

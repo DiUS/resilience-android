@@ -5,6 +5,9 @@ import android.content.ClipData;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.Toast;
+import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.Point;
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
@@ -18,13 +21,24 @@ public class ResilienceItemisedOverlay extends BalloonItemizedOverlay {
   private Context context;
 
   public ResilienceItemisedOverlay(Drawable defaultMarker, MapView mapView) {
-    super(boundCenter(defaultMarker), mapView);
+    super(boundCenterBottom(defaultMarker), mapView);
     context = mapView.getContext();
+  }
+
+  public void populateWith(List<Incident> data) {
+    for (Incident incident : data) {
+      Point point = incident.getPoint();
+      if (point != null) {
+        GeoPoint geoPoint = new GeoPoint((int) (point.getLatitude() * 1E6), (int) (point.getLongitude() * 1E6));
+        OverlayItem overlayItem = new OverlayItem(geoPoint, incident.getCategory(), incident.getNote());
+        addOverlay(overlayItem);
+      }
+    }
+    populate();
   }
 
   public void addOverlay(OverlayItem overlayItem) {
     overlays.add(overlayItem);
-    populate();
   }
 
   public boolean hasItems() {
