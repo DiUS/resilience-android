@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
-import au.com.dius.resilience.ui.map.ResilienceItemisedOverlay;
+import au.com.dius.resilience.ui.map.IncidentOverlay;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -26,9 +25,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-public class ResilienceItemisedOverlayTest {
+public class IncidentOverlayTest {
 
-  ResilienceItemisedOverlay overlay;
+  IncidentOverlay overlay;
 
   @Mock
   private Context context;
@@ -44,7 +43,7 @@ public class ResilienceItemisedOverlayTest {
   public void setUp() {
     MockitoAnnotations.initMocks(this);
     MapView mapView = new MapView(context, "");
-    overlay = new ResilienceItemisedOverlay(drawable, mapView);
+    overlay = new IncidentOverlay(drawable, mapView);
     overlayItem = new OverlayItem(new GeoPoint(0, 0), "", "");
   }
 

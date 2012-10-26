@@ -4,16 +4,12 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
-import au.com.dius.resilience.ui.map.ResilienceItemisedOverlay;
-import com.google.android.maps.GeoPoint;
+import au.com.dius.resilience.ui.map.IncidentOverlay;
 import com.google.android.maps.MapView;
-import com.google.android.maps.OverlayItem;
 import com.google.inject.Inject;
 import roboguice.activity.RoboMapActivity;
 import roboguice.inject.ContentView;
@@ -60,7 +56,7 @@ import java.util.List;
 
   @Override
   public void onLoadFinished(Loader<List<Incident>> loader, List<Incident> data) {
-    ResilienceItemisedOverlay overlay = new ResilienceItemisedOverlay(itemIcon, mapView);
+    IncidentOverlay overlay = new IncidentOverlay(itemIcon, mapView);
     overlay.populateWith(data);
 
     mapView.getOverlays().clear();

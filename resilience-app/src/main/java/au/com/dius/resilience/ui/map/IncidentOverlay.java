@@ -15,12 +15,12 @@ import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResilienceItemisedOverlay extends BalloonItemizedOverlay {
+public class IncidentOverlay extends BalloonItemizedOverlay {
 
   private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
   private Context context;
 
-  public ResilienceItemisedOverlay(Drawable defaultMarker, MapView mapView) {
+  public IncidentOverlay(Drawable defaultMarker, MapView mapView) {
     super(boundCenterBottom(defaultMarker), mapView);
     context = mapView.getContext();
   }
