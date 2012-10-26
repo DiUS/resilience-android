@@ -11,6 +11,7 @@
 
     <modules>
         <module>resilience-app</module>
+        <module>mapviewballoons</module>
         <module>resilience-test-lib</module>
         <module>resilience-test-unit</module>
         <module>resilience-test-integration</module>
