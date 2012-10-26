@@ -17,7 +17,6 @@
 
   <properties>
     <parse.version>1.1.6</parse.version>
-    <mapviewballoons.version>1.0</mapviewballoons.version>
   </properties>
 
   <dependencies>
@@ -57,13 +56,11 @@
       <version>r6</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.readystatesoftware</groupId>
-      <artifactId>mapviewballoons</artifactId>
-      <version>${mapviewballoons.version}</version>
-      <type>apklib</type>
-    </dependency>
-
+      <dependency>
+          <groupId>com.readystatesoftware</groupId>
+          <artifactId>mapviewballoons</artifactId>
+          <version>${project.version}</version>
+      </dependency>
   </dependencies>
 
   <build>
