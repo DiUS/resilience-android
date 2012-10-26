@@ -22,7 +22,7 @@ out/
 local.properties
 
 # Local properties (api keys etc)
-resilience-local.properties
+#resilience-local.properties
 
 #project.properties
 
