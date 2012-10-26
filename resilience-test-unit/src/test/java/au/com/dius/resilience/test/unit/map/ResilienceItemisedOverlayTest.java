@@ -34,6 +34,9 @@ public class ResilienceItemisedOverlayTest {
   private Context context;
 
   @Mock
+  private Incident incident;
+
+  @Mock
   private Drawable drawable;
   private OverlayItem overlayItem;
 
@@ -69,9 +72,9 @@ public class ResilienceItemisedOverlayTest {
   @Test
   public void shouldPopulateOverlayIfIncidentHasGeoData() {
     ArrayList<Incident> incidents = new ArrayList<Incident>();
-    Incident incident1 = mock(Incident.class);
-    when(incident1.getPoint()).thenReturn(new Point(1,1));
-    incidents.add(incident1);
+
+    when(incident.getPoint()).thenReturn(new Point(1,1));
+    incidents.add(incident);
 
     overlay.populateWith(incidents);
 
@@ -81,9 +84,9 @@ public class ResilienceItemisedOverlayTest {
   @Test
   public void shouldNotPopulateOverlayIfIncidentLacksGeoData() {
     ArrayList<Incident> incidents = new ArrayList<Incident>();
-    Incident incident1 = mock(Incident.class);
-    when(incident1.getPoint()).thenReturn(null);
-    incidents.add(incident1);
+
+    when(incident.getPoint()).thenReturn(null);
+    incidents.add(incident);
 
     overlay.populateWith(incidents);
 

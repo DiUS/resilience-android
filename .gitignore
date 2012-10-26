@@ -21,6 +21,8 @@ out/
 # Local configuration file (sdk path, etc)
 local.properties
 
+# Local properties (api keys etc)
+resilience-local.properties
 
 #project.properties
 

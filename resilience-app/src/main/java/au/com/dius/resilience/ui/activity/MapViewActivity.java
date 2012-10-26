@@ -63,8 +63,9 @@ import java.util.List;
     ResilienceItemisedOverlay overlay = new ResilienceItemisedOverlay(itemIcon, mapView);
     overlay.populateWith(data);
 
+    mapView.getOverlays().clear();
+
     if (overlay.hasItems()) {
-      mapView.getOverlays().clear();
       mapView.getOverlays().add(overlay);
       mapView.refreshDrawableState();
     }
