@@ -63,7 +63,7 @@ import java.util.List;
 
     if (overlay.hasItems()) {
       mapView.getOverlays().add(overlay);
-      mapView.refreshDrawableState();
+      mapView.invalidate();
     }
   }
 
