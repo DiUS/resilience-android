@@ -7,7 +7,7 @@
   <PreferenceCategory
       android:title="@string/response_willingness">
     <EditTextPreference
-        android:key="response_radius"
+        android:key="@string/response_radius_key"
         android:title="@string/response_radius"
         android:summary="@string/response_radius_summary"
         android:persistent="true"

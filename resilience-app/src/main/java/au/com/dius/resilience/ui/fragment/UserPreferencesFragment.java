@@ -18,7 +18,7 @@ public class UserPreferencesFragment extends PreferenceFragment {
     super.onCreate(savedInstanceState);
 
     SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE_COMMON, Context.MODE_PRIVATE);
-    String profile = sharedPreferences.getString("current_profile", DEFAULT_USER);
+    String profile = sharedPreferences.getString(getString(R.string.current_profile_key), DEFAULT_USER);
 
     getPreferenceManager().setSharedPreferencesName(PREFERENCES_FILE_PREFIX + profile);
     addPreferencesFromResource(R.xml.user_preferences);

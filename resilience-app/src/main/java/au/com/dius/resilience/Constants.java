@@ -1,10 +1,6 @@
 package au.com.dius.resilience;
 
-import android.content.SharedPreferences;
-
 public class Constants {
-  public static final String COL_ID = "objectId";
-
   public static final String TABLE_INCIDENT = "incident";
   public static final String COL_INCIDENT_NAME = "name";
   public static final String COL_INCIDENT_CATEGORY = "category";
