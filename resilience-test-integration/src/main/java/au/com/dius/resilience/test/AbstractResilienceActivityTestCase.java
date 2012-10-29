@@ -30,8 +30,8 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
     getActivity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        latch.countDown();
         seekbar.setProgress(progress);
+        latch.countDown();
       }
     });
 
