@@ -13,6 +13,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.ui.Codes;
+import au.com.dius.resilience.ui.Themer;
 import roboguice.activity.RoboTabActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -39,7 +40,9 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   public void onCreate(Bundle savedInstanceState) {
     //TODO Restore from savedInstance state
 
+    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
+
     setupTabs();
 
     setupLocationListener();
@@ -69,6 +72,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_bar, menu);
+    getActionBar().setDisplayShowTitleEnabled(false);
     return true;
   }
 
@@ -88,6 +92,11 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 //      case R.id.tracked_issues:
 //        Log.d(LOG_TAG, "Tracked issues selected");
 //        break;
+
+      case R.id.user_preferences:
+        Intent userPreferencesIntent = new Intent(this, ResiliencePreferenceActivity.class);
+        startActivity(userPreferencesIntent);
+        break;
 
       case R.id.raise_incident:
         Intent raiseIncident = new Intent(this, EditIncidentActivity.class);

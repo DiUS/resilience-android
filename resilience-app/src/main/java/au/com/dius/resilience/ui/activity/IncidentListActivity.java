@@ -11,6 +11,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.Repository;
+import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import com.google.inject.Inject;
 import roboguice.activity.RoboListActivity;
@@ -29,6 +30,7 @@ public class IncidentListActivity extends RoboListActivity implements LoaderMana
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
     adapter = new ListViewAdapter(this, R.layout.incident_list_view_item, new ArrayList<Incident>());
     super.setListAdapter(adapter);

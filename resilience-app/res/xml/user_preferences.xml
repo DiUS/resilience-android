@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:persistent="true">
+  <PreferenceCategory
+      android:title="@string/response_willingness">
+    <EditTextPreference
+        android:key="response_radius"
+        android:title="@string/response_radius"
+        android:summary="@string/response_radius_summary"
+        android:persistent="true"
+        android:defaultValue="10"/>
+  </PreferenceCategory>
+</PreferenceScreen>

@@ -17,6 +17,7 @@ import au.com.dius.resilience.loader.PhotoListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.Repository;
+import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -51,6 +52,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_view_incident);
 

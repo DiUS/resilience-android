@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
@@ -18,6 +19,7 @@ import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 import au.com.dius.resilience.ui.Codes;
+import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -54,6 +56,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_edit_incident);
     initialiseSpinners();
@@ -113,7 +116,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     cameraButton.setEnabled(false);
     finish();
 
-    Log.d(getClass().getName(), "Saving incident: " + incident.toString());
+    Log.d(LOG_TAG, "Saving incident: " + incident.toString());
   }
 
   public void onCameraClick(View button) {

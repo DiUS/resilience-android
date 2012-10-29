@@ -8,6 +8,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.Repository;
+import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.map.IncidentOverlay;
 import com.google.android.maps.MapView;
 import com.google.inject.Inject;
@@ -37,6 +38,7 @@ import java.util.List;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
 
     mapView.setBuiltInZoomControls(true);

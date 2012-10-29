@@ -1,0 +1,20 @@
+<resources>
+  <string name="current_profile">Current Profile</string>
+  <string name="user_preferences">User preferences</string>
+  <!-- Response willingness -->
+  <string name="response_willingness">Response willingness</string>
+  <string name="response_willingness_summary">How can you help?</string>
+  <string name="response_radius">Response radius</string>
+  <string name="response_radius_summary">How far you\'re willing to travel</string>
+
+  <!-- Visual preferences -->
+  <string name="appearance">Appearance</string>
+  <string name="appearance_summary">Look and feel</string>
+  <string name="use_light_theme">Use light theme</string>
+  <string name="use_light_theme_summary">Toggle between light/dark theme</string>
+
+  <!-- Contribute -->
+  <string name="contribute">Contribute</string>
+  <string name="github">Resilience on Github</string>
+  <string name="github_link">https://github.com/DiUS/resilience-android</string>
+</resources>

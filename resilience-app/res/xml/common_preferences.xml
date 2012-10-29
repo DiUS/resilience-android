@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory
+      android:title="@string/appearance">
+    <CheckBoxPreference
+        android:key="use_light_theme"
+        android:title="@string/use_light_theme"
+        android:summary="@string/use_light_theme_summary"
+        android:persistent="true"
+        android:defaultValue="true"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/contribute">
+    <Preference
+        android:title="@string/github"
+        android:summary="@string/github_link">
+      <intent
+          android:action="android.intent.action.VIEW"
+          android:data="@string/project_url"/>
+    </Preference>
+  </PreferenceCategory>
+</PreferenceScreen>
