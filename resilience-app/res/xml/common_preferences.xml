@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <ListPreference
+      android:title="@string/current_profile"
+      android:order="0"
+      android:entries="@array/categories"
+      android:entryValues="@array/subcategories"/>
+
   <PreferenceCategory
-      android:title="@string/appearance">
+      android:title="@string/appearance"
+      android:order="1">
     <CheckBoxPreference
         android:key="use_light_theme"
         android:title="@string/use_light_theme"
@@ -12,10 +20,11 @@
   </PreferenceCategory>
 
   <PreferenceCategory
-      android:title="@string/contribute">
+      android:title="@string/contribute"
+      android:order="2">
     <Preference
         android:title="@string/github"
-        android:summary="@string/github_link">
+        android:summary="@string/project_url">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/project_url"/>
