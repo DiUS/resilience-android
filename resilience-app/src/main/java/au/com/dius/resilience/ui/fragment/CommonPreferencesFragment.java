@@ -11,8 +11,6 @@ import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapt
 
 public class CommonPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-  private PreferenceAdapter preferenceAdapter;
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -20,15 +18,13 @@ public class CommonPreferencesFragment extends PreferenceFragment implements Sha
     getPreferenceManager().setSharedPreferencesName(PREFERENCES_FILE_COMMON);
     getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     addPreferencesFromResource(R.xml.common_preferences);
-
-    preferenceAdapter = new PreferenceAdapter(getActivity());
   }
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     // TODO - Add confirmation dialog.
-    String useLightThemeKey = (String) preferenceAdapter.getCommonPreference(R.string.use_light_theme_key);
-    if (useLightThemeKey.equals(key)) {
+    String useLightThemeKey = getString(R.string.use_light_theme_key);
+    if (key.equals(useLightThemeKey)) {
       Intent i = getActivity().getBaseContext().getPackageManager()
         .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
       i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
