@@ -1,11 +1,14 @@
 package au.com.dius.resilience.test;
 
+import android.content.Context;
+import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.SeekBar;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.test.util.ParseTestUtils;
-
 import com.jayway.android.robotium.solo.Solo;
+import au.com.dius.resilience.R;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -48,6 +51,12 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
 
     getInstrumentation().waitForIdleSync();
     solo = new Solo(getInstrumentation(), getActivity());
+
+    PreferenceManager.setDefaultValues(getActivity().getApplication(), PreferenceAdapter.PREFERENCES_FILE_COMMON,
+      Context.MODE_PRIVATE, R.xml.common_preferences, true);
+
+    PreferenceManager.setDefaultValues(getActivity().getApplication(), PreferenceAdapter.PREFERENCES_FILE_DEFAULT, Context.MODE_PRIVATE,
+      R.xml.user_preferences, true);
 
     ParseTestUtils.setUp(getActivity());
     try {

@@ -3,6 +3,7 @@ package au.com.dius.resilience;
 import android.app.Application;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import com.parse.Parse;
 
 public class ResilienceApplication extends Application {
@@ -11,8 +12,11 @@ public class ResilienceApplication extends Application {
 
   @Override
   public void onCreate() {
-    PreferenceManager.setDefaultValues(this, R.xml.user_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
-    PreferenceManager.setDefaultValues(this, R.xml.common_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
+    PreferenceManager.setDefaultValues(this, PreferenceAdapter.PREFERENCES_FILE_COMMON, MODE_PRIVATE
+                                      , R.xml.common_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
+
+    PreferenceManager.setDefaultValues(this, PreferenceAdapter.PREFERENCES_FILE_DEFAULT, MODE_PRIVATE
+                                      , R.xml.user_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
 
     String appKey = getResources().getString(R.string.key_parse_application);
     String clientKey = getResources().getString(R.string.key_parse_client);

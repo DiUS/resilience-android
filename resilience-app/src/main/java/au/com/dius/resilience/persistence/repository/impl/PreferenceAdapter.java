@@ -13,6 +13,7 @@ public class PreferenceAdapter {
 
   public static final String PREFERENCES_FILE_PREFIX = "au.com.dius.resilience.preference.";
   public static final String PREFERENCES_FILE_COMMON = PREFERENCES_FILE_PREFIX + "common";
+  public static final String PREFERENCES_FILE_DEFAULT = PREFERENCES_FILE_PREFIX + DEFAULT_USER;
 
   private Context context;
 
