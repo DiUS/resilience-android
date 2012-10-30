@@ -1,4 +1,4 @@
-package au.com.dius.resilience.test.unit.preference;
+package au.com.dius.resilience.test.unit.persistence.repository.impl;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

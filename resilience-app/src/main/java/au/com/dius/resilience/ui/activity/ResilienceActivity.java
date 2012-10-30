@@ -98,7 +98,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
         startActivity(userPreferencesIntent);
         break;
 
-      case R.id.raise_incident:
+      case R.id.create_incident:
         Intent raiseIncident = new Intent(this, EditIncidentActivity.class);
         raiseIncident.putExtra(EditIncidentActivity.LOCATION, lastKnownLocation);
         startActivityForResult(raiseIncident, Codes.CreateIncident.REQUEST_CODE);

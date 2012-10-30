@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="onSubmitClick"
                 android:layout_weight="0.5"
-                android:text="@string/raise_incident" />
+                android:text="@string/create" />
 
     </LinearLayout>
 

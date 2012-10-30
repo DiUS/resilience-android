@@ -19,8 +19,8 @@
           android:title="@string/user_preferences"
           android:showAsAction="ifRoom" android:enabled="true" android:visible="true"/>
 
-    <item android:id="@+id/raise_incident"
+    <item android:id="@+id/create_incident"
           android:icon="@drawable/create_incident"
-          android:title="@string/raise_incident"
+          android:title="@string/create"
           android:showAsAction="always" android:enabled="true" android:visible="true"/>
 </menu>

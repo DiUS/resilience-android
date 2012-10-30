@@ -23,7 +23,7 @@ public class CreateActivityTest extends AbstractResilienceActivityTestCase<Resil
 
     final int incidentsBefore = getNoOfIncidentsInList();
 
-    View raiseIncidentButton = solo.getView(R.id.raise_incident);
+    View raiseIncidentButton = solo.getView(R.id.create_incident);
     solo.clickOnView(raiseIncidentButton);
     solo.assertCurrentActivity("expected edit activity", EditIncidentActivity.class);
 

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 
 import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter.PREFERENCES_FILE_COMMON;
 
