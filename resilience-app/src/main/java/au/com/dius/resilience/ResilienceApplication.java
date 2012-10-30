@@ -5,8 +5,6 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import com.parse.Parse;
 
-import static au.com.dius.resilience.Constants.PREFERENCES_FILE_COMMON;
-
 public class ResilienceApplication extends Application {
 
   private static final boolean SHOULD_ALWAYS_LOAD_DEFAULT_PREFS = false;
