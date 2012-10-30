@@ -43,14 +43,18 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
   }
 
   @Override
-  protected void setUp() throws Exception {
+  protected void setUp() {
     Log.d(LOG_TAG, "Preparing for test " + Thread.currentThread().getName());
 
     getInstrumentation().waitForIdleSync();
     solo = new Solo(getInstrumentation(), getActivity());
 
     ParseTestUtils.setUp(getActivity());
-    ParseTestUtils.dropAll(getInstrumentation());
+    try {
+      ParseTestUtils.dropAll(getInstrumentation());
+    } catch (Exception e) {
+      throw new RuntimeException("Failed setting up test: ", e);
+    }
   }
 
   @Override

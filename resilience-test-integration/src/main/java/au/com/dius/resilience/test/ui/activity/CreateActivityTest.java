@@ -1,6 +1,7 @@
 package au.com.dius.resilience.test.ui.activity;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.test.AbstractResilienceActivityTestCase;
@@ -18,18 +19,12 @@ public class CreateActivityTest extends AbstractResilienceActivityTestCase<Resil
     super(ResilienceActivity.class);
   }
 
-  @Override
-  protected void beforeTest() {
-  }
-
-  @Override
-  protected void afterTest() {
-  }
-
   public void testCreateIncident() {
 
     final int incidentsBefore = getNoOfIncidentsInList();
-    solo.clickOnImage(2);
+
+    View raiseIncidentButton = solo.getView(R.id.raise_incident);
+    solo.clickOnView(raiseIncidentButton);
     solo.assertCurrentActivity("expected edit activity", EditIncidentActivity.class);
 
     solo.pressSpinnerItem(0, 1);
