@@ -1,26 +1,18 @@
 package au.com.dius.resilience.ui.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import au.com.dius.resilience.R;
-
-import static au.com.dius.resilience.Constants.PREFERENCES_FILE_COMMON;
-import static au.com.dius.resilience.Constants.PREFERENCES_FILE_PREFIX;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 
 public class UserPreferencesFragment extends PreferenceFragment {
-
-  public static final String DEFAULT_USER = "default_user";
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE_COMMON, Context.MODE_PRIVATE);
-    String profile = sharedPreferences.getString(getString(R.string.current_profile_key), DEFAULT_USER);
-
-    getPreferenceManager().setSharedPreferencesName(PREFERENCES_FILE_PREFIX + profile);
+    PreferenceAdapter preferenceAdapter = new PreferenceAdapter(getActivity());
+    getPreferenceManager().setSharedPreferencesName(preferenceAdapter.getCurrentUserPreferenceFile());
     addPreferencesFromResource(R.xml.user_preferences);
   }
 }

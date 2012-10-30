@@ -15,7 +15,4 @@ public class Constants {
   public static final String EXTRA_PHOTO = "photo";
 
   public static final String INCIDENT_POINT = "incidentPoint";
-
-  public static final String PREFERENCES_FILE_PREFIX = "au.com.dius.resilience.preferences.";
-  public static final String PREFERENCES_FILE_COMMON = PREFERENCES_FILE_PREFIX + "common";
 }

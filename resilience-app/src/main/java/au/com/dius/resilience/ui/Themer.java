@@ -2,14 +2,12 @@ package au.com.dius.resilience.ui;
 
 import android.content.Context;
 import au.com.dius.resilience.R;
-
-import static android.content.Context.MODE_PRIVATE;
-import static au.com.dius.resilience.Constants.PREFERENCES_FILE_COMMON;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 
 public class Themer {
   public static void applyCurrentTheme(Context context) {
-    Context appContext = context.getApplicationContext();
-    boolean useLightTheme = appContext.getSharedPreferences(PREFERENCES_FILE_COMMON, MODE_PRIVATE).getBoolean("use_light_theme", true);
+    PreferenceAdapter preferenceAdapter = new PreferenceAdapter(context.getApplicationContext());
+    Boolean useLightTheme = (Boolean) preferenceAdapter.getCommonPreference(R.string.use_light_theme_key);
 
     if (useLightTheme) {
       context.setTheme(R.style.light_theme);

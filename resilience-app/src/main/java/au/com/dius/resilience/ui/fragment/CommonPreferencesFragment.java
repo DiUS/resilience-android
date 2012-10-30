@@ -5,10 +5,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 
-import static au.com.dius.resilience.Constants.PREFERENCES_FILE_COMMON;
+import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter.PREFERENCES_FILE_COMMON;
 
 public class CommonPreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+  private PreferenceAdapter preferenceAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -17,12 +20,14 @@ public class CommonPreferencesFragment extends PreferenceFragment implements Sha
     getPreferenceManager().setSharedPreferencesName(PREFERENCES_FILE_COMMON);
     getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     addPreferencesFromResource(R.xml.common_preferences);
+
+    preferenceAdapter = new PreferenceAdapter(getActivity());
   }
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     // TODO - Add confirmation dialog.
-    String useLightThemeKey = getString(R.string.use_light_theme_key);
+    String useLightThemeKey = (String) preferenceAdapter.getCommonPreference(R.string.use_light_theme_key);
     if (useLightThemeKey.equals(key)) {
       Intent i = getActivity().getBaseContext().getPackageManager()
         .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
