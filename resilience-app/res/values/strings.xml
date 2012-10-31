@@ -30,7 +30,4 @@
   <!-- List view selector toggle buttons -->
   <string name="label_tab_map_view">Map</string>
   <string name="label_tab_list_view">List</string>
-
-  <!-- Profile creation -->
-  <string name="cancel">Cancel</string>
 </resources>

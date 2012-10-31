@@ -3,10 +3,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
   <ListPreference
+      android:key="@string/current_profile_key"
       android:title="@string/current_profile"
-      android:order="0"
-      android:entries="@array/categories"
-      android:entryValues="@array/subcategories"/>
+      android:order="0"/>
+
+  <Preference
+      android:title="@string/manage_profiles"
+      android:summary="@string/manage_profiles_summary">
+    <intent
+        android:targetClass="au.com.dius.resilience.ui.activity.ManageProfilesActivity"/>
+  </Preference>
 
   <PreferenceCategory
       android:title="@string/appearance"

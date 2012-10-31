@@ -2,6 +2,13 @@
   <string name="user_preferences">User preferences</string>
   <string name="current_profile">Current Profile</string>
   <string name="current_profile_key">current_profile</string>
+
+  <!--
+    Profiles
+  -->
+  <string name="manage_profiles">Manage profiles</string>
+  <string name="manage_profiles_summary">Edit or delete profiles</string>
+
   <!--
     Response willingness
   -->
@@ -18,6 +25,9 @@
   -->
   <string name="appearance">Appearance</string>
   <string name="appearance_summary">Look and feel</string>
+  <string name="theme_change_warning">WARNING: In order for this setting to take effect the application must
+                                       be restarted, continue?</string>
+  <string name="restart">Restart</string>
 
   <!-- VP values -->
   <string name="use_light_theme">Use light theme</string>
