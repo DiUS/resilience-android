@@ -4,6 +4,9 @@
   <string name="app_name">Resilience Dev</string>
   <string name="project_url">https://github.com/DiUS/resilience-android</string>
 
+  <!-- Multi-use -->
+  <string name="save">Save</string>
+
   <!-- Action bar menu -->
   <string name="all_incidents">All incidents</string>
   <string name="tracked_incidents">Tracked incidents</string>

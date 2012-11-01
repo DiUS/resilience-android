@@ -2,21 +2,23 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <ListPreference
+  <au.com.dius.resilience.ui.AppendableListPreference
       android:key="@string/current_profile_key"
       android:title="@string/current_profile"
-      android:order="0"/>
+      android:order="0"
+      android:defaultValue="@string/default_user"/>
 
   <Preference
       android:title="@string/manage_profiles"
-      android:summary="@string/manage_profiles_summary">
+      android:summary="@string/manage_profiles_summary"
+      android:order="1">
     <intent
         android:targetClass="au.com.dius.resilience.ui.activity.ManageProfilesActivity"/>
   </Preference>
 
   <PreferenceCategory
       android:title="@string/appearance"
-      android:order="1">
+      android:order="2">
     <CheckBoxPreference
         android:key="@string/use_light_theme_key"
         android:title="@string/use_light_theme"
@@ -27,7 +29,7 @@
 
   <PreferenceCategory
       android:title="@string/contribute"
-      android:order="2">
+      android:order="3">
     <Preference
         android:title="@string/github"
         android:summary="@string/project_url">

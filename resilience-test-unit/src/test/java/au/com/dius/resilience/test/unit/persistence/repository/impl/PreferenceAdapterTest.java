@@ -2,6 +2,7 @@ package au.com.dius.resilience.test.unit.persistence.repository.impl;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Profile;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
@@ -11,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.content.Context.MODE_PRIVATE;
-import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter.DEFAULT_USER;
 import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter.PREFERENCES_FILE_PREFIX;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
@@ -32,7 +32,7 @@ public class PreferenceAdapterTest {
   @Test
   public void shouldSelectDefaultUserProfileWhenNoUserSpecified() {
     Profile currentProfile = preferenceAdapter.getCurrentProfile();
-    assertThat(currentProfile.getName(), is(PreferenceAdapter.DEFAULT_USER));
+    assertThat(currentProfile.getName(), is(Constants.DEFAULT_USER_KEY));
   }
 
   @Test
@@ -53,7 +53,7 @@ public class PreferenceAdapterTest {
 
   @Test
   public void shouldUpdatePreferenceFileOnUserChange() {
-    assertThat(preferenceAdapter.getCurrentUserPreferenceFile(), is(PREFERENCES_FILE_PREFIX + DEFAULT_USER));
+    assertThat(preferenceAdapter.getCurrentUserPreferenceFile(), is(PREFERENCES_FILE_PREFIX + Constants.DEFAULT_USER_KEY));
 
     setCurrentUser("john_doe");
 
