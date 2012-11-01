@@ -1,6 +1,6 @@
 <resources>
   <string name="user_preferences">User preferences</string>
-  <string name="current_profile">Current Profile</string>
+  <string name="current_profile">Switch Profile</string>
   <string name="current_profile_key">current_profile</string>
 
   <!--
@@ -9,6 +9,7 @@
   <string name="manage_profiles">Manage profiles</string>
   <string name="manage_profiles_summary">Edit or delete profiles</string>
   <string name="default_user">Default User</string>
+  <string name="default_new_profile">New Profile</string>
   <string name="create_plus">Create +</string>
   <string name="profile_entries">profile_entries</string>
   <string name="profile_exists_error">Profile already exists, please choose another name.</string>

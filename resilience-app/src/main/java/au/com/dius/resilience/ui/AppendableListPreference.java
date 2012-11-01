@@ -72,13 +72,10 @@ public class AppendableListPreference extends ListPreference implements Preferen
   @Override
   public boolean onPreferenceChange(Preference preference, Object newValue) {
     if (CREATE_NEW.equals(newValue)) {
-
       Set<String> names = new LinkedHashSet<String>();
-
       for (Profile profile : profileEntries) {
         names.add(profile.getName());
       }
-
       PreferenceAdapter preferenceAdapter = new PreferenceAdapter(getContext());
       preferenceAdapter.save(preferenceAdapter.getCommonPreferences(), R.string.profile_entries, names);
 
