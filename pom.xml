@@ -61,6 +61,10 @@
             <id>dius.artifactory</id>
             <url>http://android-ci:8081/artifactory/ext-release-local</url>
         </repository>
+      <repository>
+            <id>sonatype.releases</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
     </repositories>
 
     <build>

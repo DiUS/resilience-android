@@ -32,11 +32,12 @@ public class AppendableListPreference extends ListPreference implements Preferen
   public AppendableListPreference(Context context, AttributeSet attributeSet) {
     super(context, attributeSet);
     repository = new ProfileRepository(context);
+    profileEntries = new LinkedHashSet<Profile>();
   }
 
   @Override
   public void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-    profileEntries = new LinkedHashSet<Profile>();
+    profileEntries.clear();
 
     profileEntries.addAll(repository.findAll());
 
@@ -76,6 +77,7 @@ public class AppendableListPreference extends ListPreference implements Preferen
       for (Profile profile : profileEntries) {
         names.add(profile.getName());
       }
+
       PreferenceAdapter preferenceAdapter = new PreferenceAdapter(getContext());
       preferenceAdapter.save(preferenceAdapter.getCommonPreferences(), R.string.profile_entries, names);
 

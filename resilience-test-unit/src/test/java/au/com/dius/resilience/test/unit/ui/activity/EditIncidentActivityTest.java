@@ -1,4 +1,4 @@
-package au.com.dius.resilience.test.unit.activity;
+package au.com.dius.resilience.test.unit.ui.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

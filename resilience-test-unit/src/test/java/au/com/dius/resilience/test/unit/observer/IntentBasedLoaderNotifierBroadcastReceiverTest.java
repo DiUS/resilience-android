@@ -48,9 +48,9 @@ public class IntentBasedLoaderNotifierBroadcastReceiverTest {
 
   @Test
   public void shouldRegisterMultipleReceivers() {
-    IntentFilter filter1 = new IntentFilter("");
-    IntentFilter filter2 = new IntentFilter("");
-    IntentFilter filter3 = new IntentFilter("");
+    IntentFilter filter1 = new IntentFilter("Filter1");
+    IntentFilter filter2 = new IntentFilter("Filter2");
+    IntentFilter filter3 = new IntentFilter("Filter3");
 
     receiver = new IntentBasedLoaderNotifierBroadcastReceiver(mockLoader, filter1, filter2, filter3);
     verify(mockContext).registerReceiver(receiver, filter1);

@@ -17,7 +17,7 @@
 
   <properties>
     <powermock.version>1.4.12</powermock.version>
-    <robolectric.version>1.1</robolectric.version>
+    <robolectric.version>1.2-SNAPSHOT</robolectric.version>
     <mockito.version>1.9.0</mockito.version>
     <hamcrest.version>1.1</hamcrest.version>
   </properties>
