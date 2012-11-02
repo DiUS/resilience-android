@@ -22,7 +22,6 @@ public class AppendableListPreference extends ListPreference implements Preferen
   public static final boolean DO_UPDATE_VALUE = true;
 
   private ProfileRepository repository;
-  private Set<Profile> profileEntries; // Human-readable values
 
   private static final Profile DEFAULT_PROFILE = new Profile(DEFAULT_USERNAME);
 
