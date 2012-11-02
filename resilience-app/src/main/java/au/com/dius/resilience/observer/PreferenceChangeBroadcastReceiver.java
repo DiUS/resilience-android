@@ -7,8 +7,9 @@ import android.content.Intent;
 
 /**
  * Executes method on given PreferenceChangeListener. Useful when
- * wanting to receive broadcasts on a class without extending
- * BroadcastReceiver.
+ * wanting to receive broadcasts on a class without having to
+ * implement loaders and loader behaviour. (i.e. this is a simple
+ * flag that an event has occurred).
  */
 public class PreferenceChangeBroadcastReceiver extends BroadcastReceiver {
 

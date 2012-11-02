@@ -12,10 +12,7 @@ import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ProfileRepository;
 import au.com.dius.resilience.ui.activity.ManageProfileActivity;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static au.com.dius.resilience.Constants.DEFAULT_USERNAME;
 
@@ -32,39 +29,30 @@ public class AppendableListPreference extends ListPreference implements Preferen
   public AppendableListPreference(Context context, AttributeSet attributeSet) {
     super(context, attributeSet);
     repository = new ProfileRepository(context);
-    profileEntries = new LinkedHashSet<Profile>();
   }
 
   @Override
   public void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-    profileEntries.clear();
-
-    profileEntries.addAll(repository.findAll());
-
-    if (!profileEntries.contains(DEFAULT_PROFILE)) {
-      profileEntries.add(DEFAULT_PROFILE);
-    }
-
-    addDisplayEntries();
+    addDisplayEntries(repository.findAll());
 
     setOnPreferenceChangeListener(this);
-
     super.onPrepareDialogBuilder(builder);
   }
 
-  private void addDisplayEntries() {
+  public void addDisplayEntries(Set<Profile> profiles) {
     List<CharSequence> displayEntryList = new ArrayList<CharSequence>();
     List<CharSequence> displayValueList = new ArrayList<CharSequence>();
 
-    for (Profile profile : profileEntries) {
-      displayValueList.add(profile.getPreferencesFilename());
+    displayValueList.add(DEFAULT_PROFILE.getId());
+    displayEntryList.add(DEFAULT_PROFILE.getName());
+
+    for (Profile profile : profiles) {
+      displayValueList.add(profile.getId());
       displayEntryList.add(profile.getName());
     }
 
-    if (!displayValueList.contains(CREATE_NEW)) {
-      displayValueList.add(CREATE_NEW);
-      displayEntryList.add(getContext().getString(R.string.create_plus));
-    }
+    displayValueList.add(CREATE_NEW);
+    displayEntryList.add(getContext().getString(R.string.create_plus));
 
     setEntryValues(displayValueList.toArray(new CharSequence[displayValueList.size()]));
     setEntries(displayEntryList.toArray(new CharSequence[displayEntryList.size()]));
@@ -73,14 +61,6 @@ public class AppendableListPreference extends ListPreference implements Preferen
   @Override
   public boolean onPreferenceChange(Preference preference, Object newValue) {
     if (CREATE_NEW.equals(newValue)) {
-      Set<String> names = new LinkedHashSet<String>();
-      for (Profile profile : profileEntries) {
-        names.add(profile.getName());
-      }
-
-      PreferenceAdapter preferenceAdapter = new PreferenceAdapter(getContext());
-      preferenceAdapter.save(preferenceAdapter.getCommonPreferences(), R.string.profile_entries, names);
-
       Intent intent = new Intent(getContext(), ManageProfileActivity.class);
       getContext().startActivity(intent);
 

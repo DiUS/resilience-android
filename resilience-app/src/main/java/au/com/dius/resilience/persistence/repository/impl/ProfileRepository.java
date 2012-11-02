@@ -22,8 +22,8 @@ public class ProfileRepository {
       return profiles;
     }
 
-    for (String entryNames : profileEntries) {
-      profiles.add(new Profile(entryNames));
+    for (String entryName : profileEntries) {
+      profiles.add(new Profile(entryName));
     }
 
     return profiles;

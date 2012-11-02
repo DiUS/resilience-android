@@ -28,8 +28,8 @@ public class PreferenceAdapter {
   }
 
   public Profile getCurrentProfile() {
-    String profile = getCommonPreferences().getString(context.getString(R.string.current_profile_key), DEFAULT_USER_KEY);
-    return new Profile(profile);
+    String profileName = getCommonPreferences().getString(context.getString(R.string.current_profile_key), DEFAULT_USER_KEY);
+    return new Profile(profileName);
   }
 
   private SharedPreferences getCurrentUserPreferences() {
@@ -53,7 +53,7 @@ public class PreferenceAdapter {
   }
 
   public String getCurrentUserPreferenceFile() {
-    return PREFERENCES_FILE_PREFIX + getCurrentProfile().getPreferencesFilename();
+    return PREFERENCES_FILE_PREFIX + getCurrentProfile().getId();
   }
 
   // Saving preferences (TODO: I don't like this.. I'm sure there's a better way)

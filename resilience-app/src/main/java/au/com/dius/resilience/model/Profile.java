@@ -5,17 +5,23 @@ public class Profile {
   private static final String RESERVED_CHARS = "|\\?*<\":>+\\[\\]/'";
 
   private String name;
+  private String id;
 
   public Profile(String name) {
     this.name = name;
+    this.id = encodeId(name);
   }
 
   public String getName() {
     return name;
   }
 
-  public String getPreferencesFilename() {
-    return name.toLowerCase().replaceAll(" ", "_").replaceAll(RESERVED_CHARS, "");
+  public String getId() {
+    return id;
+  }
+
+  private String encodeId(String value) {
+    return value.toLowerCase().replaceAll(" ", "_").replaceAll(RESERVED_CHARS, "");
   }
 
   @Override
