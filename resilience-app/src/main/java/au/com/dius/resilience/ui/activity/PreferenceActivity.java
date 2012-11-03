@@ -7,7 +7,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
 @ContentView(R.layout.activity_preference)
-public class ResiliencePreferenceActivity extends RoboActivity {
+public class PreferenceActivity extends RoboActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

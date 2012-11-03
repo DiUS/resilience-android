@@ -94,7 +94,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 //        break;
 
       case R.id.user_preferences:
-        Intent userPreferencesIntent = new Intent(this, ResiliencePreferenceActivity.class);
+        Intent userPreferencesIntent = new Intent(this, PreferenceActivity.class);
         startActivity(userPreferencesIntent);
         break;
 

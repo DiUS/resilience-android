@@ -8,11 +8,12 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Profile;
-import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ProfileRepository;
 import au.com.dius.resilience.ui.activity.ManageProfileActivity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static au.com.dius.resilience.Constants.DEFAULT_USERNAME;
 
@@ -28,6 +29,8 @@ public class AppendableListPreference extends ListPreference implements Preferen
   public AppendableListPreference(Context context, AttributeSet attributeSet) {
     super(context, attributeSet);
     repository = new ProfileRepository(context);
+
+    addDisplayEntries(repository.findAll());
   }
 
   @Override

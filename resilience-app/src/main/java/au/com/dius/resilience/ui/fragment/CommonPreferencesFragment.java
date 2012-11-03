@@ -2,11 +2,13 @@
 package au.com.dius.resilience.ui.fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import au.com.dius.resilience.R;
@@ -17,21 +19,28 @@ import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapt
 
 public class CommonPreferencesFragment extends PreferenceFragment implements DialogInterface.OnClickListener
                                                                            , Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
-
   private PreferenceAdapter preferenceAdapter;
   private CheckBoxPreference themeCheckboxPreference;
+  private ListPreference switchProfilePreference;
+
+  private Context appContext;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    appContext = getActivity().getApplicationContext();
+
     getPreferenceManager().setSharedPreferencesName(PREFERENCES_FILE_COMMON);
     addPreferencesFromResource(R.xml.common_preferences);
     getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    preferenceAdapter = new PreferenceAdapter(getActivity());
+    preferenceAdapter = new PreferenceAdapter(appContext);
 
     themeCheckboxPreference = (CheckBoxPreference) findPreference(getString(R.string.use_light_theme_key));
     themeCheckboxPreference.setOnPreferenceClickListener(this);
+
+    switchProfilePreference = (ListPreference) findPreference(getString(R.string.current_profile_key));
+    switchProfilePreference.setSummary(switchProfilePreference.getEntry());
   }
 
   @Override
@@ -73,6 +82,7 @@ public class CommonPreferencesFragment extends PreferenceFragment implements Dia
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    getActivity().sendBroadcast(new Intent(PREFERENCES_UPDATED_FILTER));
+    switchProfilePreference.setSummary(switchProfilePreference.getEntry());
+    appContext.sendBroadcast(new Intent(PREFERENCES_UPDATED_FILTER));
   }
 }

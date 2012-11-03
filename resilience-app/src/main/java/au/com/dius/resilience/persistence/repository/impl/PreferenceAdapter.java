@@ -17,7 +17,6 @@ public class PreferenceAdapter {
   public static final String PREFERENCES_FILE_DEFAULT = PREFERENCES_FILE_PREFIX + DEFAULT_USER_KEY;
 
   private Context context;
-  private String defaultUser;
 
   public PreferenceAdapter(Context context) {
     this.context = context;

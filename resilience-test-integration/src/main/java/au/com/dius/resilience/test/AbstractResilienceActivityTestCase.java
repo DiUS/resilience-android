@@ -28,6 +28,10 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
     super(activityClass);
   }
 
+  protected String getString(int id) {
+    return getActivity().getString(id);
+  }
+
   protected void setProgressBar(final SeekBar seekbar, final int progress) {
     final CountDownLatch latch = new CountDownLatch(1);
     getActivity().runOnUiThread(new Runnable() {

@@ -34,7 +34,7 @@
     <activity android:name=".ui.activity.IncidentListActivity"/>
     <activity android:name=".ui.activity.MapViewActivity"/>
     <activity android:name=".ui.activity.PhotoViewActivity"/>
-    <activity android:name=".ui.activity.ResiliencePreferenceActivity"/>
+    <activity android:name=".ui.activity.PreferenceActivity"/>
     <activity android:name=".ui.activity.ManageProfileActivity"/>
 
     <receiver android:name=".receiver.LocationChangedReceiver"/>

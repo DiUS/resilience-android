@@ -6,10 +6,8 @@
   <!--
     Profiles
   -->
-  <string name="manage_profiles">Manage profiles</string>
-  <string name="manage_profiles_summary">Edit or delete profiles</string>
   <string name="default_user">Default User</string>
-  <string name="default_new_profile">New Profile</string>
+  <string name="new_profile_hint">Enter profile name</string>
   <string name="create_plus">Create +</string>
   <string name="profile_entries">profile_entries</string>
   <string name="profile_exists_error">Profile already exists or is invalid, please choose another name.</string>

@@ -12,7 +12,6 @@ import au.com.dius.resilience.persistence.repository.impl.ProfileRepository;
 import au.com.dius.resilience.ui.Themer;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
-import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 import java.util.LinkedHashSet;
@@ -26,9 +25,6 @@ public class ManageProfileActivity extends RoboActivity {
   @InjectView(R.id.profile_name)
   private EditText profileName;
 
-  @InjectResource(R.string.default_new_profile)
-  private String defaultProfileName;
-
   PreferenceAdapter preferenceAdapter;
   ProfileRepository repository;
 
@@ -37,7 +33,6 @@ public class ManageProfileActivity extends RoboActivity {
     Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
 
-    profileName.setText(defaultProfileName);
     preferenceAdapter = new PreferenceAdapter(this);
     repository = new ProfileRepository(this);
   }
@@ -64,7 +59,7 @@ public class ManageProfileActivity extends RoboActivity {
       preferenceAdapter.save(preferenceAdapter.getCommonPreferences(), R.string.current_profile_key, newProfile.getId());
 
       sendBroadcast(new Intent(PREFERENCES_UPDATED_FILTER));
-      Intent preferencesIntent = new Intent(this, ResiliencePreferenceActivity.class);
+      Intent preferencesIntent = new Intent(this, PreferenceActivity.class);
       startActivity(preferencesIntent);
     }
   }

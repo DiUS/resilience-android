@@ -8,14 +8,6 @@
       android:order="0"
       android:defaultValue="@string/default_user"/>
 
-  <Preference
-      android:title="@string/manage_profiles"
-      android:summary="@string/manage_profiles_summary"
-      android:order="1">
-    <intent
-        android:targetClass="au.com.dius.resilience.ui.activity.ManageProfilesActivity"/>
-  </Preference>
-
   <PreferenceCategory
       android:title="@string/appearance"
       android:order="2">
