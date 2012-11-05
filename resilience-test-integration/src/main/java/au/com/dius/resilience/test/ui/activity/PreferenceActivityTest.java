@@ -2,6 +2,8 @@ package au.com.dius.resilience.test.ui.activity;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import au.com.dius.resilience.R;
@@ -9,6 +11,7 @@ import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.test.AbstractResilienceActivityTestCase;
 import au.com.dius.resilience.ui.activity.ManageProfileActivity;
 import au.com.dius.resilience.ui.activity.PreferenceActivity;
+import au.com.dius.resilience.ui.activity.ResilienceActivity;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -38,7 +41,7 @@ public class PreferenceActivityTest extends AbstractResilienceActivityTestCase<P
 
     solo.clearEditText(0);
     solo.typeText(0, "999");
-    solo.clickOnText("OK");
+    solo.clickOnText(getString(android.R.string.ok));
 
     solo.clickOnText(getString(R.string.current_profile));
     solo.clickOnText("John Doe");
@@ -63,5 +66,23 @@ public class PreferenceActivityTest extends AbstractResilienceActivityTestCase<P
 
     solo.clickOnText(getString(R.string.current_profile));
     assertTrue(solo.searchText("Brand spankin' new profile"));
+  }
+
+  public void testRestartOnThemeChange() {
+    solo.clickOnText(getString(R.string.use_light_theme));
+    solo.clickOnButton(getString(R.string.restart));
+    solo.assertCurrentActivity("App restart failed.", ResilienceActivity.class);
+  }
+
+  public void testCheckboxRevertsOnThemeChangeCancel() {
+
+    boolean startValue = solo.isCheckBoxChecked(getString(R.string.use_light_theme));
+    solo.clickOnText(getString(R.string.use_light_theme));
+    solo.searchText(getString(R.string.theme_change_warning));
+    solo.clickOnButton(getString(android.R.string.cancel));
+
+    boolean endValue = solo.isCheckBoxChecked(getString(R.string.use_light_theme));
+
+    assertEquals(startValue, endValue);
   }
 }
