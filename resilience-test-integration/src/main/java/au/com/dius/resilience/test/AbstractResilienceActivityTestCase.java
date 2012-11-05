@@ -26,6 +26,9 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
   protected void beforeTest() {
   }
 
+  protected void afterTest() {
+  }
+
   public AbstractResilienceActivityTestCase(Class<T> activityClass) {
     super(activityClass);
   }
@@ -82,6 +85,6 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
 
   @Override
   protected void tearDown() throws Exception {
-      getActivity().finish();
+    solo.finishOpenedActivities();
   }
 }
