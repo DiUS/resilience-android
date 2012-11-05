@@ -1,16 +1,18 @@
 package au.com.dius.resilience.test;
 
-import android.content.Context;
+import android.app.Application;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.SeekBar;
+import au.com.dius.resilience.R;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.test.util.ParseTestUtils;
 import com.jayway.android.robotium.solo.Solo;
-import au.com.dius.resilience.R;
 
 import java.util.concurrent.CountDownLatch;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author georgepapas
@@ -21,8 +23,8 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
 
   protected Solo solo;
 
-  protected void beforeTest() { }
-  protected void afterTest() { }
+  protected void beforeTest() {
+  }
 
   public AbstractResilienceActivityTestCase(Class<T> activityClass) {
     super(activityClass);
@@ -56,11 +58,7 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
     getInstrumentation().waitForIdleSync();
     solo = new Solo(getInstrumentation(), getActivity());
 
-    PreferenceManager.setDefaultValues(getActivity().getApplication(), PreferenceAdapter.PREFERENCES_FILE_COMMON,
-      Context.MODE_PRIVATE, R.xml.common_preferences, true);
-
-    PreferenceManager.setDefaultValues(getActivity().getApplication(), PreferenceAdapter.PREFERENCES_FILE_DEFAULT, Context.MODE_PRIVATE,
-      R.xml.user_preferences, true);
+    reinitialiseSharedPreferences();
 
     ParseTestUtils.setUp(getActivity());
     try {
@@ -70,8 +68,20 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
     }
   }
 
+  private void reinitialiseSharedPreferences() {
+    Application application = getActivity().getApplication();
+    application.getSharedPreferences(PreferenceAdapter.PREFERENCES_FILE_COMMON, MODE_PRIVATE)
+      .edit().clear().commit();
+    application.getSharedPreferences(PreferenceAdapter.PREFERENCES_FILE_DEFAULT, MODE_PRIVATE)
+      .edit().clear().commit();
+    PreferenceManager.setDefaultValues(application, PreferenceAdapter.PREFERENCES_FILE_COMMON,
+      MODE_PRIVATE, R.xml.common_preferences, true);
+    PreferenceManager.setDefaultValues(application, PreferenceAdapter.PREFERENCES_FILE_DEFAULT, MODE_PRIVATE,
+      R.xml.user_preferences, true);
+  }
+
   @Override
   protected void tearDown() throws Exception {
-    getActivity().finish();
+      getActivity().finish();
   }
 }
