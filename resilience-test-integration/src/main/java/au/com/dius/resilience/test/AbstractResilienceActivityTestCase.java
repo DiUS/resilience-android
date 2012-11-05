@@ -23,6 +23,8 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
 
   protected Solo solo;
 
+  private ResilienceTestActions testActions;
+
   protected void beforeTest() {
   }
 
@@ -31,10 +33,11 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
 
   public AbstractResilienceActivityTestCase(Class<T> activityClass) {
     super(activityClass);
+    testActions = new ResilienceTestActions(this);
   }
 
   protected String getString(int id) {
-    return getActivity().getString(id);
+    return testActions.getString(id);
   }
 
   protected void setProgressBar(final SeekBar seekbar, final int progress) {
@@ -56,31 +59,8 @@ public abstract class AbstractResilienceActivityTestCase<T extends android.app.A
 
   @Override
   protected void setUp() {
-    Log.d(LOG_TAG, "Preparing for test " + Thread.currentThread().getName());
-
-    getInstrumentation().waitForIdleSync();
+    testActions.setUp();
     solo = new Solo(getInstrumentation(), getActivity());
-
-    reinitialiseSharedPreferences();
-
-    ParseTestUtils.setUp(getActivity());
-    try {
-      ParseTestUtils.dropAll(getInstrumentation());
-    } catch (Exception e) {
-      throw new RuntimeException("Failed setting up test: ", e);
-    }
-  }
-
-  private void reinitialiseSharedPreferences() {
-    Application application = getActivity().getApplication();
-    application.getSharedPreferences(PreferenceAdapter.PREFERENCES_FILE_COMMON, MODE_PRIVATE)
-      .edit().clear().commit();
-    application.getSharedPreferences(PreferenceAdapter.PREFERENCES_FILE_DEFAULT, MODE_PRIVATE)
-      .edit().clear().commit();
-    PreferenceManager.setDefaultValues(application, PreferenceAdapter.PREFERENCES_FILE_COMMON,
-      MODE_PRIVATE, R.xml.common_preferences, true);
-    PreferenceManager.setDefaultValues(application, PreferenceAdapter.PREFERENCES_FILE_DEFAULT, MODE_PRIVATE,
-      R.xml.user_preferences, true);
   }
 
   @Override

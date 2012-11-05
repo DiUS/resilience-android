@@ -19,13 +19,13 @@ public class ParseTestUtils {
   public static void setUp(Context context) {
     Parse.initialize(
       context,
-      context.getResources().getString(R.string.key_parse_application),
-      context.getResources().getString(R.string.key_parse_client));
+      context.getString(R.string.key_parse_application),
+      context.getString(R.string.key_parse_client));
 
     Parse.setLogLevel(Parse.LOG_LEVEL_INFO);
   }
 
-  public static void dropAll(Instrumentation instrumentation) throws InterruptedException {
+  public static void dropAll(Instrumentation instrumentation) {
     instrumentation.runOnMainSync(new DropTables());
     instrumentation.waitForIdleSync();
   }
