@@ -56,7 +56,7 @@ public class IncidentListLoaderTest {
   }
 
   @Test
-  public void onBackgroudLoadShouldDelegateToRepository() {
+  public void onBackgroundLoadShouldDelegateToRepository() {
     List<Incident> incidents = new ArrayList<Incident>();
     when(mockRepository.findIncidents()).thenReturn(incidents);
 

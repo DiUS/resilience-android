@@ -2,22 +2,25 @@ package au.com.dius.resilience.test.util;
 
 import android.app.Instrumentation;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
-import com.parse.*;
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 public class ParseTestUtils {
 
+  public static final String LOG_TAG = ParseTestUtils.class.getName();
+
   public static void setUp(Context context) {
     Parse.initialize(
-            context,
-            context.getResources().getString(R.string.key_parse_application),
-            context.getResources().getString(R.string.key_parse_client));
+      context,
+      context.getResources().getString(R.string.key_parse_application),
+      context.getResources().getString(R.string.key_parse_client));
 
     Parse.setLogLevel(Parse.LOG_LEVEL_INFO);
   }
@@ -30,47 +33,27 @@ public class ParseTestUtils {
   private static class DropTables implements Runnable {
 
     public void run() {
+
+      StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
       try {
         ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-        Log.d(ParseTestUtils.class.getName(), "Finding list of objects for deletion..");
-        query.findInBackground(new FindCallback() {
-          @Override
-          public void done(List<ParseObject> incidents, ParseException ex) {
-            if (ex != null || incidents.size() == 0) {
-              return;
-            }
+        List<ParseObject> incidents = query.find();
 
-            try {
-              deleteObjects(incidents);
-            }
-            catch(Exception e) {
-              Log.e(DropTables.class.getName(), "Failed to delete objects!");
-            }
-          }
+        if (incidents == null || incidents.size() == 0) {
+          return;
+        }
 
-          private void deleteObjects(List<ParseObject> parseObjects) throws InterruptedException {
-            final CountDownLatch deleteLatch = new CountDownLatch(parseObjects.size());
-            for (final ParseObject i : parseObjects) {
-              AsyncTask.execute(new Runnable() {
-                public void run() {
-                  try {
-                    i.delete();
-                    Log.d(ParseTestUtils.class.getName(), "Deleting object " + i.getObjectId() + " succeeded.");
-                    deleteLatch.countDown();
-                  } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                  }
-                }
-              });
-            }
+        Log.d(LOG_TAG, "Deleting " + incidents.size() + " incidents.");
 
-            Log.d(ParseTestUtils.class.getName(), "Deleting " + parseObjects.size() + " data objects..");
-            deleteLatch.await();
-          }
-        });
-
+        for (ParseObject pObject : incidents) {
+          Log.d(LOG_TAG, "Deleting object " + pObject.getObjectId() + " succeeded.");
+          pObject.delete();
+        }
       } catch (Exception e) {
-        throw new RuntimeException("Test setup failed: ", e);
+        throw new RuntimeException("Failed to delete objects: ", e);
+      }
+      finally {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
       }
     }
   }
