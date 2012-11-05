@@ -9,6 +9,7 @@ import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
+import com.google.android.maps.GeoPoint;
 import com.google.inject.Inject;
 import com.parse.*;
 import roboguice.inject.ContextSingleton;
@@ -37,6 +38,20 @@ public class ParseRepository implements Repository {
 
     List<ParseObject> incidents = loadIncidents(parseQuery);
     return incidentAdapter.deserialise(incidents);
+  }
+
+  @Override
+  public List<Incident> findIncidentsWithinBoundingBox(Point southWest, Point northEast) {
+
+    ParseGeoPoint southWestGeoPoint = new ParseGeoPoint(southWest.getLatitude(), southWest.getLongitude());
+    ParseGeoPoint northEastGeoPoint = new ParseGeoPoint(northEast.getLatitude(), northEast.getLongitude());
+
+    ParseQuery parseQuery = new ParseQuery(Constants.TABLE_INCIDENT);
+    parseQuery.whereWithinGeoBox(Constants.COL_INCIDENT_LOCATION, southWestGeoPoint, northEastGeoPoint);
+
+    List<ParseObject> parseObjects = loadIncidents(parseQuery);
+
+    return incidentAdapter.deserialise(parseObjects);
   }
 
   @Override
