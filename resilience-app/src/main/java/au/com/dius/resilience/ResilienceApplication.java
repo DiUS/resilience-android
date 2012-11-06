@@ -12,20 +12,27 @@ public class ResilienceApplication extends Application {
 
   @Override
   public void onCreate() {
-    PreferenceManager.setDefaultValues(this, PreferenceAdapter.PREFERENCES_FILE_COMMON, MODE_PRIVATE
-                                      , R.xml.common_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
-
-    PreferenceManager.setDefaultValues(this, PreferenceAdapter.PREFERENCES_FILE_DEFAULT, MODE_PRIVATE
-                                      , R.xml.user_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
-
-    String appKey = getResources().getString(R.string.key_parse_application);
-    String clientKey = getResources().getString(R.string.key_parse_client);
-    Parse.initialize(this, appKey, clientKey);
-    // TODO - set strict mode in properties file?
+    setDefaultPreferences();
+    initialiseParse();
     setStrictMode();
   }
 
+  private void initialiseParse() {
+    String appKey = getResources().getString(R.string.key_parse_application);
+    String clientKey = getResources().getString(R.string.key_parse_client);
+    Parse.initialize(this, appKey, clientKey);
+  }
+
+  private void setDefaultPreferences() {
+    PreferenceManager.setDefaultValues(this, PreferenceAdapter.PREFERENCES_FILE_COMMON, MODE_PRIVATE
+      , R.xml.common_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
+
+    PreferenceManager.setDefaultValues(this, PreferenceAdapter.PREFERENCES_FILE_DEFAULT, MODE_PRIVATE
+                                      , R.xml.user_preferences, SHOULD_ALWAYS_LOAD_DEFAULT_PREFS);
+  }
+
   private void setStrictMode() {
+    // TODO - set strict mode in properties file?
     if (RuntimeProperties.useStrictMode()) {
       StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
         .detectDiskReads()

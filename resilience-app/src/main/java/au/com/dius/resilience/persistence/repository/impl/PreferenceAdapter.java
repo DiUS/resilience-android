@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Profile;
+import com.google.inject.Inject;
 
 import java.util.Set;
 
@@ -18,6 +19,7 @@ public class PreferenceAdapter {
 
   private Context context;
 
+  @Inject
   public PreferenceAdapter(Context context) {
     this.context = context;
   }

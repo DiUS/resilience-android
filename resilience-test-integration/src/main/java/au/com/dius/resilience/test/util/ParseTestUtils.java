@@ -6,10 +6,12 @@ import android.os.StrictMode;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.model.Incident;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ParseTestUtils {
@@ -28,6 +30,14 @@ public class ParseTestUtils {
   public static void dropAll(Instrumentation instrumentation) {
     instrumentation.runOnMainSync(new DropTables());
     instrumentation.waitForIdleSync();
+  }
+
+  public static void saveAll(ParseObject... incidents) {
+    try {
+      ParseObject.saveAll(Arrays.asList(incidents));
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to save incidents! ", e);
+    }
   }
 
   private static class DropTables implements Runnable {

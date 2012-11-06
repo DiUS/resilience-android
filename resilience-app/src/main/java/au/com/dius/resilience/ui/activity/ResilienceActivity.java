@@ -12,8 +12,10 @@ import android.widget.TabHost;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.Codes;
 import au.com.dius.resilience.ui.Themer;
+import com.google.inject.Inject;
 import roboguice.activity.RoboTabActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -32,6 +34,9 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   //TODO Very lame implementation, will need to change to use intents and broadcast listeners
   private Point lastKnownLocation;
+
+  @Inject
+  private PreferenceAdapter preferenceAdapter;
 
   /**
    * Called when the activity is first created.
@@ -130,6 +135,12 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   public void onLocationChanged(Location location) {
     Log.d(LOG_TAG, "location changed " + location);
     lastKnownLocation = new Point(location.getLatitude(), location.getLongitude());
+
+    preferenceAdapter.save(preferenceAdapter.getCommonPreferences()
+                          , R.string.last_known_latitude_key, Double.toString(lastKnownLocation.getLatitude()));
+    preferenceAdapter.save(preferenceAdapter.getCommonPreferences()
+      , R.string.last_known_longtitude_key, Double.toString(lastKnownLocation.getLongitude()));
+
   }
 
   @Override

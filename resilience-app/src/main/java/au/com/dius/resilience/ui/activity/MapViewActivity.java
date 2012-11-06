@@ -8,8 +8,10 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.Repository;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.map.IncidentOverlay;
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.inject.Inject;
 import roboguice.activity.RoboMapActivity;
@@ -22,9 +24,10 @@ import java.util.List;
 /**
  * @author georgepapas
  */
-  @ContentView(R.layout.activity_map_view)
-  public class MapViewActivity extends RoboMapActivity implements LoaderManager.LoaderCallbacks<List<Incident>> {
+@ContentView(R.layout.activity_map_view)
+public class MapViewActivity extends RoboMapActivity implements LoaderManager.LoaderCallbacks<List<Incident>> {
 
+  public static final int ZOOM_LEVEL = 17;
   @InjectView(R.id.map_view)
   private MapView mapView;
 
@@ -34,16 +37,27 @@ import java.util.List;
   @Inject
   private Repository repository;
 
-  private static final String LOG_TAG = MapViewActivity.class.getName();
+  @Inject
+  private PreferenceAdapter preferenceAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
 
-    mapView.setBuiltInZoomControls(true);
-
     getLoaderManager().initLoader(IncidentListLoader.INCIDENT_LIST_LOADER, null, this);
+
+    // TODO - When we have a nicer location service set up, hook this up properly.
+    String lastKnownLatitude = (String) preferenceAdapter.getCommonPreference(R.string.last_known_latitude_key);
+    String lastKnownLongtitude = (String) preferenceAdapter.getCommonPreference(R.string.last_known_longtitude_key);
+
+    if (lastKnownLatitude == null || lastKnownLongtitude == null) {
+      return;
+    }
+
+    mapView.setBuiltInZoomControls(true);
+    mapView.getController().setCenter(new GeoPoint((int) (Double.parseDouble(lastKnownLatitude) * 1E6), (int) (Double.parseDouble(lastKnownLongtitude) * 1E6)));
+    mapView.getController().setZoom(ZOOM_LEVEL);
   }
 
   @Override

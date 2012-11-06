@@ -6,6 +6,7 @@ import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.impl.ParseIncidentAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ParseRepository;
 import au.com.dius.resilience.test.AbstractResilienceTestCase;
+import au.com.dius.resilience.test.util.ParseTestUtils;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -58,16 +59,7 @@ public class ParseRepositoryTest extends AbstractResilienceTestCase {
     incident3.put(COL_INCIDENT_LOCATION, within15KM);
     incident3.put(COL_INCIDENT_IMPACT, Impact.HIGH.name());
 
-    try {
-      ParseObject.saveAll(
-        new ArrayList<ParseObject>() {{
-          add(incident);
-          add(incident2);
-          add(incident3);
-        }});
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to save incidents! ", e);
-    }
+    ParseTestUtils.saveAll(incident, incident2, incident3);
   }
 
   public void testFindAllIncidents() {
