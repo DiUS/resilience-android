@@ -8,6 +8,7 @@ Prerequisite software
 * Google Android Developer SDK
 	* Android 4.0.3 (API 15)
 	* Android 2.3.3 (API 10) - Required by one of the testing libraries, Robolectric
+	* Android 4.0 (API 14) - Required by mapviewballoons
 * Maven 3.x
 * Eclipse + ADT plugin *or* IntelliJ *or* whatever works for you
 
@@ -85,5 +86,6 @@ Integration with IntelliJ
 -------------------------
   * Import the project as a regular maven project, ensuring all submodules are imported
   * IntelliJ should pick up the two Android facets, resilience-app and resilience-it
+  * Add the android sdk as a module: http://blogs.jetbrains.com/idea/2011/03/new-concept-of-android-sdk-in-intellij-idea-105/
   * When running integration tests from the IDE, you will need to change the classpath to ensure that the Junit 4.x dependency is before the Android dependency
   * We use an external apklib to generate balloon tips on the map view.  In the project dependecies for this android module, you will need to ensure the maps.jar is added as a 'provided' dependency in order to be able to deploy from within your IDE.
