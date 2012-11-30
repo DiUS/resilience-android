@@ -10,13 +10,14 @@ import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.facade.CameraFacade;
-import au.com.dius.resilience.loader.IncidentListLoader;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
+import au.com.dius.resilience.service.SaveIncidentService;
 import au.com.dius.resilience.ui.Codes;
 import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
@@ -109,7 +110,12 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     incident.addPhotos(cameraFacade.getPhotos());
 
     Log.d(LOG_TAG, "Saving incident, thread is " +  Thread.currentThread().getName());
-    incidentRepository.save(this, incident);
+
+    Intent saveIncident = new Intent(this, SaveIncidentService.class);
+    saveIncident.putExtra(SaveIncidentService.EXTRA_INCIDENT, incident);
+    startService(saveIncident);
+
+//    incidentRepository.save(this, incident);
 
     button.setEnabled(false);
     cameraButton.setEnabled(false);
@@ -160,7 +166,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     setResult(Codes.CreateIncident.RESULT_OK);
 
     if (result.isSuccess()) {
-      Intent intent = new Intent(IncidentListLoader.INCIDENT_LIST_LOADER_FILTER);
+      Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_ADDED);
       sendBroadcast(intent);
     }
   }

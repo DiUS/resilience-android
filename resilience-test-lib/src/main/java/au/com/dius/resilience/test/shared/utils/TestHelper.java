@@ -1,6 +1,7 @@
 package au.com.dius.resilience.test.shared.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
@@ -11,6 +12,8 @@ import com.google.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+
+import static com.sun.tools.internal.ws.wsdl.parser.Util.fail;
 
 public class TestHelper {
   public static RepositoryCommand<String> createRepositoryCommand() {
@@ -67,5 +70,14 @@ public class TestHelper {
         return context;
       }
     };
+  }
+
+  public static void assertContainsIntents(List<Intent> intents, String intentAction) {
+    for (Intent intent : intents) {
+      if (intentAction.equals(intent.getAction())) {
+        return;
+      }
+    }
+    fail("Did not find intent in list " + intentAction);
   }
 }

@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.loader.IncidentListLoader;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.ui.Codes;
 import au.com.dius.resilience.ui.Themer;
@@ -85,7 +85,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
       case R.id.refresh:
         Log.d(LOG_TAG, "Refreshing incidents.");
-        Intent intent = new Intent(IncidentListLoader.INCIDENT_LIST_LOADER_FILTER);
+        Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_ADDED);
         sendBroadcast(intent);
         break;
 

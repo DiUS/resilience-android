@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.util.Log;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.persistence.repository.Repository;
@@ -15,7 +16,6 @@ public class IncidentListLoader extends AbstractAsyncListLoader<Incident> {
   private static final String LOG_TAG = IncidentListLoader.class.getName();
 
   public static final int INCIDENT_LIST_LOADER = 0;
-  public static final String INCIDENT_LIST_LOADER_FILTER = "INCIDENT_LIST_LOADER_FILTER";
 
   public IncidentListLoader(Context context, Repository repository) {
     super(context, repository);
@@ -30,6 +30,6 @@ public class IncidentListLoader extends AbstractAsyncListLoader<Incident> {
 
   @Override
   protected BroadcastReceiver createBroadcastReceiver() {
-    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(INCIDENT_LIST_LOADER_FILTER));
+    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(Intents.RESILIENCE_INCIDENT_ADDED));
   }
 }

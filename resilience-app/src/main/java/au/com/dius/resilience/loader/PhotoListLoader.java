@@ -3,6 +3,7 @@ package au.com.dius.resilience.loader;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.persistence.repository.Repository;
@@ -15,8 +16,6 @@ public class PhotoListLoader extends AbstractAsyncListLoader<Photo> {
 
 private static final String LOG_TAG = PhotoListLoader.class.getName();
 
-  public static final String PHOTO_LOADED = "INTENT_PHOTO_LOADED";
-
   private String incidentId;
   public static int PHOTO_LIST_LOADER = 1;
 
@@ -27,7 +26,7 @@ private static final String LOG_TAG = PhotoListLoader.class.getName();
 
   @Override
   protected BroadcastReceiver createBroadcastReceiver() {
-    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(PHOTO_LOADED));
+    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(Intents.RESILIENCE_PHOTO_LOADED));
   }
 
   @Override

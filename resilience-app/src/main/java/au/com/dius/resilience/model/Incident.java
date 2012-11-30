@@ -114,4 +114,21 @@ public class Incident implements Serializable {
   public void setPoint(Point point) {
     this.point = point;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder str = new StringBuilder();
+
+    str
+      .append("id=").append(id)
+      .append(", name=").append(name)
+      .append(", dateCreated=").append(dateCreated)
+      .append(", note=").append(note)
+      .append(", category=").append(category)
+      .append(", subCat=").append(subCategory)
+      .append(", scale=").append(scale)
+      .append(", point=").append(point);
+
+    return str.toString();
+  }
 }

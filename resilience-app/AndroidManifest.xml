@@ -39,6 +39,8 @@
 
     <receiver android:name=".receiver.LocationChangedReceiver"/>
 
+    <service android:name=".service.SaveIncidentService"/>
+
   </application>
 
   <uses-permission android:name="android.permission.CAMERA"/>

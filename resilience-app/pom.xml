@@ -25,10 +25,6 @@
       <artifactId>android</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>de.akquinet.android.androlog</groupId>
-      <artifactId>androlog</artifactId>
-    </dependency>
 
     <!-- Roboguice -->
     <dependency>
