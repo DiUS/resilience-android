@@ -22,7 +22,7 @@ out/
 local.properties
 
 # Local properties (api keys etc)
-#resilience-local.properties
+*/*local.properties
 
 #project.properties
 
@@ -30,6 +30,8 @@ local.properties
 out/
 .gradle/
 .DS_Store
+*.iws
+*.ipr
 *.iml
 *.ipr
 *.iws

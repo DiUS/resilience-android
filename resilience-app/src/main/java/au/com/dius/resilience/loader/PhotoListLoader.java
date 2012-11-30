@@ -3,11 +3,11 @@ package au.com.dius.resilience.loader;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.util.Log;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.persistence.repository.Repository;
-import de.akquinet.android.androlog.Log;
 
 import java.util.ArrayList;
 import java.util.List;
