@@ -1,12 +1,19 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.app.LoaderManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.Themer;
@@ -20,6 +27,9 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 import java.util.List;
+
+import static au.com.dius.resilience.Constants.EXTRA_INCIDENT;
+import static au.com.dius.resilience.Constants.EXTRA_PHOTO;
 
 /**
  * @author georgepapas
@@ -72,7 +82,7 @@ public class MapViewActivity extends RoboMapActivity implements LoaderManager.Lo
 
   @Override
   public void onLoadFinished(Loader<List<Incident>> loader, List<Incident> data) {
-    IncidentOverlay overlay = new IncidentOverlay(itemIcon, mapView);
+    IncidentOverlay overlay = new IncidentOverlay(itemIcon, mapView, repository);
     overlay.populateWith(data);
 
     mapView.getOverlays().clear();

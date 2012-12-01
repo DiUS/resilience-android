@@ -43,7 +43,7 @@ public class IncidentOverlayTest {
   public void setUp() {
     MockitoAnnotations.initMocks(this);
     MapView mapView = new MapView(context, "");
-    overlay = new IncidentOverlay(drawable, mapView);
+    overlay = new IncidentOverlay(drawable, mapView, null);
     overlayItem = new OverlayItem(new GeoPoint(0, 0), "", "");
   }
 

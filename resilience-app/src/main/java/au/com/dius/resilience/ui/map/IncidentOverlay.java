@@ -6,11 +6,13 @@ import android.graphics.drawable.Drawable;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
+import com.readystatesoftware.mapviewballoons.BalloonOverlayView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,14 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
   private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
   private List<Incident> incidents = new ArrayList<Incident>();
   private Context context;
+  private Incident tappedIncident;
 
-  public IncidentOverlay(Drawable defaultMarker, MapView mapView) {
+  private Repository repository;
+
+  public IncidentOverlay(Drawable defaultMarker, MapView mapView, Repository repository) {
     super(boundCenterBottom(defaultMarker), mapView);
     context = mapView.getContext();
+    this.repository = repository;
   }
 
   public void populateWith(List<Incident> data) {
@@ -50,6 +56,27 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
   }
 
   @Override
+  public boolean onTap(int index) {
+    tappedIncident = incidents.get(index);
+    return super.onTap(index);
+  }
+
+  @Override
+  protected boolean onBalloonTap(int index, OverlayItem item) {
+    Intent intent = new Intent(context, ViewIncidentActivity.class);
+    intent.putExtra(EXTRA_INCIDENT, incidents.get(index));
+    context.startActivity(intent);
+
+    return true;
+  }
+
+  @Override
+  protected BalloonOverlayView<OverlayItem> createBalloonOverlayView() {
+    return new ImageBalloonOverlayView<OverlayItem>(getMapView().getContext(), getBalloonBottomOffset()
+      , tappedIncident, repository);
+  }
+
+  @Override
   public OverlayItem createItem(int i) {
     return overlays.get(i);
   }
@@ -57,15 +84,5 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
   @Override
   public int size() {
     return overlays.size();
-  }
-
-  @Override
-  protected boolean onBalloonTap(int index, OverlayItem item) {
-
-    Intent intent = new Intent(context, ViewIncidentActivity.class);
-    intent.putExtra(EXTRA_INCIDENT, incidents.get(index));
-    context.startActivity(intent);
-
-    return true;
   }
 }
