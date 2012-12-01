@@ -105,6 +105,22 @@ public class ParseRepository implements Repository {
     return true;
   }
 
+  @Override
+  public boolean trackIncident(Incident incident, String userIdentifier) {
+    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+    incidentAdapter.serialise(parseObject, incident);
+
+    parseObject.addUnique(Constants.COL_TRACKED_BY, userIdentifier);
+    try {
+      parseObject.save();
+    } catch (ParseException e) {
+      Log.i(TAG, "Could not update tracking information");
+      e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
+
   private void savePhoto(Incident incident, Photo photo) throws ParseException {
     byte[] bytes = CameraFacade.extractBytes(photo);
     final ParseFile parseFile = new ParseFile(Constants.PHOTO_FILENAME, bytes);

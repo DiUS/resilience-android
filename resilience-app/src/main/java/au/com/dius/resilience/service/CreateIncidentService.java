@@ -18,20 +18,17 @@ public class CreateIncidentService extends RoboIntentService {
   private Repository repository;
 
   public CreateIncidentService() {
-    super("ResilienceSaveIncidentService");
+    super("ResilienceCreateIncidentService");
   }
 
   @Override
   public void onHandleIntent(Intent intent) {
 
-    Log.d(LOG_TAG, "Intent is being handled" + intent);
-    Log.d(LOG_TAG, "repository is " + repository);
-
     Incident incident = (Incident) intent.getExtras().getSerializable(CreateIncidentService.EXTRA_INCIDENT);
-    Log.d(LOG_TAG, "Incident is " + incident);
+    Log.d(LOG_TAG, "intent handling incident " + incident);
 
     if (repository.createIncident(incident)) {
-      sendBroadcast(new Intent(Intents.RESILIENCE_INCIDENT_ADDED));
+      sendBroadcast(new Intent(Intents.RESILIENCE_INCIDENT_CREATED));
     }
   }
 

@@ -46,6 +46,6 @@ public class SaveIncidentServiceTest {
   @Test
   public void shouldRaiseIncidentSavedIntent() {
     service.onHandleIntent(intent);
-    assertContainsIntents(Robolectric.shadowOf(service).getBroadcastIntents(), Intents.RESILIENCE_INCIDENT_ADDED);
+    assertContainsIntents(Robolectric.shadowOf(service).getBroadcastIntents(), Intents.RESILIENCE_INCIDENT_CREATED);
   }
 }

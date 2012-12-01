@@ -10,6 +10,8 @@ public class Constants {
   public static final String COL_INCIDENT_NOTE = "note";
   public static final String COL_INCIDENT_PHOTO = "incident_photo";
   public static final String COL_INCIDENT_LOCATION = "location";
+  public static final String COL_TRACKED_BY = "trackedBy";
+
   public static final String PHOTO_FILENAME = COL_INCIDENT_PHOTO + ".jpg";
 
   public static final String EXTRA_PHOTO = "photo";

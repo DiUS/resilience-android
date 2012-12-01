@@ -30,6 +30,6 @@ public class IncidentListLoader extends AbstractAsyncListLoader<Incident> {
 
   @Override
   protected BroadcastReceiver createBroadcastReceiver() {
-    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(Intents.RESILIENCE_INCIDENT_ADDED));
+    return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(Intents.RESILIENCE_INCIDENT_CREATED));
   }
 }

@@ -47,4 +47,6 @@ public interface Repository {
   Photo findPhotoByIncident(String incidentId);
 
   boolean createIncident(Incident incident);
+
+  boolean trackIncident(Incident incident, String userIdentifier);
 }

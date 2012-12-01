@@ -85,7 +85,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
       case R.id.refresh:
         Log.d(LOG_TAG, "Refreshing incidents.");
-        Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_ADDED);
+        Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
         sendBroadcast(intent);
         break;
 
