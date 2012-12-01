@@ -1,4 +1,4 @@
-package au.com.dius.resilience.test.unit.persistence.test.unit.repository.impl;
+package au.com.dius.resilience.test.unit.persistence.repository.impl;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
