@@ -17,7 +17,7 @@ import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-import au.com.dius.resilience.service.SaveIncidentService;
+import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.Codes;
 import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
@@ -111,8 +111,8 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
     Log.d(LOG_TAG, "Saving incident, thread is " +  Thread.currentThread().getName());
 
-    Intent saveIncident = new Intent(this, SaveIncidentService.class);
-    saveIncident.putExtra(SaveIncidentService.EXTRA_INCIDENT, incident);
+    Intent saveIncident = new Intent(this, CreateIncidentService.class);
+    saveIncident.putExtra(CreateIncidentService.EXTRA_INCIDENT, incident);
     startService(saveIncident);
 
 //    incidentRepository.save(this, incident);

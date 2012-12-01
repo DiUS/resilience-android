@@ -1,11 +1,12 @@
 package au.com.dius.resilience.model;
 
 import java.io.File;
+import java.io.Serializable;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-public class Photo {
+public class Photo implements Serializable {
   
   private File path;
   private Uri uri;

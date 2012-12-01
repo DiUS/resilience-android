@@ -22,8 +22,8 @@ import java.util.List;
 /**
  * @author georgepapas
  */
-  @ContentView(R.layout.activity_map_view)
-  public class MapViewActivity extends RoboMapActivity implements LoaderManager.LoaderCallbacks<List<Incident>> {
+@ContentView(R.layout.activity_map_view)
+public class MapViewActivity extends RoboMapActivity implements LoaderManager.LoaderCallbacks<List<Incident>> {
 
   @InjectView(R.id.map_view)
   private MapView mapView;

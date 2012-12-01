@@ -39,7 +39,7 @@
 
     <receiver android:name=".receiver.LocationChangedReceiver"/>
 
-    <service android:name=".service.SaveIncidentService"/>
+    <service android:name=".service.CreateIncidentService"/>
 
   </application>
 

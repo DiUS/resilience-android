@@ -4,7 +4,7 @@ import android.content.Intent;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.Repository;
-import au.com.dius.resilience.service.SaveIncidentService;
+import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.xtremelabs.robolectric.Robolectric;
 import org.junit.Before;
@@ -19,14 +19,14 @@ import static org.mockito.Mockito.verify;
 @RunWith(ResilienceTestRunner.class)
 public class SaveIncidentServiceTest {
 
-  private SaveIncidentService service;
+  private CreateIncidentService service;
   private Intent intent;
   private Incident incident;
   private Repository repository;
 
   @Before
   public void setup() {
-    service = new SaveIncidentService();
+    service = new CreateIncidentService();
     service.onCreate();
 
     repository = spy(RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(Repository.class));
@@ -34,7 +34,7 @@ public class SaveIncidentServiceTest {
     intent = new Intent("");
 
     incident = new Incident();
-    intent.getExtras().putSerializable(SaveIncidentService.EXTRA_INCIDENT, incident);
+    intent.getExtras().putSerializable(CreateIncidentService.EXTRA_INCIDENT, incident);
   }
 
   @Test

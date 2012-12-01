@@ -9,6 +9,7 @@ import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
+import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import com.google.android.maps.GeoPoint;
 import com.google.inject.Inject;
 import com.parse.*;
@@ -84,6 +85,43 @@ public class ParseRepository implements Repository {
       throw new RuntimeException(e);
     }
     return photo;
+  }
+
+  @Override
+  public boolean createIncident(Incident incident) {
+    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+
+    incidentAdapter.serialise(parseObject, incident);
+    try {
+      parseObject.save();
+      incident.setId(parseObject.getObjectId());
+
+      if (incident.hasPhotos()) {
+        savePhoto(incident, incident.getPhotos().get(0));
+      }
+    } catch (ParseException e) {
+      return false;
+    }
+    return true;
+  }
+
+  private void savePhoto(Incident incident, Photo photo) throws ParseException {
+    byte[] bytes = CameraFacade.extractBytes(photo);
+    final ParseFile parseFile = new ParseFile(Constants.PHOTO_FILENAME, bytes);
+
+    parseFile.save();
+
+    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+    if (parseObject.isDataAvailable()) {
+      parseObject.fetchIfNeeded();
+    }
+    parseObject.put(Constants.COL_INCIDENT_PHOTO, parseFile);
+    parseObject.saveEventually(new SaveCallback() {
+      @Override
+      public void done(ParseException e) {
+        Log.d(TAG, "Saved incident with photo data");
+      }
+    });
   }
 
   private List<ParseObject> loadIncidents(ParseQuery query) {

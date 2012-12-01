@@ -131,4 +131,8 @@ public class Incident implements Serializable {
 
     return str.toString();
   }
+
+  public boolean hasPhotos() {
+    return this.photos.size() > 0;
+  }
 }
