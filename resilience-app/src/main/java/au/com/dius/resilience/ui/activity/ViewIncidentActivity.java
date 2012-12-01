@@ -21,7 +21,9 @@ import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.receiver.IncidentTrackedBroadcastReceiver;
+import au.com.dius.resilience.receiver.IncidentUnTrackedBroadcastReceiver;
 import au.com.dius.resilience.service.TrackIncidentService;
+import au.com.dius.resilience.service.UntrackIncidentService;
 import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
@@ -53,6 +55,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
   private Repository repository;
 
   private IncidentTrackedBroadcastReceiver incidentTrackedBroadcastReceiver;
+  private IncidentUnTrackedBroadcastReceiver incidentUnTrackedBroadcastReceiver;
 
   private Bitmap photoBitmap;
 
@@ -65,6 +68,11 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
     this.registerReceiver(
             incidentTrackedBroadcastReceiver,
             new IntentFilter(Intents.RESILIENCE_INCIDENT_TRACKED));
+
+    this.registerReceiver(
+            incidentUnTrackedBroadcastReceiver,
+            new IntentFilter(Intents.RESILIENCE_INCIDENT_UNTRACKED));
+
     super.onRestart();
   }
 
@@ -72,6 +80,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
   protected void onPause() {
     Log.d(LOG_TAG, "Unregistering broadcast receiver");
     this.unregisterReceiver(incidentTrackedBroadcastReceiver);
+    this.unregisterReceiver(incidentUnTrackedBroadcastReceiver);
 
     super.onPause();
   }
@@ -90,6 +99,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
 
     getLoaderManager().initLoader(PhotoListLoader.PHOTO_LIST_LOADER, null, this);
     incidentTrackedBroadcastReceiver = new IncidentTrackedBroadcastReceiver(this);
+    incidentUnTrackedBroadcastReceiver = new IncidentUnTrackedBroadcastReceiver(this);
   }
 
   @Override
@@ -99,6 +109,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
         trackIncident();
         break;
       case R.id.untrack_incident:
+        unTrackIncident();
         Log.d(LOG_TAG, "Untrack incident requested");
         break;
       default:
@@ -106,6 +117,10 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
     }
 
     return true;
+  }
+
+  private void unTrackIncident() {
+    startService(UntrackIncidentService.createUnTrackingIntent(this, incident));
   }
 
   private void trackIncident() {
@@ -191,4 +206,13 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
     return ((TelephonyManager)this.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
   }
 
+  public void incidentUnTracked(String incidentId) {
+    Toast.makeText(this, "Incident no longer being tracked", Toast.LENGTH_LONG).show();
+    if (incident.getId().equals(incidentId)) {
+      // HACK ALERT TODO, We need to use a loader to get a nice refresh/data load work
+      incident.removeTracker(getCurrentUserId());
+    }
+    updateTrackingMenu();
+
+  }
 }

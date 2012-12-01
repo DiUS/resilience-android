@@ -146,7 +146,11 @@ public class Incident implements Serializable {
     }
   }
 
-  public void addTracker(String incidentId) {
-    this.trackers.add(incidentId);
+  public void addTracker(String trackerId) {
+    this.trackers.add(trackerId);
+  }
+
+  public void removeTracker(String trackerId) {
+    this.trackers.remove(trackerId);
   }
 }

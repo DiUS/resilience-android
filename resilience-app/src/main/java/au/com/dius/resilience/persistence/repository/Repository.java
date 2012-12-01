@@ -49,4 +49,6 @@ public interface Repository {
   boolean createIncident(Incident incident);
 
   boolean trackIncident(Incident incident, String userIdentifier);
+
+  boolean untrackIncident(Incident incident, String currentUserId);
 }

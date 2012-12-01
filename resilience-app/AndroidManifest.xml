@@ -41,6 +41,7 @@
 
     <service android:name=".service.CreateIncidentService"/>
     <service android:name=".service.TrackIncidentService"/>
+    <service android:name=".service.UntrackIncidentService"/>
 
   </application>
 

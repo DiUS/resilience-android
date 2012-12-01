@@ -16,6 +16,7 @@ import com.parse.*;
 import roboguice.inject.ContextSingleton;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @ContextSingleton
@@ -120,6 +121,24 @@ public class ParseRepository implements Repository {
     }
     return true;
   }
+
+  @Override
+  public boolean untrackIncident(Incident incident, String userIdentifier) {
+    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+    incidentAdapter.serialise(parseObject, incident);
+
+    Collection<String> ids = new ArrayList<String>();
+    ids.add(userIdentifier);
+    parseObject.removeAll(Constants.COL_TRACKED_BY, ids);
+
+    try {
+      parseObject.save();
+    } catch (ParseException e) {
+      Log.i(TAG, "Could not update tracking information");
+      e.printStackTrace();
+      return false;
+    }
+    return true;  }
 
   private void savePhoto(Incident incident, Photo photo) throws ParseException {
     byte[] bytes = CameraFacade.extractBytes(photo);
