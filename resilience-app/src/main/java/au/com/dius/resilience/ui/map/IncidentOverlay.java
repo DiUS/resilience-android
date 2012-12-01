@@ -1,12 +1,12 @@
 package au.com.dius.resilience.ui.map;
 
-import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.widget.Toast;
+import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
@@ -15,9 +15,12 @@ import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
+import static au.com.dius.resilience.Constants.EXTRA_INCIDENT;
+
 public class IncidentOverlay extends BalloonItemizedOverlay {
 
   private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
+  private List<Incident> incidents = new ArrayList<Incident>();
   private Context context;
 
   public IncidentOverlay(Drawable defaultMarker, MapView mapView) {
@@ -32,6 +35,7 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
         GeoPoint geoPoint = new GeoPoint((int) (point.getLatitude() * 1E6), (int) (point.getLongitude() * 1E6));
         OverlayItem overlayItem = new OverlayItem(geoPoint, incident.getCategory(), incident.getNote());
         addOverlay(overlayItem);
+        incidents.add(incident);
       }
     }
     populate();
@@ -57,6 +61,11 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
 
   @Override
   protected boolean onBalloonTap(int index, OverlayItem item) {
+
+    Intent intent = new Intent(context, ViewIncidentActivity.class);
+    intent.putExtra(EXTRA_INCIDENT, incidents.get(index));
+    context.startActivity(intent);
+
     return true;
   }
 }

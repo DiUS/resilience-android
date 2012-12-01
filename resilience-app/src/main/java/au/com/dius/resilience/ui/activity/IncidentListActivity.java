@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
@@ -18,6 +19,8 @@ import roboguice.activity.RoboListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static au.com.dius.resilience.Constants.EXTRA_INCIDENT;
 
 public class IncidentListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<Incident>> {
 
@@ -43,7 +46,7 @@ public class IncidentListActivity extends RoboListActivity implements LoaderMana
   public void onListItemClick(ListView l, View v, int position, long id) {
     Incident incident = (Incident) getListAdapter().getItem(position);
     Intent viewIncident = new Intent(this, ViewIncidentActivity.class);
-    viewIncident.putExtra("incident", incident);
+    viewIncident.putExtra(EXTRA_INCIDENT, incident);
     startActivityForResult(viewIncident, 0);
   }
 

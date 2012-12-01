@@ -24,6 +24,8 @@ import roboguice.inject.InjectView;
 
 import java.util.List;
 
+import static au.com.dius.resilience.Constants.EXTRA_INCIDENT;
+
 public class ViewIncidentActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<Photo>> {
 
   private static final String LOG_TAG = ViewIncidentActivity.class.getName();
@@ -56,7 +58,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_view_incident);
 
-    incident = (Incident) getIntent().getSerializableExtra("incident");
+    incident = (Incident) getIntent().getSerializableExtra(EXTRA_INCIDENT);
     Log.d(LOG_TAG, "Incident retrieved with name " + incident.getName());
 
     name.setText(incident.getName());
