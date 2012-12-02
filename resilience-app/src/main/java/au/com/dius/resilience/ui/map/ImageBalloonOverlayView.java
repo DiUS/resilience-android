@@ -64,6 +64,10 @@ public class ImageBalloonOverlayView<Item extends OverlayItem> extends BalloonOv
     loadTask.execute();
   }
 
+  public void setTappedIncident(Incident tappedIncident) {
+    this.tappedIncident = tappedIncident;
+  }
+
   private final class PhotoLoadTask extends AsyncTask<Object, Object, Photo> {
 
     @Override

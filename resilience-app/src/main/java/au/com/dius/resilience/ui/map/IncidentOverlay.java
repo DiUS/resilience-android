@@ -28,6 +28,9 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
 
   private Repository repository;
 
+  // TODO - hackhackhack.
+  private ImageBalloonOverlayView<OverlayItem> overlayItemImageBalloonOverlayView;
+
   public IncidentOverlay(Drawable defaultMarker, MapView mapView, Repository repository) {
     super(boundCenterBottom(defaultMarker), mapView);
     context = mapView.getContext();
@@ -58,6 +61,11 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
   @Override
   public boolean onTap(int index) {
     tappedIncident = incidents.get(index);
+
+    if (overlayItemImageBalloonOverlayView != null) {
+      overlayItemImageBalloonOverlayView.setTappedIncident(tappedIncident);
+    }
+
     return super.onTap(index);
   }
 
@@ -72,8 +80,9 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
 
   @Override
   protected BalloonOverlayView<OverlayItem> createBalloonOverlayView() {
-    return new ImageBalloonOverlayView<OverlayItem>(getMapView().getContext(), getBalloonBottomOffset()
+  overlayItemImageBalloonOverlayView = new ImageBalloonOverlayView<OverlayItem>(getMapView().getContext(), getBalloonBottomOffset()
       , tappedIncident, repository);
+    return overlayItemImageBalloonOverlayView;
   }
 
   @Override
