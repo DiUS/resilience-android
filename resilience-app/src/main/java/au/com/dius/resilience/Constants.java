@@ -8,7 +8,7 @@ public class Constants {
   public static final String COL_INCIDENT_IMPACT = "impact";
   public static final String COL_INCIDENT_CREATION_DATE = "createdAt";
   public static final String COL_INCIDENT_NOTE = "note";
-  public static final String COL_INCIDENT_PHOTO = "incident_photo";
+  public static final String COL_INCIDENT_PHOTO = "photo";
   public static final String COL_INCIDENT_LOCATION = "location";
   public static final String COL_TRACKED_BY = "trackedBy";
 
