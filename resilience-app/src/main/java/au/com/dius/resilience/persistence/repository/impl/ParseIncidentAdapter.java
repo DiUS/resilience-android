@@ -9,6 +9,7 @@ import com.parse.ParseObject;
 import roboguice.inject.ContextSingleton;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class ParseIncidentAdapter implements ModelAdapter<Incident, ParseObject>
       final ParseGeoPoint geoPoint = (ParseGeoPoint) persistable.get(Constants.COL_INCIDENT_LOCATION);
       incident.setPoint(new Point(geoPoint.getLatitude(), geoPoint.getLongitude()));
     }
+
+    incident.setTrackers(persistable.<String>getList(Constants.COL_TRACKED_BY));
 
     return incident;
   }

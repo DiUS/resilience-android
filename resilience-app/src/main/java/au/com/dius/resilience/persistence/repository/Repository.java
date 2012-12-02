@@ -45,4 +45,10 @@ public interface Repository {
    * @return
    */
   Photo findPhotoByIncident(String incidentId);
+
+  boolean createIncident(Incident incident);
+
+  boolean trackIncident(Incident incident, String userIdentifier);
+
+  boolean untrackIncident(Incident incident, String currentUserId);
 }

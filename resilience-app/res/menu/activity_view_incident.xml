@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_settings"
-        android:title="@string/menu_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+
+  <item android:id="@+id/track_incident"
+        android:title="TRACK"
+        android:showAsAction="always|withText" android:enabled="true" android:visible="true"/>
+
+  <item android:id="@+id/untrack_incident"
+        android:title="UNTRACK"
+        android:showAsAction="always|withText" android:enabled="true" android:visible="true"/>
+
 </menu>

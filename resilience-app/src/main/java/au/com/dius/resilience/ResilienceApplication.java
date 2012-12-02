@@ -3,10 +3,13 @@ package au.com.dius.resilience;
 import android.app.Application;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import com.parse.Parse;
 
 public class ResilienceApplication extends Application {
+
+  private static final String LOG_TAG = "ResilienceApplication";
 
   private static final boolean SHOULD_ALWAYS_LOAD_DEFAULT_PREFS = false;
 
@@ -20,6 +23,9 @@ public class ResilienceApplication extends Application {
   private void initialiseParse() {
     String appKey = getResources().getString(R.string.key_parse_application);
     String clientKey = getResources().getString(R.string.key_parse_client);
+
+    Log.d(LOG_TAG, "Connecting to parse using " + appKey + " application key and " + clientKey + " client key");
+
     Parse.initialize(this, appKey, clientKey);
   }
 

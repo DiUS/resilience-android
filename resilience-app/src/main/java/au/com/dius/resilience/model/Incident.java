@@ -3,8 +3,7 @@ package au.com.dius.resilience.model;
 import android.location.Location;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Incident implements Serializable {
 
@@ -15,6 +14,7 @@ public class Incident implements Serializable {
   private String category;
   private String subCategory;
   private Impact scale;
+  private Set<String> trackers = new HashSet<String>();
   private Point point;
 
   private List<Photo> photos = new ArrayList<Photo>();
@@ -113,5 +113,44 @@ public class Incident implements Serializable {
 
   public void setPoint(Point point) {
     this.point = point;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder str = new StringBuilder();
+
+    str
+      .append("id=").append(id)
+      .append(", name=").append(name)
+      .append(", dateCreated=").append(dateCreated)
+      .append(", note=").append(note)
+      .append(", category=").append(category)
+      .append(", subCat=").append(subCategory)
+      .append(", scale=").append(scale)
+      .append(", point=").append(point);
+
+    return str.toString();
+  }
+
+  public boolean hasPhotos() {
+    return this.photos.size() > 0;
+  }
+
+  public boolean isTrackedBy(String currentUserId) {
+    return trackers.contains(currentUserId);
+  }
+
+  public void setTrackers(Collection<String> trackers) {
+    if (trackers != null){
+      this.trackers.addAll(trackers);
+    }
+  }
+
+  public void addTracker(String trackerId) {
+    this.trackers.add(trackerId);
+  }
+
+  public void removeTracker(String trackerId) {
+    this.trackers.remove(trackerId);
   }
 }

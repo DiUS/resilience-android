@@ -10,22 +10,17 @@ import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.facade.CameraFacade;
-import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
-import au.com.dius.resilience.persistence.repository.IncidentRepository;
-import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
-import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
-import au.com.dius.resilience.ui.Codes;
+import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.Themer;
-import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 import java.util.Date;
 
-public class EditIncidentActivity extends RoboActivity implements OnSeekBarChangeListener, RepositoryCommandResultListener<Incident> {
+public class EditIncidentActivity extends RoboActivity implements OnSeekBarChangeListener {
 
   public static final String LOCATION = "location";
 
@@ -50,9 +45,6 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   // It may need to be bundled/deserialised during onPause/onResume?
   private CameraFacade cameraFacade;
 
-  @Inject
-  private IncidentRepository incidentRepository;
-  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     Themer.applyCurrentTheme(this);
@@ -68,6 +60,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     Button cameraButton = (Button) findViewById(R.id.submit_photo);
     cameraButton.setEnabled(deviceHasCamera);
     cameraFacade = new CameraFacade(this);
+
   }
 
   private void initialiseSpinners() {
@@ -86,6 +79,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.activity_edit_incident, menu);
     updateImpactLabel(Impact.LOW);
+
     return true;
   }
 
@@ -109,7 +103,10 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     incident.addPhotos(cameraFacade.getPhotos());
 
     Log.d(LOG_TAG, "Saving incident, thread is " +  Thread.currentThread().getName());
-    incidentRepository.save(this, incident);
+
+    Intent saveIncident = new Intent(this, CreateIncidentService.class);
+    saveIncident.putExtra(CreateIncidentService.EXTRA_INCIDENT, incident);
+    startService(saveIncident);
 
     button.setEnabled(false);
     cameraButton.setEnabled(false);
@@ -152,16 +149,6 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     }
     else if (impact == Impact.HIGH) {
       seekBar.setProgress(100);
-    }
-  }
-
-  public void commandComplete(RepositoryCommandResult<Incident> result) {
-    Toast.makeText(this, "Incident was " + (result.isSuccess() ? "saved" : "not saved"), Toast.LENGTH_SHORT).show();
-    setResult(Codes.CreateIncident.RESULT_OK);
-
-    if (result.isSuccess()) {
-      Intent intent = new Intent(IncidentListLoader.INCIDENT_LIST_LOADER_FILTER);
-      sendBroadcast(intent);
     }
   }
 }
