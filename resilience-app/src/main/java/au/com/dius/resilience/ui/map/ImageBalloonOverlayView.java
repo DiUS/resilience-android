@@ -1,10 +1,6 @@
 package au.com.dius.resilience.ui.map;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
@@ -22,8 +17,6 @@ import com.readystatesoftware.mapviewballoons.BalloonOverlayView;
 
 public class ImageBalloonOverlayView<Item extends OverlayItem> extends BalloonOverlayView<OverlayItem> {
 
-  public static final String PHOTO_LOADED = "photo_loaded";
-  public static final String PHOTO_BITMAP = "photo_bitmap";
   private TextView title;
   private TextView snippet;
   private ImageView image;
@@ -32,8 +25,6 @@ public class ImageBalloonOverlayView<Item extends OverlayItem> extends BalloonOv
   private ProgressBar progressBar;
 
   private Incident tappedIncident;
-
-  BroadcastReceiver photoLoaderBroadcastReceiver;
 
   /**
    * Create a new BalloonOverlayView.
@@ -47,9 +38,6 @@ public class ImageBalloonOverlayView<Item extends OverlayItem> extends BalloonOv
     super(context, balloonBottomOffset);
     this.tappedIncident = tappedIncident;
     this.repository = repository;
-
-    photoLoaderBroadcastReceiver = new PhotoLoaderBroadcastReceiver();
-    context.registerReceiver(photoLoaderBroadcastReceiver, new IntentFilter(PHOTO_LOADED));
   }
 
   @Override
@@ -57,7 +45,6 @@ public class ImageBalloonOverlayView<Item extends OverlayItem> extends BalloonOv
     LayoutInflater inflater = (LayoutInflater) context
       .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View v = inflater.inflate(R.layout.image_balloon_overlay, parent);
-
     title = (TextView) v.findViewById(R.id.balloon_item_title);
     snippet = (TextView) v.findViewById(R.id.balloon_item_snippet);
     image = (ImageView) v.findViewById(R.id.balloon_item_image);
@@ -70,30 +57,26 @@ public class ImageBalloonOverlayView<Item extends OverlayItem> extends BalloonOv
     title.setText(item.getTitle());
     snippet.setText(item.getSnippet());
 
-    // FIXME. We go from UI thread -> Async thread -> broadcast -> UI thread
-    // in this class again. Seems way too complex.
-    AsyncTask.execute(new Runnable() {
-      @Override
-      public void run() {
-        Photo photo = repository.findPhotoByIncident(tappedIncident.getId());
+    image.setVisibility(View.INVISIBLE);
+    progressBar.setVisibility(View.VISIBLE);
 
-        Intent intent = new Intent(PHOTO_LOADED);
-        intent.putExtra(PHOTO_BITMAP, photo.getBitmap());
-
-        getContext().sendBroadcast(intent);
-      }
-    });
+    PhotoLoadTask loadTask = new PhotoLoadTask();
+    loadTask.execute();
   }
 
-  private final class PhotoLoaderBroadcastReceiver extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      progressBar.setVisibility(View.GONE);
-      Bitmap bitmap = (Bitmap) intent.getExtras().get(PHOTO_BITMAP);
+  private final class PhotoLoadTask extends AsyncTask<Object, Object, Photo> {
 
-      if (bitmap != null) {
+    @Override
+    protected Photo doInBackground(Object... params) {
+      return repository.findPhotoByIncident(tappedIncident.getId());
+    }
+
+    @Override
+    protected void onPostExecute(Photo photo) {
+      progressBar.setVisibility(View.INVISIBLE);
+      if (photo != null) {
         image.setVisibility(View.VISIBLE);
-        image.setImageBitmap(bitmap);
+        image.setImageBitmap(photo.getBitmap());
       }
     }
   }

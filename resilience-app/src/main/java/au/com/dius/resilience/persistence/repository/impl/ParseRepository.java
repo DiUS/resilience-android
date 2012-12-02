@@ -81,7 +81,8 @@ public class ParseRepository implements Repository {
         photo = new Photo(Uri.parse(parseFile.getUrl()), bitmap);
       }
     } catch (ParseException e) {
-      throw new RuntimeException(e);
+      Log.d(TAG, "Failed to load photo: ", e);
+      return null;
     }
     return photo;
   }
@@ -91,7 +92,11 @@ public class ParseRepository implements Repository {
       return query.find();
     } catch (ParseException e) {
       Log.d(TAG, "Loading all incidents failed with: ", e);
-      throw new RuntimeException(e);
+      return emptyList();
     }
+  }
+
+  private ArrayList<ParseObject> emptyList() {
+    return new ArrayList<ParseObject>();
   }
 }
