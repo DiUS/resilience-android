@@ -10,6 +10,7 @@ import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.facade.CameraFacade;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
+import au.com.dius.resilience.persistence.Columns;
 import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
@@ -51,11 +52,11 @@ public class ParsePhotoRepository implements PhotoRepository {
         final RepositoryCommandResultListener<Incident> listener,
         final ParseFile parseFile) throws ParseException {
         parseFile.save();
-        final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+        final ParseObject parseObject = ParseObject.createWithoutData(Columns.Incident.TABLE_NAME, incident.getId());
         if (parseObject.isDataAvailable()) {
           parseObject.fetchIfNeeded();
         }
-        parseObject.put(Constants.COL_INCIDENT_PHOTO, parseFile);
+        parseObject.put(Columns.Incident.PHOTO, parseFile);
         parseObject.saveEventually(new SaveCallback() {
           @Override
           public void done(ParseException ex) {
@@ -82,11 +83,11 @@ public class ParsePhotoRepository implements PhotoRepository {
       throw new RuntimeException("Incident has not yet been persisted!");
     }
 
-    ParseQuery parseQuery = new ParseQuery(Constants.TABLE_INCIDENT);
+    ParseQuery parseQuery = new ParseQuery(Columns.Incident.TABLE_NAME);
     parseQuery.getInBackground(incident.getId(), new GetCallback() {
       @Override
       public void done(ParseObject parseIncident, ParseException ex) {
-        final ParseFile parseFile = (ParseFile) parseIncident.get(Constants.COL_INCIDENT_PHOTO);
+        final ParseFile parseFile = (ParseFile) parseIncident.get(Columns.Incident.PHOTO);
         if (parseFile == null) {
           listener.commandComplete(new RepositoryCommandResult<Photo>(false, new ArrayList<Photo>()));
           return;

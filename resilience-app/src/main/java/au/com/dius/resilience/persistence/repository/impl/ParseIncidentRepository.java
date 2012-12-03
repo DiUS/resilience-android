@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.Columns;
 import au.com.dius.resilience.persistence.repository.IncidentRepository;
 import au.com.dius.resilience.persistence.repository.PhotoRepository;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
@@ -33,7 +34,7 @@ public class ParseIncidentRepository implements IncidentRepository {
   @Override
   public void findById(
       final RepositoryCommandResultListener<Incident> listener, final String id) {
-    final ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
+    final ParseQuery query = new ParseQuery(Columns.Incident.TABLE_NAME);
     query.getInBackground(id, new GetCallback() {
       @Override
       public void done(ParseObject parseObject, ParseException ex) {
@@ -50,7 +51,7 @@ public class ParseIncidentRepository implements IncidentRepository {
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
-        final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+        final ParseObject parseObject = ParseObject.createWithoutData(Columns.Incident.TABLE_NAME, incident.getId());
         try {
           // Update object if it has an ID, otherwise we'll use the one we just created.
           if(parseObject.isDataAvailable()) {
@@ -93,8 +94,8 @@ public class ParseIncidentRepository implements IncidentRepository {
 
   @Override
   public void findAll(final RepositoryCommandResultListener<Incident> listener) {
-    ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-    query.orderByDescending(Constants.COL_INCIDENT_CREATION_DATE);
+    ParseQuery query = new ParseQuery(Columns.Incident.TABLE_NAME);
+    query.orderByDescending(Columns.Incident.CREATION_DATE);
     query.findInBackground(new FindCallback() {
       @Override
       public void done(List<ParseObject> results, ParseException ex) {

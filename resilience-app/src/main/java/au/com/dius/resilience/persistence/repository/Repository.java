@@ -1,5 +1,6 @@
 package au.com.dius.resilience.persistence.repository;
 
+import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.model.Point;
@@ -51,4 +52,6 @@ public interface Repository {
   boolean trackIncident(Incident incident, String userIdentifier);
 
   boolean untrackIncident(Incident incident, String currentUserId);
+
+  boolean sendFeedback(Feedback feedback);
 }

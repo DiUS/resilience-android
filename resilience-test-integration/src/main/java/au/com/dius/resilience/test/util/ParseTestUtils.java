@@ -7,6 +7,7 @@ import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.Columns;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -46,7 +47,7 @@ public class ParseTestUtils {
 
       StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
       try {
-        ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
+        ParseQuery query = new ParseQuery(Columns.Incident.TABLE_NAME);
         List<ParseObject> incidents = query.find();
 
         if (incidents == null || incidents.size() == 0) {

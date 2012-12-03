@@ -4,6 +4,7 @@ import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.Columns;
 import au.com.dius.resilience.persistence.repository.impl.ParseIncidentAdapter;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -49,11 +50,11 @@ public class ParseIncidentAdapterTest {
 
     parse = adapter.serialise(parse, incident);
 
-    assertThat(parse.getString(Constants.COL_INCIDENT_NAME), equalTo(EXPECTED_NAME));
-    assertThat(parse.getString(Constants.COL_INCIDENT_NOTE), equalTo(EXPECTED_NOTE));
-    assertThat(parse.getString(Constants.COL_INCIDENT_CATEGORY), equalTo(EXPECTED_CATEGORY));
-    assertThat(parse.getString(Constants.COL_INCIDENT_SUBCATEGORY), equalTo(EXPECTED_SUB_CATEGORY));
-    assertThat(parse.getString(Constants.COL_INCIDENT_IMPACT), equalTo(EXPECTED_IMPACT.name()));
+    assertThat(parse.getString(Columns.Incident.NAME), equalTo(EXPECTED_NAME));
+    assertThat(parse.getString(Columns.Incident.NOTE), equalTo(EXPECTED_NOTE));
+    assertThat(parse.getString(Columns.Incident.CATEGORY), equalTo(EXPECTED_CATEGORY));
+    assertThat(parse.getString(Columns.Incident.SUBCATEGORY), equalTo(EXPECTED_SUB_CATEGORY));
+    assertThat(parse.getString(Columns.Incident.IMPACT), equalTo(EXPECTED_IMPACT.name()));
   }
 
   @Test
@@ -77,7 +78,7 @@ public class ParseIncidentAdapterTest {
   @Test
   public void shouldHandleNullLocationWhenSerialising() {
     parse = adapter.serialise(parse, createStubIncident());
-    assertThat(parse.get(Constants.COL_INCIDENT_LOCATION), nullValue());
+    assertThat(parse.get(Columns.Incident.LOCATION), nullValue());
   }
 
   @Test
@@ -91,7 +92,7 @@ public class ParseIncidentAdapterTest {
     final double expectedLatitude = -10.00;
     final double expectedLongitude = 10.00;
     ParseGeoPoint geoPoint = new ParseGeoPoint(expectedLatitude, expectedLongitude);
-    parse.put(Constants.COL_INCIDENT_LOCATION, geoPoint);
+    parse.put(Columns.Incident.LOCATION, geoPoint);
 
     final Incident incident = adapter.deserialise(parse);
     final Point point = incident.getPoint();
@@ -125,11 +126,11 @@ public class ParseIncidentAdapterTest {
   private ParseObject createStubParseObject() {
     ParseObject stub = new ParseObject("incident");
 
-    stub.put(Constants.COL_INCIDENT_NAME, EXPECTED_NAME);
-    stub.put(Constants.COL_INCIDENT_NOTE, EXPECTED_NOTE);
-    stub.put(Constants.COL_INCIDENT_CATEGORY, EXPECTED_CATEGORY);
-    stub.put(Constants.COL_INCIDENT_SUBCATEGORY, EXPECTED_SUB_CATEGORY);
-    stub.put(Constants.COL_INCIDENT_IMPACT, EXPECTED_IMPACT.name());
+    stub.put(Columns.Incident.NAME, EXPECTED_NAME);
+    stub.put(Columns.Incident.NOTE, EXPECTED_NOTE);
+    stub.put(Columns.Incident.CATEGORY, EXPECTED_CATEGORY);
+    stub.put(Columns.Incident.SUBCATEGORY, EXPECTED_SUB_CATEGORY);
+    stub.put(Columns.Incident.IMPACT, EXPECTED_IMPACT.name());
 
     return stub;
   }

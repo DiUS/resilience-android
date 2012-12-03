@@ -1,8 +1,10 @@
 package au.com.dius.resilience.test.persistence;
 
+import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.Columns;
 import au.com.dius.resilience.persistence.repository.impl.ParseIncidentAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ParseRepository;
 import au.com.dius.resilience.test.AbstractResilienceTestCase;
@@ -11,8 +13,6 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static au.com.dius.resilience.Constants.*;
@@ -44,20 +44,20 @@ public class ParseRepositoryTest extends AbstractResilienceTestCase {
     double distance2 = sourcePoint.distanceInKilometersTo(within15KM);
     assertTrue(distance2 > 14.0 && distance2 < 15.0);
 
-    final ParseObject incident = new ParseObject(TABLE_INCIDENT);
-    incident.put(COL_INCIDENT_NAME, INCIDENT_1);
-    incident.put(COL_INCIDENT_LOCATION, sourcePoint);
-    incident.put(COL_INCIDENT_IMPACT, Impact.LOW.name());
+    final ParseObject incident = new ParseObject(Columns.Incident.TABLE_NAME);
+    incident.put(Columns.Incident.NAME, INCIDENT_1);
+    incident.put(Columns.Incident.LOCATION, sourcePoint);
+    incident.put(Columns.Incident.IMPACT, Impact.LOW.name());
 
-    final ParseObject incident2 = new ParseObject(TABLE_INCIDENT);
-    incident2.put(COL_INCIDENT_NAME, INCIDENT_2);
-    incident2.put(COL_INCIDENT_LOCATION, within1KM);
-    incident2.put(COL_INCIDENT_IMPACT, Impact.MEDIUM.name());
+    final ParseObject incident2 = new ParseObject(Columns.Incident.TABLE_NAME);
+    incident2.put(Columns.Incident.NAME, INCIDENT_2);
+    incident2.put(Columns.Incident.LOCATION, within1KM);
+    incident2.put(Columns.Incident.IMPACT, Impact.MEDIUM.name());
 
-    final ParseObject incident3 = new ParseObject(TABLE_INCIDENT);
-    incident3.put(COL_INCIDENT_NAME, INCIDENT_3);
-    incident3.put(COL_INCIDENT_LOCATION, within15KM);
-    incident3.put(COL_INCIDENT_IMPACT, Impact.HIGH.name());
+    final ParseObject incident3 = new ParseObject(Columns.Incident.TABLE_NAME);
+    incident3.put(Columns.Incident.NAME, INCIDENT_3);
+    incident3.put(Columns.Incident.LOCATION, within15KM);
+    incident3.put(Columns.Incident.IMPACT, Impact.HIGH.name());
 
     ParseTestUtils.saveAll(incident, incident2, incident3);
   }
@@ -105,5 +105,10 @@ public class ParseRepositoryTest extends AbstractResilienceTestCase {
         fail("Unexpected incident " + i.getName() + " returned.");
       }
     }
+  }
+
+  public void testSendFeedback() {
+    // TODO
+//    repository.sendFeedback(new Feedback("test feedback", "dev-id123"));
   }
 }

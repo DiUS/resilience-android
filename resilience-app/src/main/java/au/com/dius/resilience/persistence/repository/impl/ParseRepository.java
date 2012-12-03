@@ -5,12 +5,12 @@ import android.net.Uri;
 import android.util.Log;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.facade.CameraFacade;
+import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.Columns;
 import au.com.dius.resilience.persistence.repository.Repository;
-import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
-import com.google.android.maps.GeoPoint;
 import com.google.inject.Inject;
 import com.parse.*;
 import roboguice.inject.ContextSingleton;
@@ -18,6 +18,8 @@ import roboguice.inject.ContextSingleton;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static au.com.dius.resilience.persistence.Columns.Incident.TABLE_NAME;
 
 @ContextSingleton
 public class ParseRepository implements Repository {
@@ -35,8 +37,8 @@ public class ParseRepository implements Repository {
   public List<Incident> findIncidentsWithinDistanceKM(Point point, int distance) {
     ParseGeoPoint parseGeoPoint = new ParseGeoPoint(point.getLatitude(), point.getLongitude());
 
-    ParseQuery parseQuery = new ParseQuery(Constants.TABLE_INCIDENT);
-    parseQuery.whereWithinKilometers(Constants.COL_INCIDENT_LOCATION, parseGeoPoint, distance);
+    ParseQuery parseQuery = new ParseQuery(Columns.Incident.TABLE_NAME);
+    parseQuery.whereWithinKilometers(Columns.Incident.LOCATION, parseGeoPoint, distance);
 
     List<ParseObject> incidents = loadIncidents(parseQuery);
     return incidentAdapter.deserialise(incidents);
@@ -48,8 +50,8 @@ public class ParseRepository implements Repository {
     ParseGeoPoint southWestGeoPoint = new ParseGeoPoint(southWest.getLatitude(), southWest.getLongitude());
     ParseGeoPoint northEastGeoPoint = new ParseGeoPoint(northEast.getLatitude(), northEast.getLongitude());
 
-    ParseQuery parseQuery = new ParseQuery(Constants.TABLE_INCIDENT);
-    parseQuery.whereWithinGeoBox(Constants.COL_INCIDENT_LOCATION, southWestGeoPoint, northEastGeoPoint);
+    ParseQuery parseQuery = new ParseQuery(Columns.Incident.TABLE_NAME);
+    parseQuery.whereWithinGeoBox(Columns.Incident.LOCATION, southWestGeoPoint, northEastGeoPoint);
 
     List<ParseObject> parseObjects = loadIncidents(parseQuery);
 
@@ -58,8 +60,8 @@ public class ParseRepository implements Repository {
 
   @Override
   public List<Incident> findIncidents() {
-    ParseQuery query = new ParseQuery(Constants.TABLE_INCIDENT);
-    query.orderByDescending(Constants.COL_INCIDENT_CREATION_DATE);
+    ParseQuery query = new ParseQuery(Columns.Incident.TABLE_NAME);
+    query.orderByDescending(Columns.Incident.CREATION_DATE);
 
     List<ParseObject> parseObjects = loadIncidents(query);
     return incidentAdapter.deserialise(parseObjects);
@@ -67,12 +69,12 @@ public class ParseRepository implements Repository {
 
   @Override
   public Photo findPhotoByIncident(final String incidentId) {
-    ParseQuery parseQuery = new ParseQuery(Constants.TABLE_INCIDENT);
+    ParseQuery parseQuery = new ParseQuery(Columns.Incident.TABLE_NAME);
 
     Photo photo = null;
     try {
       ParseObject incident = parseQuery.get(incidentId);
-      final ParseFile parseFile = (ParseFile) incident.get(Constants.COL_INCIDENT_PHOTO);
+      final ParseFile parseFile = (ParseFile) incident.get(Columns.Incident.PHOTO);
       if (parseFile != null) {
         Log.d(TAG, "Found photo for incident " + incidentId + ", retrieving data..");
 
@@ -91,7 +93,7 @@ public class ParseRepository implements Repository {
 
   @Override
   public boolean createIncident(Incident incident) {
-    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+    final ParseObject parseObject = ParseObject.createWithoutData(Columns.Incident.TABLE_NAME, incident.getId());
 
     incidentAdapter.serialise(parseObject, incident);
     try {
@@ -109,10 +111,10 @@ public class ParseRepository implements Repository {
 
   @Override
   public boolean trackIncident(Incident incident, String userIdentifier) {
-    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+    final ParseObject parseObject = ParseObject.createWithoutData(Columns.Incident.TABLE_NAME, incident.getId());
     incidentAdapter.serialise(parseObject, incident);
 
-    parseObject.addUnique(Constants.COL_TRACKED_BY, userIdentifier);
+    parseObject.addUnique(Columns.Incident.TRACKED_BY, userIdentifier);
     try {
       parseObject.save();
     } catch (ParseException e) {
@@ -125,12 +127,12 @@ public class ParseRepository implements Repository {
 
   @Override
   public boolean untrackIncident(Incident incident, String userIdentifier) {
-    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+    final ParseObject parseObject = ParseObject.createWithoutData(Columns.Incident.TABLE_NAME, incident.getId());
     incidentAdapter.serialise(parseObject, incident);
 
     Collection<String> ids = new ArrayList<String>();
     ids.add(userIdentifier);
-    parseObject.removeAll(Constants.COL_TRACKED_BY, ids);
+    parseObject.removeAll(Columns.Incident.TRACKED_BY, ids);
 
     try {
       parseObject.save();
@@ -141,17 +143,34 @@ public class ParseRepository implements Repository {
     }
     return true;  }
 
+  @Override
+  public boolean sendFeedback(Feedback feedback) {
+    ParseObject parseObject = new ParseObject(Columns.Feedback.TABLE_NAME);
+    parseObject.put(Columns.Feedback.TEXT, feedback.getText());
+    parseObject.put(Columns.Feedback.PHONE_ID, feedback.getDeviceId());
+
+    try {
+      parseObject.save();
+    } catch (ParseException e) {
+      e.printStackTrace();
+      Log.d(TAG, "Could not send feedback");
+      return false;
+    }
+
+    return false;
+  }
+
   private void savePhoto(Incident incident, Photo photo) throws ParseException {
     byte[] bytes = CameraFacade.extractBytes(photo);
     final ParseFile parseFile = new ParseFile(Constants.PHOTO_FILENAME, bytes);
 
     parseFile.save();
 
-    final ParseObject parseObject = ParseObject.createWithoutData(Constants.TABLE_INCIDENT, incident.getId());
+    final ParseObject parseObject = ParseObject.createWithoutData(Columns.Incident.TABLE_NAME, incident.getId());
     if (parseObject.isDataAvailable()) {
       parseObject.fetchIfNeeded();
     }
-    parseObject.put(Constants.COL_INCIDENT_PHOTO, parseFile);
+    parseObject.put(Columns.Incident.PHOTO, parseFile);
     parseObject.saveEventually(new SaveCallback() {
       @Override
       public void done(ParseException e) {

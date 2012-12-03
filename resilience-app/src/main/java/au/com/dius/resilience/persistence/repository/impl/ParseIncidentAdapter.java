@@ -4,12 +4,12 @@ import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
+import au.com.dius.resilience.persistence.Columns;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import roboguice.inject.ContextSingleton;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -30,19 +30,19 @@ public class ParseIncidentAdapter implements ModelAdapter<Incident, ParseObject>
     final Date dateCreated = persistable.getCreatedAt();
     Incident incident = new Incident(
             persistable.getObjectId(),
-            persistable.getString(Constants.COL_INCIDENT_NAME),
+            persistable.getString(Columns.Incident.NAME),
             dateCreated != null ? dateCreated.getTime() : 0,
-            persistable.getString(Constants.COL_INCIDENT_NOTE),
-            persistable.getString(Constants.COL_INCIDENT_CATEGORY),
-            persistable.getString(Constants.COL_INCIDENT_SUBCATEGORY),
-            Impact.valueOf(persistable.getString(Constants.COL_INCIDENT_IMPACT)));
+            persistable.getString(Columns.Incident.NOTE),
+            persistable.getString(Columns.Incident.CATEGORY),
+            persistable.getString(Columns.Incident.SUBCATEGORY),
+            Impact.valueOf(persistable.getString(Columns.Incident.IMPACT)));
 
-    if (persistable.has(Constants.COL_INCIDENT_LOCATION)) {
-      final ParseGeoPoint geoPoint = (ParseGeoPoint) persistable.get(Constants.COL_INCIDENT_LOCATION);
+    if (persistable.has(Columns.Incident.LOCATION)) {
+      final ParseGeoPoint geoPoint = (ParseGeoPoint) persistable.get(Columns.Incident.LOCATION);
       incident.setPoint(new Point(geoPoint.getLatitude(), geoPoint.getLongitude()));
     }
 
-    incident.setTrackers(persistable.<String>getList(Constants.COL_TRACKED_BY));
+    incident.setTrackers(persistable.<String>getList(Columns.Incident.TRACKED_BY));
 
     return incident;
   }
@@ -50,16 +50,16 @@ public class ParseIncidentAdapter implements ModelAdapter<Incident, ParseObject>
   @Override
   public ParseObject serialise(ParseObject parseObject, Incident incident) {
 
-    parseObject.put(Constants.COL_INCIDENT_NAME, incident.getName());
-    parseObject.put(Constants.COL_INCIDENT_CATEGORY, incident.getCategory());
-    parseObject.put(Constants.COL_INCIDENT_SUBCATEGORY, incident.getSubCategory());
-    parseObject.put(Constants.COL_INCIDENT_IMPACT, incident.getImpact().name());
-    parseObject.put(Constants.COL_INCIDENT_NOTE, incident.getNote());
+    parseObject.put(Columns.Incident.NAME, incident.getName());
+    parseObject.put(Columns.Incident.CATEGORY, incident.getCategory());
+    parseObject.put(Columns.Incident.SUBCATEGORY, incident.getSubCategory());
+    parseObject.put(Columns.Incident.IMPACT, incident.getImpact().name());
+    parseObject.put(Columns.Incident.NOTE, incident.getNote());
 
     Point point = incident.getPoint();
     if (point != null) {
       parseObject.put(
-              Constants.COL_INCIDENT_LOCATION,
+              Columns.Incident.LOCATION,
               new ParseGeoPoint(point.getLatitude(), point.getLongitude()));
     }
 

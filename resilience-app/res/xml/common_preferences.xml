@@ -29,5 +29,12 @@
           android:action="android.intent.action.VIEW"
           android:data="@string/project_url"/>
     </Preference>
+    <Preference
+        android:title="@string/feedback"
+        android:summary="@string/feedback_summary">
+      <intent
+          android:targetPackage="au.com.dius.resilience"
+          android:targetClass="au.com.dius.resilience.ui.activity.FeedbackActivity"/>
+    </Preference>
   </PreferenceCategory>
 </PreferenceScreen>
