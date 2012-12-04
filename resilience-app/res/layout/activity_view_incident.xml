@@ -1,107 +1,133 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/list_view_padding" >
 
-    <TextView
-            android:id="@+id/incident_name"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical" >
+
+        <ImageView
+            android:id="@+id/list_view_category_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:hint="@string/name"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:gravity="center_vertical">
-        <requestFocus />
-    </TextView>
+            android:layout_gravity="left"
+            android:clickable="false"
+            android:contentDescription="@string/list_view_category_desc"
+            android:src="@drawable/fire" />
 
-    <TableLayout
-            android:id="@+id/detailed_info_table"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/incident_name" >
+            android:layout_gravity="left|center_vertical"
+            android:orientation="vertical" >
 
-        <TableRow
-                android:id="@+id/di_tr1"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="0"
-                android:padding="5dip" >
-
-            <RelativeLayout
-                    android:layout_weight="1"
-                    android:layout_width="150dp"
-                    android:layout_height="110dp">
-
-                <ImageView
-                        android:id="@+id/incident_photo"
-                        android:layout_height="fill_parent"
-                        android:layout_width="fill_parent"
-                        android:contentDescription="@string/photo"
-                        android:visibility="invisible"
-                        android:paddingLeft="10dp"
-                        android:onClick="onImageClick"
-                        />
-
-                <TextView
-                        android:id="@+id/no_image_label"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_alignBottom="@id/incident_photo"
-                        android:layout_alignTop="@id/incident_photo"
-                        android:gravity="center"
-                        android:visibility="invisible"
-                        android:text="@string/no_image"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <ProgressBar
-                        android:id="@+id/image_load_progress_bar"
-                        style="?android:attr/progressBarStyleLarge"
-                        android:layout_alignBottom="@id/incident_photo"
-                        android:layout_alignTop="@id/incident_photo"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" />
-
-            </RelativeLayout>
-
-            <ImageView
-                    android:id="@+id/incident_map"
-                    android:layout_width="170dp"
-                    android:layout_height="110dp"
-                    android:layout_weight="1"
-                    android:contentDescription="@string/map"
-                    android:src="@drawable/map_icon"
-                    android:onClick="onMapClick"/>
-        </TableRow>
-
-        <TableRow>
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/extra_notes"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:gravity="center_vertical">
-            </TextView>
-        </TableRow>
-
-        <TableRow
-                android:id="@+id/di_tr2"
+                android:id="@+id/activity_view_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0" >
+                android:ellipsize="end"
+                android:maxLength="@integer/list_view_name_max"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:text="Zombie sighting"
+                android:textStyle="bold" >
+            </TextView>
 
             <TextView
-                    android:id="@+id/incident_note"
-                    android:layout_height="fill_parent"
-                    android:layout_width="fill_parent"
-                    android:layout_span="2"
-                    android:layout_weight="0"
-                    android:ems="10"
-                    android:gravity="top" />
-        </TableRow>
-    </TableLayout>
+                android:id="@+id/activity_view_item_time_reported"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reported 3 hours ago" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/activity_view_item_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Melbourne CBD" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical" >
+
+        <ImageView
+            android:id="@+id/incident_photo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/photo"
+            android:onClick="onImageClick"
+            android:paddingLeft="10dp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/no_image_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_image"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/image_load_progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/incident_map"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/map"
+            android:onClick="onMapClick"
+            android:src="@drawable/map_icon" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="@string/extra_notes"
+            android:paddingLeft="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/incident_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:paddingLeft="10dp"
+            android:gravity="top" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <Button
+            android:id="@+id/email_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="onCameraClick"
+            android:text="@string/email_btn_txt" />
+
+        <Button
+            android:id="@+id/tweet_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="onCameraClick"
+            android:text="@string/tweet_btn_txt" />
+    </LinearLayout>
+</LinearLayout>

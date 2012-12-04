@@ -16,7 +16,7 @@
   <string name="refresh">Refresh</string>
 
   <!-- View/create incident -->
-  <string name="extra_notes">Extra notes</string>
+  <string name="extra_notes">Extra Notes</string>
   <string name="name">Name</string>
   <string name="select_category">Category</string>
   <string name="select_subcategory">Subcategory</string>
@@ -26,6 +26,9 @@
   <string name="map">Map</string>
   <string name="view_incident">View Incident</string>
   <string name="no_image">NO IMAGE</string>
+  
+  <string name="email_btn_txt">Email</string>
+  <string name="tweet_btn_txt">Tweet</string>
 
   <!-- List view -->
   <string name="list_view_more_details_desc">More details</string>
