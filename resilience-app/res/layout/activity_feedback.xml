@@ -13,8 +13,10 @@
   <EditText
       android:id="@+id/feedback_text"
       android:layout_width="fill_parent"
-      android:layout_height="200dp" />
+      android:layout_height="200dp"
+      android:gravity="top" />
   <Button
+      android:id="@+id/send_feedback_button"
       android:text="@string/send_feedback"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"

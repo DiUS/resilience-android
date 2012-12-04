@@ -17,6 +17,7 @@ import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.PhotoListLoader;
+import au.com.dius.resilience.model.Device;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.Repository;
@@ -205,7 +206,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
   }
 
   private String getCurrentUserId() {
-    return ((TelephonyManager)this.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
+    return Device.getDeviceId(this);
   }
 
   public void incidentUnTracked(String incidentId) {

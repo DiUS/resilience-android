@@ -157,7 +157,7 @@ public class ParseRepository implements Repository {
       return false;
     }
 
-    return false;
+    return true;
   }
 
   private void savePhoto(Incident incident, Photo photo) throws ParseException {

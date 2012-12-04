@@ -55,7 +55,8 @@
   -->
   <string name="feedback">Feedback</string>
   <string name="feedback_summary">Tell us what you think</string>
-  <string name="feedback_description_highlight">Resilience is all about community engagement</string>
-  <string name="feedback_description">Use the form below for feedback, suggestions or complaints</string>
+  <string name="feedback_description_highlight">Resilience is all about community engagement.</string>
+  <string name="feedback_description">Use the form below to provide feedback, suggestions or complaints.</string>
+  <string name="feedback_thanks">Thank you for your feedback!</string>
 
 </resources>

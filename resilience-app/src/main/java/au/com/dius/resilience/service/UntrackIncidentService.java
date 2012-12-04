@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import au.com.dius.resilience.intent.Intents;
+import au.com.dius.resilience.model.Device;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.Repository;
 import com.google.inject.Inject;
@@ -42,6 +43,6 @@ public class UntrackIncidentService extends RoboIntentService{
   }
 
   private String getCurrentUserId() {
-    return ((TelephonyManager)this.getSystemService(TELEPHONY_SERVICE)).getDeviceId();
+    return Device.getDeviceId(this);
   }
 }
