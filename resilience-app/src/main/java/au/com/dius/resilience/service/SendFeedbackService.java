@@ -22,20 +22,24 @@ public class SendFeedbackService extends RoboIntentService {
     super("ResilienceSendFeedbackIncidentService");
   }
 
-  public static Intent createFeedbackIntent(Context context, Feedback feedback) {
-    Intent trackIncident = new Intent(context, SendFeedbackService.class);
-    trackIncident.putExtra(EXTRA_FEEDBACK, feedback);
+  public static Intent createFeedbackSaveCompleteIntent(Context context, Feedback feedback) {
+    Intent feedbackIntent = new Intent(context, SendFeedbackService.class);
+    feedbackIntent.putExtra(EXTRA_FEEDBACK, feedback);
 
-    return trackIncident;
+    return feedbackIntent;
   }
 
   @Override
   public void onHandleIntent(Intent intent) {
     Feedback feedback = (Feedback) intent.getExtras().getSerializable(EXTRA_FEEDBACK);
 
-    if(repository.sendFeedback(feedback)) {
-      sendBroadcast(new Intent(RESILIENCE_FEEDBACK_SUBMITTED));
-       Log.d(TAG, "Sent " + RESILIENCE_FEEDBACK_SUBMITTED + " broadcast");
+    sendBroadcast(new Intent(RESILIENCE_FEEDBACK_SUBMITTED));
+
+    if (repository.sendFeedback(feedback)) {
+      Log.d(TAG, "Sent " + RESILIENCE_FEEDBACK_SUBMITTED + " broadcast");
+    }
+    else {
+      Log.d(TAG, "Sending feedback failed.");
     }
   }
 }
