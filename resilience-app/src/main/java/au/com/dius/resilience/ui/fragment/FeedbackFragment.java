@@ -1,5 +1,6 @@
 package au.com.dius.resilience.ui.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,23 +17,16 @@ import au.com.dius.resilience.model.Device;
 import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.service.SendFeedbackService;
-import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.activity.PreferenceActivity;
-import com.google.inject.Inject;
-import roboguice.inject.InjectView;
 
 import static au.com.dius.resilience.intent.Intents.RESILIENCE_FEEDBACK_SUBMITTED;
 
 public class FeedbackFragment extends Fragment {
 
-  @Inject
-  private Repository repository;
-
-  @InjectView(R.id.feedback_text)
   private TextView feedbackText;
 
   private FeedbackFragment.FeedbackSavedBroadcastReceiver feedbackSavedBroadcastReceiver;
-  private Context context;
+  private Activity activity;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,39 +34,44 @@ public class FeedbackFragment extends Fragment {
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    context = getActivity();
-    Themer.applyCurrentTheme(context);
-    super.onCreate(savedInstanceState);
+  public void onActivityCreated(Bundle state) {
+    activity = getActivity();
+    feedbackText = (TextView) activity.findViewById(R.id.feedback_text);
 
-    feedbackSavedBroadcastReceiver = new FeedbackSavedBroadcastReceiver();
-
-    context.registerReceiver(feedbackSavedBroadcastReceiver,
+    activity.registerReceiver(feedbackSavedBroadcastReceiver,
       new IntentFilter(RESILIENCE_FEEDBACK_SUBMITTED));
+
+    super.onActivityCreated(state);
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    feedbackSavedBroadcastReceiver = new FeedbackSavedBroadcastReceiver();
   }
 
   public void onFeedbackSubmitClick(View button) {
-    button.setEnabled(false);
-    String deviceId = Device.getDeviceId(context);
-    String text = feedbackText.getText().toString();
 
+    String deviceId = Device.getDeviceId(activity);
+    String text = feedbackText.getText().toString();
     Feedback feedback = new Feedback(text, deviceId);
 
     if (text != null && text.trim().length() > 0) {
-      context.startService(SendFeedbackService.createFeedbackIntent(context, feedback));
+      button.setEnabled(false);
+      activity.startService(SendFeedbackService.createFeedbackIntent(activity, feedback));
     }
   }
 
   @Override
   public void onPause() {
-    context.unregisterReceiver(feedbackSavedBroadcastReceiver);
+    activity.unregisterReceiver(feedbackSavedBroadcastReceiver);
     super.onPause();
   }
 
   @Override
   public void onResume() {
     feedbackSavedBroadcastReceiver = new FeedbackSavedBroadcastReceiver();
-    context.registerReceiver(feedbackSavedBroadcastReceiver, new IntentFilter(RESILIENCE_FEEDBACK_SUBMITTED));
+    activity.registerReceiver(feedbackSavedBroadcastReceiver, new IntentFilter(RESILIENCE_FEEDBACK_SUBMITTED));
     super.onResume();
   }
 
