@@ -16,8 +16,6 @@ public class FeedbackFragment extends Fragment {
 
   private TextView feedbackText;
 
-  private Activity activity;
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_feedback, container);
@@ -25,9 +23,7 @@ public class FeedbackFragment extends Fragment {
 
   @Override
   public void onActivityCreated(Bundle state) {
-    activity = getActivity();
-    feedbackText = (TextView) activity.findViewById(R.id.feedback_text);
-
+    feedbackText = (TextView) getActivity().findViewById(R.id.feedback_text);
     super.onActivityCreated(state);
   }
 
@@ -37,14 +33,13 @@ public class FeedbackFragment extends Fragment {
   }
 
   public void onFeedbackSubmitClick(View button) {
-
-    String deviceId = Device.getDeviceId(activity);
+    String deviceId = Device.getDeviceId(getActivity());
     String text = feedbackText.getText().toString();
     Feedback feedback = new Feedback(text, deviceId);
 
     if (text != null && text.trim().length() > 0) {
       button.setEnabled(false);
-      activity.startService(SendFeedbackService.createFeedbackSaveCompleteIntent(activity, feedback));
+      getActivity().startService(SendFeedbackService.createFeedbackSaveCompleteIntent(getActivity(), feedback));
     }
   }
 }

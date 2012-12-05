@@ -1,5 +1,6 @@
 package au.com.dius.resilience.test.unit.utils;
 
+import au.com.dius.resilience.test.unit.fragment.ResilienceShadowFragment;
 import au.com.dius.resilience.test.unit.loader.ShadowLoader;
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
@@ -23,5 +24,6 @@ public class ResilienceTestRunner extends RobolectricTestRunner {
   public void beforeTest(Method method) {
     Robolectric.bindShadowClass(SameDatabaseShadowSqlLiteOpenHelper.class);
     Robolectric.bindShadowClass(ShadowLoader.class);
+    Robolectric.bindShadowClass(ResilienceShadowFragment.class);
   }
 }
