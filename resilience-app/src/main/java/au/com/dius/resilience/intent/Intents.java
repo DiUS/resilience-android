@@ -7,4 +7,5 @@ public class Intents {
   public static final String RESILIENCE_INCIDENT_TRACKED = Intents.class.getName() + ".IncidentTracked";
   public static final String RESILIENCE_INCIDENT_UNTRACKED = Intents.class.getName() + ".IncidentUnTracked";
   public static final String RESILIENCE_FEEDBACK_SUBMITTED = Intents.class.getName() + ".Feedback";
+  public static final String RESILIENCE_FEEDBACK_REQUESTED = Intents.class.getName() + ".FeedbackRequested";
 }

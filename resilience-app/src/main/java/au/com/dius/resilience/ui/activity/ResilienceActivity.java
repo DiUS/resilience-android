@@ -94,6 +94,10 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
         sendBroadcast(intent);
         break;
 
+      case R.id.send_feedback:
+        Intent sendFeedbackIntent = new Intent(Intents.RESILIENCE_FEEDBACK_REQUESTED);
+        sendBroadcast(sendFeedbackIntent);
+        break;
 //      case R.id.tracked_issues:
 //        Log.d(LOG_TAG, "Tracked issues selected");
 //        break;

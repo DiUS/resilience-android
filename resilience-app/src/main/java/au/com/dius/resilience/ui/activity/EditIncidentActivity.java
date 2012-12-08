@@ -16,10 +16,12 @@ import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.Themer;
 import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 import java.util.Date;
 
+@ContentView(R.layout.activity_edit_incident)
 public class EditIncidentActivity extends RoboActivity implements OnSeekBarChangeListener {
 
   public static final String LOCATION = "location";
@@ -49,7 +51,6 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
   public void onCreate(Bundle savedInstanceState) {
     Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_edit_incident);
     initialiseSpinners();
     
     impactScale.setOnSeekBarChangeListener(this);
@@ -61,6 +62,15 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     cameraButton.setEnabled(deviceHasCamera);
     cameraFacade = new CameraFacade(this);
 
+    updateImpactLabel(Impact.LOW);
+
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.action_bar, menu);
+    getActionBar().setDisplayShowTitleEnabled(false);
+    return true;
   }
 
   private void initialiseSpinners() {
@@ -73,14 +83,6 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
         R.array.subcategories, android.R.layout.simple_spinner_item);
     subCategoryadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     subCategorySpinner.setAdapter(subCategoryadapter);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.activity_edit_incident, menu);
-    updateImpactLabel(Impact.LOW);
-
-    return true;
   }
 
   public void onSubmitClick(View button) {
