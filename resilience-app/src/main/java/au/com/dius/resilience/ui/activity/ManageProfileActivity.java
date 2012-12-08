@@ -10,6 +10,7 @@ import au.com.dius.resilience.model.Profile;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ProfileRepository;
 import au.com.dius.resilience.ui.Themer;
+import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -25,12 +26,14 @@ public class ManageProfileActivity extends RoboActivity {
   @InjectView(R.id.profile_name)
   private EditText profileName;
 
+  @Inject
+  private Themer themer;
+
   PreferenceAdapter preferenceAdapter;
   ProfileRepository repository;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
 
     preferenceAdapter = new PreferenceAdapter(this);

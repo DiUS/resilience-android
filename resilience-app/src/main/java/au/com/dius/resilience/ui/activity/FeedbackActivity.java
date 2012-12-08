@@ -24,9 +24,11 @@ public class FeedbackActivity extends RoboActivity {
 
   private FeedbackBroadcastReceiver feedbackBroadcastReceiver;
 
+  @Inject
+  private Themer themer;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_feedback);
   }

@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.ui.Themer;
+import com.google.inject.Inject;
+import roboguice.activity.RoboActivity;
 
-public class PhotoViewActivity extends Activity {
+public class PhotoViewActivity extends RoboActivity {
+
+  @Inject
+  private Themer themer;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
 
     Bitmap photoBitmap = (Bitmap) getIntent().getExtras().get(Constants.EXTRA_PHOTO);

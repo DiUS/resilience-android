@@ -27,10 +27,12 @@ import au.com.dius.resilience.service.UntrackIncidentService;
 import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 import java.util.List;
 
+@ContentView(R.layout.activity_view_incident)
 public class ViewIncidentActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<Photo>> {
 
   private static final String LOG_TAG = ViewIncidentActivity.class.getName();
@@ -69,6 +71,9 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
   @InjectView(R.id.tweet_btn)
   private Button tweetButton;
 
+  @Inject
+  private Themer themer;
+
   private IncidentTrackedBroadcastReceiver incidentTrackedBroadcastReceiver;
   private IncidentUnTrackedBroadcastReceiver incidentUnTrackedBroadcastReceiver;
 
@@ -99,9 +104,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_view_incident);
 
     incident = (Incident) getIntent().getSerializableExtra("incident");
     Log.d(LOG_TAG, "Incident retrieved with name " + incident.getName());

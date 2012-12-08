@@ -50,9 +50,11 @@ public class MapViewActivity extends RoboMapActivity implements LoaderManager.Lo
   @Inject
   private PreferenceAdapter preferenceAdapter;
 
+  @Inject
+  private Themer themer;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
 
     getLoaderManager().initLoader(IncidentListLoader.INCIDENT_LIST_LOADER, null, this);

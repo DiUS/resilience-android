@@ -15,6 +15,7 @@ import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.Themer;
+import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -42,6 +43,9 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
   @InjectView(R.id.submit_photo)
   private Button cameraButton;
+
+  @Inject
+  private Themer themer;
   
   // TODO - This object is shared between calls to another activity.
   // It may need to be bundled/deserialised during onPause/onResume?
@@ -49,10 +53,9 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
     initialiseSpinners();
-    
+
     impactScale.setOnSeekBarChangeListener(this);
 
     // FIXME - test this (-xxx-camera args not taking effect on my emulator)
@@ -63,12 +66,11 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     cameraFacade = new CameraFacade(this);
 
     updateImpactLabel(Impact.LOW);
-
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.action_bar, menu);
+    getMenuInflater().inflate(R.menu.action_bar_minimal, menu);
     getActionBar().setDisplayShowTitleEnabled(false);
     return true;
   }

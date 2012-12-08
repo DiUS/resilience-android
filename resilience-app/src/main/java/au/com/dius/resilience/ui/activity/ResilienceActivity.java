@@ -38,14 +38,15 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   @Inject
   private PreferenceAdapter preferenceAdapter;
 
+  @Inject
+  private Themer themer;
+
   /**
    * Called when the activity is first created.
    */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     //TODO Restore from savedInstance state
-
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
 
     setupTabs();

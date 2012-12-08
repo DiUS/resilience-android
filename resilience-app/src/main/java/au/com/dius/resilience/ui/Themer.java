@@ -3,9 +3,16 @@ package au.com.dius.resilience.ui;
 import android.content.Context;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
+import com.google.inject.Inject;
 
 public class Themer {
-  public static void applyCurrentTheme(Context context) {
+
+  @Inject
+  public Themer(Context context) {
+    updateTheme(context);
+  }
+
+  private void updateTheme(Context context) {
     PreferenceAdapter preferenceAdapter = new PreferenceAdapter(context.getApplicationContext());
     Boolean useLightTheme = (Boolean) preferenceAdapter.getCommonPreference(R.string.use_light_theme_key);
 

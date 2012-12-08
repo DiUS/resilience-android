@@ -2,8 +2,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@drawable/background_border">
+              android:orientation="vertical">
 
     <TextView
             android:id="@+id/category_lbl"
@@ -79,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:gravity="top"
+            android:gravity="bottom"
             android:inputType="textMultiLine" >
     </EditText>
 

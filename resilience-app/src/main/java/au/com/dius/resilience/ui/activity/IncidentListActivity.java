@@ -29,11 +29,13 @@ public class IncidentListActivity extends RoboListActivity implements LoaderMana
   @Inject
   private Repository repository;
 
+  @Inject
+  private Themer themer;
+
   private ListViewAdapter adapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    Themer.applyCurrentTheme(this);
     super.onCreate(savedInstanceState);
     adapter = new ListViewAdapter(this, R.layout.incident_list_view_item, new ArrayList<Incident>());
     super.setListAdapter(adapter);
