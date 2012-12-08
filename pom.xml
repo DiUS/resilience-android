@@ -72,6 +72,8 @@
                         <assetsDirectory>${project.basedir}/assets</assetsDirectory>
                         <resourceDirectory>${project.basedir}/res</resourceDirectory>
                         <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
+                        <genDirectory>${project.basedir}/gen</genDirectory>
+                        <genDirectoryAidl>${project.basedir}/gen</genDirectoryAidl>
                         <sdk>
                             <platform>14</platform>
                         </sdk>
@@ -79,8 +81,6 @@
                             <avd>Resilience</avd>
                         </emulator>
                         <undeployBeforeDeploy>true</undeployBeforeDeploy>
-                        <genDirectory>${project.build.directory}/gen</genDirectory>
-                        <genDirectoryAidl>${project.build.directory}/gen</genDirectoryAidl>
                     </configuration>
                 </plugin>
                 <plugin>
