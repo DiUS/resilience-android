@@ -67,15 +67,6 @@
         <artifactId>android-maven-plugin</artifactId>
         <extensions>true</extensions>
       </plugin>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-eclipse-plugin</artifactId>
-          <configuration>
-	          <additionalProjectnatures>
-	            <projectnature>com.android.ide.eclipse.adt.AndroidNature</projectnature>
-	          </additionalProjectnatures>
-          </configuration>
-      </plugin>
     </plugins>
 
     <resources>
