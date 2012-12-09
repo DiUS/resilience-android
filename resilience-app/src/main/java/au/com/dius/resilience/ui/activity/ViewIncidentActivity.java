@@ -14,11 +14,13 @@ import android.view.View;
 import android.widget.*;
 import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.PhotoListLoader;
 import au.com.dius.resilience.model.Device;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
+import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.receiver.IncidentTrackedBroadcastReceiver;
 import au.com.dius.resilience.receiver.IncidentUnTrackedBroadcastReceiver;
@@ -72,6 +74,9 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
   private Button tweetButton;
 
   @Inject
+  private ActionBarHandler actionBarHandler;
+
+  @Inject
   private Themer themer;
 
   private IncidentTrackedBroadcastReceiver incidentTrackedBroadcastReceiver;
@@ -109,15 +114,17 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
     incident = (Incident) getIntent().getSerializableExtra("incident");
     Log.d(LOG_TAG, "Incident retrieved with name " + incident.getName());
 
-
     name.setText(incident.getName());
     time.setText(DateUtils.getRelativeDateTimeString(
       this,
-      incident.getDateCreated().longValue(),
+      incident.getDateCreated(),
       DateUtils.SECOND_IN_MILLIS,
       DateUtils.YEAR_IN_MILLIS, 0));
 
-    location.setText("Long :" + incident.getPoint().getLatitude() + "  Lat :" + incident.getPoint().getLatitude());
+    Point incidentLocation = incident.getPoint();
+    if (incidentLocation != null) {
+      location.setText("Long :" + incidentLocation.getLatitude() + "  Lat :" + incidentLocation.getLatitude());
+    }
 
     note.setText(incident.getNote());
 
@@ -157,7 +164,7 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
         Log.d(LOG_TAG, "Untrack incident requested");
         break;
       default:
-        super.onOptionsItemSelected(item);
+        actionBarHandler.handleMenuItemSelected(item);
     }
 
     return true;

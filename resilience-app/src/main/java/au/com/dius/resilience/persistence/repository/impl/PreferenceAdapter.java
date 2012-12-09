@@ -3,7 +3,9 @@ package au.com.dius.resilience.persistence.repository.impl;
 import android.content.Context;
 import android.content.SharedPreferences;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.model.Profile;
+import com.google.android.maps.GeoPoint;
 import com.google.inject.Inject;
 
 import java.util.Set;
@@ -92,5 +94,19 @@ public class PreferenceAdapter {
     SharedPreferences.Editor editor = openEditor(sharedPreferences);
     editor.putStringSet(context.getString(key), values);
     closeEditor(editor);
+  }
+
+  /*
+   * Helper methods
+   */
+  public Point retrieveLastKnownLocation() {
+    String lastKnownLatitude = (String) getCommonPreference(R.string.last_known_latitude_key);
+    String lastKnownLongtitude = (String) getCommonPreference(R.string.last_known_longtitude_key);
+
+    if (lastKnownLatitude == null || lastKnownLongtitude == null) {
+      return null;
+    }
+
+    return new Point(Double.parseDouble(lastKnownLatitude), Double.parseDouble(lastKnownLongtitude));
   }
 }

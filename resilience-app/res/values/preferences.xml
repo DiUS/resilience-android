@@ -1,5 +1,5 @@
 <resources>
-  <string name="user_preferences">User preferences</string>
+  <string name="user_preferences">User Preferences</string>
   <string name="current_profile">Switch Profile</string>
   <string name="current_profile_key">current_profile</string>
 

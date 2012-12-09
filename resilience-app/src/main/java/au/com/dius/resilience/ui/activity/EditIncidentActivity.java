@@ -5,10 +5,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.facade.CameraFacade;
 import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
@@ -46,6 +48,9 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
   @Inject
   private Themer themer;
+
+  @Inject
+  private ActionBarHandler actionBarHandler;
   
   // TODO - This object is shared between calls to another activity.
   // It may need to be bundled/deserialised during onPause/onResume?
@@ -73,6 +78,11 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
     getMenuInflater().inflate(R.menu.action_bar_minimal, menu);
     getActionBar().setDisplayShowTitleEnabled(false);
     return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    return actionBarHandler.handleMenuItemSelected(item);
   }
 
   private void initialiseSpinners() {

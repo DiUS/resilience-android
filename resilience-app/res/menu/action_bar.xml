@@ -21,7 +21,7 @@
 
   <item android:id="@+id/send_feedback"
         android:icon="@drawable/ic_menu_start_conversation"
-        android:title="@string/send_feedback"
+        android:title="@string/feedback"
         android:showAsAction="ifRoom" android:enabled="true" android:visible="true"/>
 
   <item android:id="@+id/create_incident"

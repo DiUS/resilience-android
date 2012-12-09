@@ -21,10 +21,4 @@ public class EditIncidentActivityTest {
   public void setup() {
     editIncidentActivity = new EditIncidentActivity();
   }
-
-  @Test
-  public void shouldSendBroadCastMessageWhenIncidentCreated() {
-    editIncidentActivity.commandComplete(new RepositoryCommandResult<Incident>(true, new Incident()));
-    assertContainsIntents(Robolectric.shadowOf(editIncidentActivity).getBroadcastIntents(), Intents.RESILIENCE_INCIDENT_CREATED);
-  }
 }

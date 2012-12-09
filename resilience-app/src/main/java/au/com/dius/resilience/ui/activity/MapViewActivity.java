@@ -14,6 +14,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
+import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.Themer;
@@ -58,18 +59,14 @@ public class MapViewActivity extends RoboMapActivity implements LoaderManager.Lo
     super.onCreate(savedInstanceState);
 
     getLoaderManager().initLoader(IncidentListLoader.INCIDENT_LIST_LOADER, null, this);
+    Point lastKnownLocation = preferenceAdapter.retrieveLastKnownLocation();
 
-    // TODO - When we have a nicer location service set up, hook this up properly.
-    String lastKnownLatitude = (String) preferenceAdapter.getCommonPreference(R.string.last_known_latitude_key);
-    String lastKnownLongtitude = (String) preferenceAdapter.getCommonPreference(R.string.last_known_longtitude_key);
-
-    if (lastKnownLatitude == null || lastKnownLongtitude == null) {
-      return;
+    if (lastKnownLocation != null) {
+      GeoPoint geoPoint = new GeoPoint((int) (lastKnownLocation.getLatitude() * 1E6), (int) (lastKnownLocation.getLongitude() * 1E6));
+      mapView.setBuiltInZoomControls(true);
+      mapView.getController().setCenter(geoPoint);
+      mapView.getController().setZoom(ZOOM_LEVEL);
     }
-
-    mapView.setBuiltInZoomControls(true);
-    mapView.getController().setCenter(new GeoPoint((int) (Double.parseDouble(lastKnownLatitude) * 1E6), (int) (Double.parseDouble(lastKnownLongtitude) * 1E6)));
-    mapView.getController().setZoom(ZOOM_LEVEL);
   }
 
   @Override

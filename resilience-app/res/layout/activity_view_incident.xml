@@ -32,21 +32,18 @@
                 android:maxLength="@integer/list_view_name_max"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp"
-                android:text="Zombie sighting"
                 android:textStyle="bold" >
             </TextView>
 
             <TextView
                 android:id="@+id/activity_view_item_time_reported"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reported 3 hours ago" />
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/activity_view_item_location"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Melbourne CBD" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

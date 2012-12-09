@@ -7,20 +7,33 @@
   <TextView android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="@string/feedback_description_highlight"/>
+            android:text="@string/feedback_description_highlight"
+            android:paddingLeft="2dp"/>
   <TextView android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/feedback_description"/>
+            android:text="@string/feedback_description"
+            android:paddingLeft="2dp"/>
   <EditText
       android:id="@+id/feedback_text"
       android:layout_width="fill_parent"
       android:layout_height="200dp"
-      android:gravity="top" />
+      android:gravity="top"/>
   <Button
       android:id="@+id/send_feedback_button"
       android:text="@string/send_feedback"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:onClick="onFeedbackSubmitClick" />
+      android:onClick="onFeedbackSubmitClick"/>
+
+  <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/github"
+            android:paddingLeft="2dp"/>
+  <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:linksClickable="true"
+            android:autoLink="web"
+            android:text="@string/project_url"
+            android:paddingLeft="2dp"/>
 
 </LinearLayout>

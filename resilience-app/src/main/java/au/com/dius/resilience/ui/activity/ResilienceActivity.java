@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
@@ -40,6 +41,9 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   @Inject
   private Themer themer;
+
+  @Inject
+  private ActionBarHandler actionBarHandler;
 
   /**
    * Called when the activity is first created.
@@ -84,44 +88,8 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.all_issues:
-        Log.d(LOG_TAG, "All issues selected");
-        break;
-
-      case R.id.refresh:
-        Log.d(LOG_TAG, "Refreshing incidents.");
-        Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
-        sendBroadcast(intent);
-        break;
-
-      case R.id.send_feedback:
-        Intent sendFeedbackIntent = new Intent(Intents.RESILIENCE_FEEDBACK_REQUESTED);
-        sendBroadcast(sendFeedbackIntent);
-        break;
-//      case R.id.tracked_issues:
-//        Log.d(LOG_TAG, "Tracked issues selected");
-//        break;
-
-      case R.id.user_preferences:
-        Intent userPreferencesIntent = new Intent(this, PreferenceActivity.class);
-        startActivity(userPreferencesIntent);
-        break;
-
-      case R.id.create_incident:
-        Intent raiseIncident = new Intent(this, EditIncidentActivity.class);
-        raiseIncident.putExtra(EditIncidentActivity.LOCATION, lastKnownLocation);
-        startActivityForResult(raiseIncident, Codes.CreateIncident.REQUEST_CODE);
-
-        Log.d(LOG_TAG, "Raise incident selected");
-        break;
-
-      default:
-        return super.onOptionsItemSelected(item);
-    }
-    return true;
+    return actionBarHandler.handleMenuItemSelected(item);
   }
-
 
   @Override
   public void onTabChanged(String tabTag) {
