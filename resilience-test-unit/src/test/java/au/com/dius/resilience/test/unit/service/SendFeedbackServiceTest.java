@@ -2,6 +2,7 @@ package au.com.dius.resilience.test.unit.service;
 
 import android.content.Intent;
 import android.os.Bundle;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.Repository;
@@ -52,7 +53,6 @@ public class SendFeedbackServiceTest {
     intent = new Intent(RESILIENCE_FEEDBACK_SUBMITTED);
     intent.putExtra(SendFeedbackService.EXTRA_FEEDBACK, new Feedback("some text", "dev-id123"));
 
-    repository = mock(ParseRepository.class);
     when(repository.sendFeedback(any(Feedback.class))).thenReturn(true);
 
     service = spy(new SendFeedbackService());
@@ -61,14 +61,17 @@ public class SendFeedbackServiceTest {
 
   @Test
   public void shouldSendCompleteBroadcastOnSave() throws NoSuchFieldException {
+    when(repository.sendFeedback(any(Feedback.class))).thenReturn(true);
     service.onHandleIntent(intent);
-    verify(service).sendBroadcast(any(Intent.class));
+    verify(service).sendBroadcast(new Intent(Intents.RESILIENCE_FEEDBACK_REQUESTED));
+     verify(service).sendBroadcast(new Intent(Intents.RESILIENCE_FEEDBACK_SUBMITTED));
   }
 
   @Test
-  public void shouldNotSendBroadcastOnFail() throws NoSuchFieldException {
+  public void shouldNotSendCompleteBroadcastOnFail() throws NoSuchFieldException {
     when(repository.sendFeedback(any(Feedback.class))).thenReturn(false);
     service.onHandleIntent(intent);
-    verify(service, never()).sendBroadcast(any(Intent.class));
+    verify(service).sendBroadcast(new Intent(Intents.RESILIENCE_FEEDBACK_REQUESTED));
+    verify(service, never()).sendBroadcast(new Intent(Intents.RESILIENCE_FEEDBACK_SUBMITTED));
   }
 }

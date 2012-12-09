@@ -3,6 +3,7 @@ package au.com.dius.resilience.service;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.persistence.repository.Repository;
 import com.google.inject.Inject;
@@ -32,10 +33,10 @@ public class SendFeedbackService extends RoboIntentService {
   @Override
   public void onHandleIntent(Intent intent) {
     Feedback feedback = (Feedback) intent.getExtras().getSerializable(EXTRA_FEEDBACK);
-
-    sendBroadcast(new Intent(RESILIENCE_FEEDBACK_SUBMITTED));
+    sendBroadcast(new Intent(Intents.RESILIENCE_FEEDBACK_REQUESTED));
 
     if (repository.sendFeedback(feedback)) {
+      sendBroadcast(new Intent(Intents.RESILIENCE_FEEDBACK_SUBMITTED));
       Log.d(TAG, "Sent " + RESILIENCE_FEEDBACK_SUBMITTED + " broadcast");
     }
     else {
