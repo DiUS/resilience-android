@@ -8,6 +8,8 @@ import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.persistence.repository.impl.ParseRepository;
 import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.service.SendFeedbackService;
+import au.com.dius.resilience.test.shared.utils.TestHelper;
+import com.google.inject.AbstractModule;
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import junitx.util.PrivateAccessor;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.powermock.modules.junit4.PowerMockRunner;
 import roboguice.RoboGuice;
 
@@ -29,11 +32,23 @@ public class SendFeedbackServiceTest {
 
   private SendFeedbackService service;
 
+  @Mock
   Repository repository;
+
   Intent intent;
+
+  private final class MockRepositoryModule extends AbstractModule {
+    @Override
+    protected void configure() {
+      bind(Repository.class).toInstance(repository);
+    }
+  }
 
   @Before
   public void setup() {
+    MockitoAnnotations.initMocks(this);
+    TestHelper.overrideRoboguiceModule(new MockRepositoryModule());
+
     intent = new Intent(RESILIENCE_FEEDBACK_SUBMITTED);
     intent.putExtra(SendFeedbackService.EXTRA_FEEDBACK, new Feedback("some text", "dev-id123"));
 
@@ -46,7 +61,6 @@ public class SendFeedbackServiceTest {
 
   @Test
   public void shouldSendCompleteBroadcastOnSave() throws NoSuchFieldException {
-    PrivateAccessor.setField(service, "repository", repository);
     service.onHandleIntent(intent);
     verify(service).sendBroadcast(any(Intent.class));
   }
@@ -54,7 +68,6 @@ public class SendFeedbackServiceTest {
   @Test
   public void shouldNotSendBroadcastOnFail() throws NoSuchFieldException {
     when(repository.sendFeedback(any(Feedback.class))).thenReturn(false);
-    PrivateAccessor.setField(service, "repository", repository);
     service.onHandleIntent(intent);
     verify(service, never()).sendBroadcast(any(Intent.class));
   }
