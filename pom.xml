@@ -25,6 +25,7 @@
       <robotium.version>3.5.1</robotium.version>
       <junit.version>4.8.2</junit.version>
       <junit.addons.version>1.4</junit.addons.version>
+      <robolectric.version>1.2-SNAPSHOT</robolectric.version>
 
       <android.maven.plugin.version>3.1.1</android.maven.plugin.version>
       <!--<android.maven.plugin.version>3.4.0</android.maven.plugin.version>-->

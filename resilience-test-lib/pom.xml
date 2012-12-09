@@ -36,6 +36,12 @@
       <version>${robo.guice.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.pivotallabs</groupId>
+      <artifactId>robolectric</artifactId>
+      <version>${robolectric.version}</version>
+    </dependency>
+
   </dependencies>
 
 </project>
