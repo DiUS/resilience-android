@@ -19,8 +19,10 @@ import static au.com.dius.resilience.observer.PreferenceChangeBroadcastReceiver.
 import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter.PREFERENCES_FILE_COMMON;
 
 public class CommonPreferencesFragment extends PreferenceFragment implements DialogInterface.OnClickListener
-                                                                           , DialogInterface.OnDismissListener
+                                                                           , DialogInterface.OnKeyListener
                                                                            , Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+  public static final boolean EVENT_NOT_CONSUMED = false;
+
   private PreferenceAdapter preferenceAdapter;
   private CheckBoxPreference themeCheckboxPreference;
   private ListPreference switchProfilePreference;
@@ -56,8 +58,11 @@ public class CommonPreferencesFragment extends PreferenceFragment implements Dia
   }
 
   @Override
-  public void onDismiss(DialogInterface dialog) {
-    onClick(dialog, DialogInterface.BUTTON_NEGATIVE);
+  public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+      onClick(dialog, DialogInterface.BUTTON_NEGATIVE);
+    }
+    return EVENT_NOT_CONSUMED;
   }
 
   @Override
@@ -84,6 +89,7 @@ public class CommonPreferencesFragment extends PreferenceFragment implements Dia
     builder.setMessage(R.string.theme_change_warning);
     builder.setPositiveButton(R.string.restart, this);
     builder.setNegativeButton(android.R.string.cancel, this);
+    builder.setOnKeyListener(this);
     builder.show();
   }
 
