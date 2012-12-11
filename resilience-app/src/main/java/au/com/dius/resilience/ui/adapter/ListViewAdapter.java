@@ -11,6 +11,7 @@ import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Category;
 import au.com.dius.resilience.model.Incident;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 
 import java.util.List;
 
@@ -20,9 +21,12 @@ import java.util.List;
 public class ListViewAdapter extends ArrayAdapter<Incident> {
 
   public static final String DRAWABLE = "drawable";
+  public static final String DARK_THEME_SUFFIX = "_white";
+  private PreferenceAdapter preferenceAdapter;
 
   public ListViewAdapter(Context context, int textViewResourceId, List<Incident> incidents) {
     super(context, textViewResourceId, incidents);
+    preferenceAdapter = new PreferenceAdapter(context);
   }
 
   @Override
@@ -50,13 +54,21 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
   private void assignIcon(View rowView, Incident incident) {
     ImageView categoryIcon = (ImageView) rowView.findViewById(R.id.list_view_category_icon);
     Category category = Category.asCategory(incident.getCategory());
+    String categoryFilename = category.getImageFilename();
 
-    int drawableId = rowView.getResources().getIdentifier(category.getImageFilename()
-      , DRAWABLE, rowView.getContext().getPackageName());
-
-    if (drawableId > 0) {
-      categoryIcon.setImageResource(drawableId);
+    Boolean isLightTheme = (Boolean) preferenceAdapter.getCommonPreference(R.string.use_light_theme_key);
+    if (!isLightTheme) {
+      categoryFilename = categoryFilename + DARK_THEME_SUFFIX;
     }
+
+    int drawableId = rowView.getResources().getIdentifier(categoryFilename, DRAWABLE
+      , rowView.getContext().getPackageName());
+
+    if (drawableId <= 0) {
+      drawableId = isLightTheme ? R.drawable.unknown : R.drawable.unknown_white;
+    }
+
+    categoryIcon.setImageResource(drawableId);
   }
 
   public void setData(List<Incident> incidents) {
