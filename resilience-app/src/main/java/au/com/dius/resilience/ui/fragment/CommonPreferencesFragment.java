@@ -11,6 +11,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.view.KeyEvent;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 
@@ -18,6 +19,7 @@ import static au.com.dius.resilience.observer.PreferenceChangeBroadcastReceiver.
 import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter.PREFERENCES_FILE_COMMON;
 
 public class CommonPreferencesFragment extends PreferenceFragment implements DialogInterface.OnClickListener
+                                                                           , DialogInterface.OnDismissListener
                                                                            , Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
   private PreferenceAdapter preferenceAdapter;
   private CheckBoxPreference themeCheckboxPreference;
@@ -51,6 +53,11 @@ public class CommonPreferencesFragment extends PreferenceFragment implements Dia
     else {
       revertCheckboxState();
     }
+  }
+
+  @Override
+  public void onDismiss(DialogInterface dialog) {
+    onClick(dialog, DialogInterface.BUTTON_NEGATIVE);
   }
 
   @Override
