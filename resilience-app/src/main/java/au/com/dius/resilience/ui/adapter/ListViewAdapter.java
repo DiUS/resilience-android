@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.model.Category;
 import au.com.dius.resilience.model.Incident;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
  * @author georgepapas
  */
 public class ListViewAdapter extends ArrayAdapter<Incident> {
+
+  public static final String DRAWABLE = "drawable";
 
   public ListViewAdapter(Context context, int textViewResourceId, List<Incident> incidents) {
     super(context, textViewResourceId, incidents);
@@ -26,8 +30,9 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     View rowView = inflater.inflate(R.layout.incident_list_view_item, null);
-
     Incident incident = getItem(position);
+
+    assignIcon(rowView, incident);
 
     TextView nameField = (TextView) rowView.findViewById(R.id.list_view_item_name);
     nameField.setText(incident.getName());
@@ -40,6 +45,18 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
             DateUtils.YEAR_IN_MILLIS, 0));
 
     return rowView;
+  }
+
+  private void assignIcon(View rowView, Incident incident) {
+    ImageView categoryIcon = (ImageView) rowView.findViewById(R.id.list_view_category_icon);
+    Category category = Category.asCategory(incident.getCategory());
+
+    int drawableId = rowView.getResources().getIdentifier(category.getImageFilename()
+      , DRAWABLE, rowView.getContext().getPackageName());
+
+    if (drawableId > 0) {
+      categoryIcon.setImageResource(drawableId);
+    }
   }
 
   public void setData(List<Incident> incidents) {
