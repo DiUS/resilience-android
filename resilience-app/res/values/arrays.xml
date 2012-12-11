@@ -1,29 +1,5 @@
 <resources>
 
-    <string-array name="incident_list_name">
-        <item>Fallen tree</item>
-        <item>Burst water main</item>
-        <item>Bush fire</item>
-        <item>Car accident</item>
-        <item>Out of beer!!!</item>
-    </string-array>
-
-    <string-array name="incident_list_creation_date">
-        <item>Fallen tree</item>
-        <item>Burst water main</item>
-        <item>Bush fire</item>
-        <item>Car accident</item>
-        <item>Out of beer!!!</item>
-    </string-array>
-
-    <string-array name="incident_list_notes">
-        <item>Big tree, needs chainsaw</item>
-        <item>Water going everywhere!! bring a lifeboat</item>
-        <item>run, run, run!!</item>
-        <item>Police ambulance on their way, stay out of their way</item>
-        <item>Quick, run to the bottle shop!</item>
-    </string-array>
-    
     <string-array name="categories">
 			  <item>Unknown</item>
 			  <item>Fire</item>
