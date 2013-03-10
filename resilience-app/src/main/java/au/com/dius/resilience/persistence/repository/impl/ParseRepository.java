@@ -22,6 +22,7 @@ import java.util.List;
 import static au.com.dius.resilience.persistence.Columns.Incident.TABLE_NAME;
 
 @ContextSingleton
+@Deprecated
 public class ParseRepository implements Repository {
 
   private static final String TAG = ParseRepository.class.getName();

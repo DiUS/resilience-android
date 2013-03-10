@@ -1,0 +1,15 @@
+-verbose
+
+-keep class org.restlet.resource.* { *; }
+-keep class org.restlet.engine.adapter.* { *; }
+-keep class org.restlet.engine.adapter.* { *; }
+
+-dontwarn roboguice.test.**
+-dontwarn com.parse.**
+
+ -libraryjars /Users/justin/.gradle/caches/artifacts-14/filestore/org.restlet.android/org.restlet.ext.jackson/2.1.1/jar/1e1b9a05887a56c2b959f95a04c6db44f5050320/org.restlet.ext.jackson-2.1.1.jar
+ -libraryjars /Users/justin/.gradle/caches/artifacts-14/filestore/org.codehaus.jackson/jackson-core-asl/1.9.8/jar/e04e8b2defcbf2e365b75498a36475f2cddc44ba/jackson-core-asl-1.9.8.jar
+ -libraryjars /Users/justin/.gradle/caches/artifacts-14/filestore/org.codehaus.jackson/jackson-mapper-asl/1.9.8/jar/d3443728ad3b01dd94838a6e79964b1c7ea89c9d/jackson-mapper-asl-1.9.8.jar
+ -libraryjars /Users/justin/.gradle/caches/artifacts-14/filestore/org.json/json/20080701/jar/d652f102185530c93b66158b1859f35d45687258/json-20080701.jar
+ -libraryjars /Users/justin/.m2/repository/com/google/android/maps/maps/15r2/maps-15r2.jar
+ -libraryjars /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar

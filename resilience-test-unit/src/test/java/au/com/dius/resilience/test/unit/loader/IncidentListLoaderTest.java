@@ -47,8 +47,6 @@ public class IncidentListLoaderTest {
 
   @Before
   public void setUp() throws NoSuchFieldException {
-    MockitoAnnotations.initMocks(this);
-
     listLoader = new IncidentListLoader(mockContext, mockRepository);
     PrivateAccessor.setField(listLoader, REFRESH_OBSERVER, mockObserver);
 

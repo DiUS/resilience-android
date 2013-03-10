@@ -6,6 +6,7 @@ import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import com.xtremelabs.robolectric.bytecode.ShadowWrangler;
 import org.junit.runners.model.InitializationError;
+import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Method;
 
@@ -18,6 +19,12 @@ public class ResilienceTestRunner extends RobolectricTestRunner {
     super(testClass);
 
     ShadowWrangler.getInstance().debug = false;
+  }
+
+  @Override
+  public void prepareTest(Object test) {
+    super.prepareTest(test);
+    MockitoAnnotations.initMocks(test);
   }
 
   @Override

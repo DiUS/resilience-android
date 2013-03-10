@@ -15,10 +15,14 @@ public abstract class AbstractAsyncListLoader<T> extends AsyncTaskLoader<List<T>
   private List<T> data;
   private BroadcastReceiver refreshObserver;
 
-  protected Repository repository;
-
   protected abstract BroadcastReceiver createBroadcastReceiver();
 
+  protected AbstractAsyncListLoader(Context context) {
+    super(context);
+  }
+
+  protected Repository repository;
+  @Deprecated
   protected AbstractAsyncListLoader(Context context, Repository repository) {
     super(context);
     this.repository = repository;
