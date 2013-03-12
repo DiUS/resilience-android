@@ -1,18 +1,10 @@
 package au.com.dius.resilience.test;
 
-import android.app.Application;
-import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.SeekBar;
-import au.com.dius.resilience.R;
-import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
-import au.com.dius.resilience.test.util.ParseTestUtils;
 import com.jayway.android.robotium.solo.Solo;
 
 import java.util.concurrent.CountDownLatch;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author georgepapas
