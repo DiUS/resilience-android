@@ -1,0 +1,61 @@
+<resources>
+  <string name="user_preferences">User Preferences</string>
+  <string name="current_profile">Switch Profile</string>
+  <string name="current_profile_key">current_profile</string>
+
+  <!--
+    Location
+  -->
+  <string name="last_known_latitude_key">last_known_latitude</string>
+  <string name="last_known_longtitude_key">last_known_longtitude</string>
+
+  <!--
+    Profiles
+  -->
+  <string name="default_user">Default User</string>
+  <string name="new_profile_hint">Enter profile name</string>
+  <string name="create_plus">Create +</string>
+  <string name="profile_entries">profile_entries</string>
+  <string name="profile_exists_error">Profile already exists or is invalid, please choose another name.</string>
+  <string name="profile_id">profile_id</string>
+
+  <!--
+    Response willingness
+  -->
+  <string name="response_willingness">Response willingness</string>
+  <string name="response_willingness_summary">How can you help?</string>
+
+  <!-- RW values -->
+  <string name="response_radius">Response radius</string>
+  <string name="response_radius_summary">How far you\'re willing to travel</string>
+  <string name="response_radius_key">response_radius_key</string>
+
+  <!--
+    Visual preferences
+  -->
+  <string name="appearance">Appearance</string>
+  <string name="appearance_summary">Look and feel</string>
+  <string name="theme_change_warning">WARNING: In order for this setting to take effect the application must
+                                       be restarted, continue?</string>
+  <string name="restart">Restart</string>
+
+  <!-- VP values -->
+  <string name="use_light_theme">Use light theme</string>
+  <string name="use_light_theme_summary">Toggle between light/dark theme</string>
+  <string name="use_light_theme_key">use_light_theme</string>
+
+  <!--
+    Contribute
+  -->
+  <string name="contribute">Contribute</string>
+  <string name="github">Resilience on Github</string>
+
+  <!--
+    Feedback
+  -->
+  <string name="feedback_summary">Tell us what you think</string>
+  <string name="feedback_description_highlight">Resilience is all about community engagement.</string>
+  <string name="feedback_description">Use the form below to provide feedback, suggestions or complaints.</string>
+  <string name="feedback_thanks">Thank you for your feedback!</string>
+
+</resources>

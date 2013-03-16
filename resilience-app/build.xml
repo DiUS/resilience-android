@@ -91,9 +91,10 @@
   <import file="${sdk.dir}/tools/ant/build.xml"/>
 
   <target name="-pre-clean">
+    <!--
     <subant target="clean">
       <fileset dir="submodules/robolectric/" includes="build.xml"/>
-    </subant>
+    </subant>-->
     <delete dir="${out.absolute.dir}/testClasses"/>
     <delete dir="tmp"/>
   </target>
@@ -121,6 +122,9 @@
       <path refid="project.all.jars.path"/>
       <path refid="tested.project.classpath"/>
       <pathelement path="${sdk.dir}/extras/android/support/v4/android-support-v4.jar"/>
+      <pathelement path="${sdk.dir}/add-ons/addon_google_apis_google_inc_${default.sdk.version}/libs/maps.jar"/>
+      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google_inc_-${default.sdk.version}/libs/maps.jar"/>
+      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-${default.sdk.version}/libs/maps.jar"/>
     </path>
 
     <!-- directories customized for our test dirs -->

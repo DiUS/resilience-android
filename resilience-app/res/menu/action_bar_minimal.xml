@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item android:id="@+id/user_preferences"
+        android:icon="@drawable/ic_menu_preferences"
+        android:title="@string/user_preferences"
+        android:showAsAction="ifRoom" android:enabled="true" android:visible="true"/>
+
+  <item android:id="@+id/send_feedback"
+        android:icon="@drawable/ic_menu_start_conversation"
+        android:title="@string/send_feedback"
+        android:showAsAction="ifRoom" android:enabled="true" android:visible="true"/>
+</menu>

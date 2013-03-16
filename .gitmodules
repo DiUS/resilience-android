@@ -1,3 +1,6 @@
 [submodule "submodules/robolectric"]
 	path = submodules/robolectric
 	url = git@github.com:DiUS/robolectric.git
+[submodule "resilience-app/submodules/robolectric"]
+	path = resilience-app/submodules/robolectric
+	url = https://github.com/pivotal/robolectric

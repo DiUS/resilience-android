@@ -1,0 +1,10 @@
+<resources>
+
+  <!-- Google map key -->
+  <string name="key_map_api">${map.key}</string>
+
+  <!-- Parse client keys -->
+  <string name="key_parse_client">${parse.client.key}</string>
+  <string name="key_parse_application">${parse.app.key}</string>
+
+</resources>

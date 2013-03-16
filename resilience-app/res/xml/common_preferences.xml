@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <au.com.dius.resilience.ui.AppendableListPreference
+      android:key="@string/current_profile_key"
+      android:title="@string/current_profile"
+      android:order="0"
+      android:defaultValue="@string/default_user"/>
+
+  <PreferenceCategory
+      android:title="@string/appearance"
+      android:order="2">
+    <CheckBoxPreference
+        android:key="@string/use_light_theme_key"
+        android:title="@string/use_light_theme"
+        android:summary="@string/use_light_theme_summary"
+        android:persistent="true"
+        android:defaultValue="true"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/contribute"
+      android:order="3">
+    <Preference
+        android:title="@string/github"
+        android:summary="@string/project_url">
+      <intent
+          android:action="android.intent.action.VIEW"
+          android:data="@string/project_url"/>
+    </Preference>
+    <Preference
+        android:title="@string/feedback"
+        android:summary="@string/feedback_summary">
+      <intent
+          android:targetPackage="au.com.dius.resilience"
+          android:targetClass="au.com.dius.resilience.ui.activity.FeedbackActivity"/>
+    </Preference>
+  </PreferenceCategory>
+</PreferenceScreen>

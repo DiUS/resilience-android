@@ -1,4 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Resilience</string>
+
+  <string name="app_name">Resilience Dev</string>
+  <string name="project_url">https://github.com/DiUS/resilience-android</string>
+
+  <!-- Multi-use -->
+  <string name="save">Save</string>
+  <string name="send_feedback">Send Feedback</string>
+  <string name="feedback">Feedback</string>
+
+  <!-- Action bar menu -->
+  <string name="all_incidents">All incidents</string>
+  <string name="tracked_incidents">Tracked incidents</string>
+  <string name="create">Create</string>
+  <string name="menu_settings">Settings</string>
+  <string name="refresh">Refresh</string>
+
+  <!-- View/create incident -->
+  <string name="extra_notes">Extra Notes</string>
+  <string name="name">Name</string>
+  <string name="select_category">Category</string>
+  <string name="select_subcategory">Subcategory</string>
+  <string name="impact">Impact Scale</string>
+  <string name="camera">Camera</string>
+  <string name="photo">Photo</string>
+  <string name="map">Map</string>
+  <string name="view_incident">View Incident</string>
+  <string name="no_image">NO IMAGE</string>
+  
+  <string name="email_btn_txt">Email</string>
+  <string name="tweet_btn_txt">Tweet</string>
+
+  <!-- List view -->
+  <string name="list_view_more_details_desc">More details</string>
+  <string name="list_view_category_desc">Incident category</string>
+
+  <!-- List view selector toggle buttons -->
+  <string name="label_tab_map_view">Map</string>
+  <string name="label_tab_list_view">List</string>
 </resources>
