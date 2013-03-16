@@ -1,0 +1,12 @@
+.DS_Store
+.git.bak/
+.idea/workspace.xml
+.idea/uiDesigner.xml
+.idea
+ant_build/
+bin/
+gen/
+out/
+tmp/
+local.properties
+target/
