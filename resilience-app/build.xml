@@ -109,10 +109,6 @@
     <property name="tested.project.test.absolute.dir" location="${tested.project.absolute.dir}/src/test/java"/>
     <property name="out.test.classes.absolute.dir" location="${out.dir}/testClasses"/>
 
-
-<echo>sdkdir = ${sdk.dir}</echo>
-<echo>defaultsdkversion = ${default.sdk.version}</echo>
-
     <!-- Hack - I'm abusing this property to add 'provided' dependencies since the SDK
          uses this pathid when building the classpath. I'd like to use
          project.all.jars.path however jars on this property are included in the dex.
@@ -121,7 +117,7 @@
     <path id="tested.project.classpath">
 <!--      <pathelement path="${sdk.dir}/add-ons/addon_google_apis_google_inc_${default.sdk.version}/libs/maps.jar"/>  -->
 <!--      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google_inc_-${default.sdk.version}/libs/maps.jar"/> -->
-      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-14/libs/maps.jar"/> 
+       <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-14/libs/maps.jar"/> 
     </path>
 
   </target>
@@ -188,6 +184,7 @@
         <!-- Android -->
         <path refid="project.target.class.path"/>
         <pathelement path="${sdk.dir}/extras/android/support/v4/android-support-v4.jar"/>
+        <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-14/libs/maps.jar"/> 
       </classpath>
     </junit>
     <fail if="junit.failure" message="Unit test(s) failed.  See reports!"/>
