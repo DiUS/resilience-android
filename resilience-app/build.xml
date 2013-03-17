@@ -108,13 +108,29 @@
     <property name="tested.project.absolute.dir" location="."/>
     <property name="tested.project.test.absolute.dir" location="${tested.project.absolute.dir}/src/test/java"/>
     <property name="out.test.classes.absolute.dir" location="${out.dir}/testClasses"/>
+
+
+<echo>sdkdir = ${sdk.dir}</echo>
+<echo>defaultsdkversion = ${default.sdk.version}</echo>
+
+    <!-- Hack - I'm abusing this property to add 'provided' dependencies since the SDK
+         uses this pathid when building the classpath. I'd like to use
+         project.all.jars.path however jars on this property are included in the dex.
+         I don't want to add the maps jar to the dex. If you read this and actually like
+         Ant, please fix it, dear god. -->
+    <path id="tested.project.classpath">
+<!--      <pathelement path="${sdk.dir}/add-ons/addon_google_apis_google_inc_${default.sdk.version}/libs/maps.jar"/>  -->
+<!--      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google_inc_-${default.sdk.version}/libs/maps.jar"/> -->
+      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-14/libs/maps.jar"/> 
+    </path>
+
   </target>
 
   <!-- Mostly a copy of the compile target from ~/android-sdk-macosx/tools/ant/main_rules.xml -->
   <target name="compile.tests" depends="-set-debug-files, -set-debug-mode, -compile">
-    <subant target="compile">
+    <!--<subant target="compile">
       <fileset dir="submodules/robolectric/" includes="build.xml"/>
-    </subant>
+    </subant>-->
 
     <mkdir dir="${out.test.classes.absolute.dir}"/>
 
@@ -122,9 +138,6 @@
       <path refid="project.all.jars.path"/>
       <path refid="tested.project.classpath"/>
       <pathelement path="${sdk.dir}/extras/android/support/v4/android-support-v4.jar"/>
-      <pathelement path="${sdk.dir}/add-ons/addon_google_apis_google_inc_${default.sdk.version}/libs/maps.jar"/>
-      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google_inc_-${default.sdk.version}/libs/maps.jar"/>
-      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-${default.sdk.version}/libs/maps.jar"/>
     </path>
 
     <!-- directories customized for our test dirs -->
@@ -167,8 +180,10 @@
         <fileset dir="${jar.libs.dir}" includes="**/*.jar"/>
 
         <!-- Robolectric -->
+        <!-- 
         <fileset dir="submodules/robolectric/lib/main" includes="*.jar"/>
         <pathelement path="submodules/robolectric/bin/mainClasses"/>
+        -->
 
         <!-- Android -->
         <path refid="project.target.class.path"/>
@@ -177,6 +192,5 @@
     </junit>
     <fail if="junit.failure" message="Unit test(s) failed.  See reports!"/>
   </target>
-
 </project>
 

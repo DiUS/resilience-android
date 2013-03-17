@@ -47,11 +47,6 @@
          This file is an integral part of the build system for your
          application and should be checked into Version Control Systems. -->
     <loadproperties srcFile="project.properties" />
-    <path id="compile.classpath">
-      <pathelement path="${sdk.dir}/add-ons/addon_google_apis_google_inc_${default.sdk.version}/libs/maps.jar"/>
-      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google_inc_-${default.sdk.version}/libs/maps.jar"/>
-      <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-${default.sdk.version}/libs/maps.jar"/>
-    </path>
 
     <!-- quick check on sdk.dir -->
     <fail
@@ -72,6 +67,12 @@
             -pre-clean
     -->
     <import file="custom_rules.xml" optional="true" />
+
+    <target name="-pre-compile">
+      <path id="project.all.jars.path">
+          <pathelement path="${sdk.dir}/add-ons/addon-google_apis-google-14/libs/maps.jar"/>
+      </path>
+    </target>
 
     <!-- Import the actual build file.
 
