@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.xtremelabs.robolectric.Robolectric;
 import junitx.util.PrivateAccessor;
@@ -14,20 +13,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
 
 @RunWith(ResilienceTestRunner.class)
-public class IncidentListLoaderTest {
+public class SimpleListLoaderTest {
 
   public static final String REFRESH_OBSERVER = "refreshObserver";
   public static final String DATA = "data";
@@ -38,36 +35,25 @@ public class IncidentListLoaderTest {
   @Mock
   private BroadcastReceiver mockObserver;
 
-  @Mock
-  private Repository mockRepository;
+  private SimpleListLoader listLoader;
 
-  private IncidentListLoader listLoader;
   private ShadowLoader shadowLoader;
-
 
   @Before
   public void setUp() throws NoSuchFieldException {
-    listLoader = new IncidentListLoader(mockContext, mockRepository);
+    listLoader = new SimpleListLoader(mockContext);
     PrivateAccessor.setField(listLoader, REFRESH_OBSERVER, mockObserver);
 
     shadowLoader = (ShadowLoader) Robolectric.shadowOf_(listLoader);
   }
 
   @Test
-  public void onBackgroundLoadShouldDelegateToRepository() {
-    List<Incident> incidents = new ArrayList<Incident>();
-    when(mockRepository.findIncidents()).thenReturn(incidents);
-
-    assertThat(listLoader.loadInBackground(), sameInstance(incidents));
-  }
-
-  @Test
   public void shouldOnlyDeliverResultWhenInStartedState() {
     shadowLoader.setStarted(true);
-    ArrayList<Incident> incidents = new ArrayList<Incident>();
+    ArrayList<Object> objects = new ArrayList<Object>();
 
-    listLoader.deliverResult(incidents);
-    Assert.assertSame(incidents, shadowLoader.getDeliveredResult());
+    listLoader.deliverResult(objects);
+    Assert.assertSame(objects, shadowLoader.getDeliveredResult());
   }
 
   @Test
@@ -87,7 +73,7 @@ public class IncidentListLoaderTest {
     assertNull(getMockObserver());
 
     listLoader.onStartLoading();
-    assertNotNull(getMockObserver() );
+    assertNotNull(getMockObserver());
   }
 
   @Test
@@ -96,7 +82,7 @@ public class IncidentListLoaderTest {
     ArrayList originalData = new ArrayList();
     shadowLoader.deliverResult(originalData);
 
-    listLoader.deliverResult(new ArrayList<Incident>());
+    listLoader.deliverResult(new ArrayList<Object>());
 
     assertSame(shadowLoader.getDeliveredResult(), originalData);
   }
