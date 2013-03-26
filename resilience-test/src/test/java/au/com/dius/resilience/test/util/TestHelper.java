@@ -1,4 +1,4 @@
-package au.com.dius.resilience.test.unit.utils;
+package au.com.dius.resilience.test.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
 import au.com.dius.resilience.persistence.repository.impl.RepositoryCommand;
+import au.com.dius.resilience.test.util.MutableBoolean;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.util.Modules;
-import com.xtremelabs.robolectric.Robolectric;
 import junit.framework.Assert;
 import roboguice.RoboGuice;
 
@@ -82,10 +82,5 @@ public class TestHelper {
       }
     }
     Assert.fail("Did not find intent in list " + intentAction);
-  }
-
-  public static void overrideRoboguiceModule(Module module) {
-    RoboGuice.setBaseApplicationInjector(Robolectric.application, RoboGuice.DEFAULT_STAGE, Modules.override(
-      RoboGuice.newDefaultRoboModule(Robolectric.application)).with(module));
   }
 }

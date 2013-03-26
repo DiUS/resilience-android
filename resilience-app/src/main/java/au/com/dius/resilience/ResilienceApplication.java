@@ -26,7 +26,7 @@ public class ResilienceApplication extends Application {
 
     Log.d(LOG_TAG, "Connecting to parse using " + appKey + " application key and " + clientKey + " client key");
 
-    Parse.initialize(this, appKey, clientKey);
+//    Parse.initialize(this, appKey, clientKey);
   }
 
   private void setDefaultPreferences() {

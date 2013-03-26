@@ -11,3 +11,4 @@ tmp/
 local.properties
 target/
 resilience-local.properties
+*.iml
