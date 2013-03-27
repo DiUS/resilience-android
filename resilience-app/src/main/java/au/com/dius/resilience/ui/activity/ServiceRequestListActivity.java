@@ -7,13 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.loader.IncidentListLoader;
+import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
+import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
 import roboguice.activity.RoboListActivity;
 
@@ -22,12 +21,9 @@ import java.util.List;
 
 import static au.com.dius.resilience.Constants.EXTRA_INCIDENT;
 
-public class IncidentListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<Incident>> {
+public class ServiceRequestListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
 
-  private static final String LOG_TAG = IncidentListActivity.class.getName();
-
-  @Inject
-  private Repository repository;
+  private static final String LOG_TAG = ServiceRequestListActivity.class.getName();
 
   @Inject
   private Themer themer;
@@ -37,11 +33,11 @@ public class IncidentListActivity extends RoboListActivity implements LoaderMana
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    adapter = new ListViewAdapter(this, R.layout.incident_list_view_item, new ArrayList<Incident>());
+    adapter = new ListViewAdapter(this, R.layout.incident_list_view_item, new ArrayList<ServiceRequest>());
     super.setListAdapter(adapter);
 
     Log.d(LOG_TAG, "Calling load manager");
-    getLoaderManager().initLoader(IncidentListLoader.INCIDENT_LIST_LOADER, null, this);
+    getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
 
   @Override
@@ -53,19 +49,19 @@ public class IncidentListActivity extends RoboListActivity implements LoaderMana
   }
 
   @Override
-  public Loader<List<Incident>> onCreateLoader(int i, Bundle bundle) {
+  public Loader<List<ServiceRequest>> onCreateLoader(int i, Bundle bundle) {
     Log.d(LOG_TAG, "Creating IncidentListLoader.");
-    return new IncidentListLoader(this, repository);
+    return new ServiceRequestLoader(this);
   }
 
   @Override
-  public void onLoadFinished(Loader<List<Incident>> listLoader, List<Incident> incidentList) {
+  public void onLoadFinished(Loader<List<ServiceRequest>> listLoader, List<ServiceRequest> incidentList) {
     Log.d(LOG_TAG, "Adding " + incidentList + " Objects to the UI.");
     adapter.setData(incidentList);
   }
 
   @Override
-  public void onLoaderReset(Loader<List<Incident>> listLoader) {
+  public void onLoaderReset(Loader<List<ServiceRequest>> listLoader) {
     adapter.setData(null);
   }
 }

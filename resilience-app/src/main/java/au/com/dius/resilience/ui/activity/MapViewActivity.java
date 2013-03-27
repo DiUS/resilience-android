@@ -1,24 +1,18 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.app.LoaderManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.Loader;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import au.com.dius.resilience.Constants;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.loader.IncidentListLoader;
+import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.map.IncidentOverlay;
+import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.inject.Inject;
@@ -29,14 +23,11 @@ import roboguice.inject.InjectView;
 
 import java.util.List;
 
-import static au.com.dius.resilience.Constants.EXTRA_INCIDENT;
-import static au.com.dius.resilience.Constants.EXTRA_PHOTO;
-
 /**
  * @author georgepapas
  */
 @ContentView(R.layout.activity_map_view)
-public class MapViewActivity extends RoboMapActivity implements LoaderManager.LoaderCallbacks<List<Incident>> {
+public class MapViewActivity extends RoboMapActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
 
   public static final int ZOOM_LEVEL = 17;
   @InjectView(R.id.map_view)
@@ -58,7 +49,7 @@ public class MapViewActivity extends RoboMapActivity implements LoaderManager.Lo
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    getLoaderManager().initLoader(IncidentListLoader.INCIDENT_LIST_LOADER, null, this);
+    getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
     Point lastKnownLocation = preferenceAdapter.retrieveLastKnownLocation();
 
     if (lastKnownLocation != null) {
@@ -75,12 +66,12 @@ public class MapViewActivity extends RoboMapActivity implements LoaderManager.Lo
   }
 
   @Override
-  public Loader<List<Incident>> onCreateLoader(int id, Bundle args) {
-    return new IncidentListLoader(this, repository);
+  public Loader<List<ServiceRequest>> onCreateLoader(int id, Bundle args) {
+    return new ServiceRequestLoader(this);
   }
 
   @Override
-  public void onLoadFinished(Loader<List<Incident>> loader, List<Incident> data) {
+  public void onLoadFinished(Loader<List<ServiceRequest>> loader, List<ServiceRequest> data) {
     IncidentOverlay overlay = new IncidentOverlay(itemIcon, mapView, repository);
     overlay.populateWith(data);
 
@@ -93,6 +84,6 @@ public class MapViewActivity extends RoboMapActivity implements LoaderManager.Lo
   }
 
   @Override
-  public void onLoaderReset(Loader<List<Incident>> loader) {
+  public void onLoaderReset(Loader<List<ServiceRequest>> loader) {
   }
 }

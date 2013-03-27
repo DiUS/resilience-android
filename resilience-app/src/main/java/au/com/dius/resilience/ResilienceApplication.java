@@ -5,7 +5,10 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
+import au.com.justinb.open311.Open311;
 import com.parse.Parse;
+import org.restlet.engine.Engine;
+import org.restlet.ext.jackson.JacksonConverter;
 
 public class ResilienceApplication extends Application {
 
@@ -16,17 +19,12 @@ public class ResilienceApplication extends Application {
   @Override
   public void onCreate() {
     setDefaultPreferences();
-    initialiseParse();
+    initialiseOpen311();
     setStrictMode();
   }
 
-  private void initialiseParse() {
-    String appKey = getResources().getString(R.string.key_parse_application);
-    String clientKey = getResources().getString(R.string.key_parse_client);
-
-    Log.d(LOG_TAG, "Connecting to parse using " + appKey + " application key and " + clientKey + " client key");
-
-//    Parse.initialize(this, appKey, clientKey);
+  private void initialiseOpen311() {
+    Open311.setBaseUrl(getApplicationContext().getString(R.string.open_311_base_url));
   }
 
   private void setDefaultPreferences() {

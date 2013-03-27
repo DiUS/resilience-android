@@ -13,6 +13,8 @@ import java.util.List;
 
 public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest> {
 
+  public static final int SERVICE_REQUEST_LIST_LOADER = 0;
+
   private GenericRequestAdapter<ServiceRequest> requestAdapter
     = new GenericRequestAdapter<ServiceRequest>(ServiceRequest.class);
 

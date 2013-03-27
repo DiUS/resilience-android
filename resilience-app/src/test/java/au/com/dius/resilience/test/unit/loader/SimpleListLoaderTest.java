@@ -2,7 +2,6 @@ package au.com.dius.resilience.test.unit.loader;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import au.com.dius.resilience.loader.IncidentListLoader;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.xtremelabs.robolectric.Robolectric;

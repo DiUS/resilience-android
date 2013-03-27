@@ -12,19 +12,21 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Category;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
+import au.com.justinb.open311.model.ServiceRequest;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author georgepapas
  */
-public class ListViewAdapter extends ArrayAdapter<Incident> {
+public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
 
   public static final String DRAWABLE = "drawable";
   public static final String DARK_THEME_SUFFIX = "_white";
   private PreferenceAdapter preferenceAdapter;
 
-  public ListViewAdapter(Context context, int textViewResourceId, List<Incident> incidents) {
+  public ListViewAdapter(Context context, int textViewResourceId, List<ServiceRequest> incidents) {
     super(context, textViewResourceId, incidents);
     preferenceAdapter = new PreferenceAdapter(context);
   }
@@ -34,44 +36,23 @@ public class ListViewAdapter extends ArrayAdapter<Incident> {
     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     View rowView = inflater.inflate(R.layout.incident_list_view_item, null);
-    Incident incident = getItem(position);
 
-    assignIcon(rowView, incident);
+    ServiceRequest serviceRequest = getItem(position);
 
     TextView nameField = (TextView) rowView.findViewById(R.id.list_view_item_name);
-    nameField.setText(incident.getName());
+    nameField.setText(serviceRequest.getServiceName());
 
     TextView reportedTime = (TextView) rowView.findViewById(R.id.list_view_item_time_reported);
     reportedTime.setText(DateUtils.getRelativeDateTimeString(
             getContext(),
-            incident.getDateCreated().longValue(),
+            serviceRequest.getRequestedDatetime().getTime(),
             DateUtils.SECOND_IN_MILLIS,
             DateUtils.YEAR_IN_MILLIS, 0));
 
     return rowView;
   }
 
-  private void assignIcon(View rowView, Incident incident) {
-    ImageView categoryIcon = (ImageView) rowView.findViewById(R.id.list_view_category_icon);
-    Category category = Category.asCategory(incident.getCategory());
-    String categoryFilename = category.getImageFilename();
-
-    Boolean isLightTheme = (Boolean) preferenceAdapter.getCommonPreference(R.string.use_light_theme_key);
-    if (!isLightTheme) {
-      categoryFilename = categoryFilename + DARK_THEME_SUFFIX;
-    }
-
-    int drawableId = rowView.getResources().getIdentifier(categoryFilename, DRAWABLE
-      , rowView.getContext().getPackageName());
-
-    if (drawableId <= 0) {
-      drawableId = isLightTheme ? R.drawable.unknown : R.drawable.unknown_white;
-    }
-
-    categoryIcon.setImageResource(drawableId);
-  }
-
-  public void setData(List<Incident> incidents) {
+  public void setData(List<ServiceRequest> incidents) {
     clear();
     if (incidents == null) {
       return;

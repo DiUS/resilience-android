@@ -11,10 +11,8 @@ import android.view.MenuItem;
 import android.widget.TabHost;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
-import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
-import au.com.dius.resilience.ui.Codes;
 import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboTabActivity;
@@ -60,7 +58,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   private void setupTabs() {
     tabHost.setup();
-    tabHost.addTab(newTab(TAB_TAG_LIST_VIEW, getResources().getString(R.string.label_tab_list_view), IncidentListActivity.class));
+    tabHost.addTab(newTab(TAB_TAG_LIST_VIEW, getResources().getString(R.string.label_tab_list_view), ServiceRequestListActivity.class));
     tabHost.addTab(newTab(TAB_TAG_MAP_VIEW, getResources().getString(R.string.label_tab_map_view), MapViewActivity.class));
 
     tabHost.setOnTabChangedListener(this);

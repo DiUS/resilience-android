@@ -8,6 +8,7 @@ import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.ui.activity.ViewIncidentActivity;
+import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
@@ -37,17 +38,19 @@ public class IncidentOverlay extends BalloonItemizedOverlay {
     this.repository = repository;
   }
 
-  public void populateWith(List<Incident> data) {
-    for (Incident incident : data) {
-      Point point = incident.getPoint();
-      if (point != null) {
-        GeoPoint geoPoint = new GeoPoint((int) (point.getLatitude() * 1E6), (int) (point.getLongitude() * 1E6));
-        OverlayItem overlayItem = new OverlayItem(geoPoint, incident.getCategory(), incident.getNote());
-        addOverlay(overlayItem);
-        incidents.add(incident);
-      }
-    }
-    populate();
+  public void populateWith(List<ServiceRequest> data) {
+    // TODO
+//    for (ServiceRequest incident : data) {
+//      GeoPoint geoPoint1 = new GeoPoint(incident.getLong(), incident.getLat());
+//      Point point = incident.getPoint();
+//      if (point != null) {
+//        GeoPoint geoPoint = new GeoPoint((int) (point.getLatitude() * 1E6), (int) (point.getLongitude() * 1E6));
+////        OverlayItem overlayItem = new OverlayItem(geoPoint, incident.getCategory(), incident.getNote());
+//        addOverlay(overlayItem);
+//        incidents.add(incident);
+//      }
+//    }
+//    populate();
   }
 
   public void addOverlay(OverlayItem overlayItem) {
