@@ -16,7 +16,6 @@ import au.com.dius.resilience.model.Impact;
 import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.service.CreateIncidentService;
-import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -45,9 +44,6 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
   @InjectView(R.id.submit_photo)
   private Button cameraButton;
-
-  @Inject
-  private Themer themer;
 
   @Inject
   private ActionBarHandler actionBarHandler;

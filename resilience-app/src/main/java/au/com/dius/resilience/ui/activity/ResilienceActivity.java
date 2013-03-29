@@ -13,7 +13,6 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
-import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboTabActivity;
 import roboguice.inject.ContentView;
@@ -36,9 +35,6 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   @Inject
   private PreferenceAdapter preferenceAdapter;
-
-  @Inject
-  private Themer themer;
 
   @Inject
   private ActionBarHandler actionBarHandler;

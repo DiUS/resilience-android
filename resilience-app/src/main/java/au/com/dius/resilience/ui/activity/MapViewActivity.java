@@ -6,11 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
-import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
-import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.map.IncidentOverlay;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.maps.GeoPoint;
@@ -41,9 +39,6 @@ public class MapViewActivity extends RoboMapActivity implements LoaderManager.Lo
 
   @Inject
   private PreferenceAdapter preferenceAdapter;
-
-  @Inject
-  private Themer themer;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

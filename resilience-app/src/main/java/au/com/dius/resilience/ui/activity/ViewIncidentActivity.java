@@ -26,7 +26,6 @@ import au.com.dius.resilience.receiver.IncidentTrackedBroadcastReceiver;
 import au.com.dius.resilience.receiver.IncidentUnTrackedBroadcastReceiver;
 import au.com.dius.resilience.service.TrackIncidentService;
 import au.com.dius.resilience.service.UntrackIncidentService;
-import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -75,9 +74,6 @@ public class ViewIncidentActivity extends RoboActivity implements LoaderManager.
 
   @Inject
   private ActionBarHandler actionBarHandler;
-
-  @Inject
-  private Themer themer;
 
   private IncidentTrackedBroadcastReceiver incidentTrackedBroadcastReceiver;
   private IncidentUnTrackedBroadcastReceiver incidentUnTrackedBroadcastReceiver;

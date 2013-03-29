@@ -9,7 +9,6 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Profile;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ProfileRepository;
-import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -25,9 +24,6 @@ public class ManageProfileActivity extends RoboActivity {
 
   @InjectView(R.id.profile_name)
   private EditText profileName;
-
-  @Inject
-  private Themer themer;
 
   PreferenceAdapter preferenceAdapter;
   ProfileRepository repository;

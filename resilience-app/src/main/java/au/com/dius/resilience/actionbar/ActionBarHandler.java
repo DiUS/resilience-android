@@ -28,8 +28,8 @@ public class ActionBarHandler {
 
   public boolean handleMenuItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.all_issues:
-        break;
+//      case R.id.all_issues:
+//        break;
 
       case R.id.refresh:
         Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);

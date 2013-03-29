@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.persistence.repository.Repository;
-import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.fragment.FeedbackFragment;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
@@ -23,9 +22,6 @@ public class FeedbackActivity extends RoboActivity {
   private Repository repository;
 
   private FeedbackBroadcastReceiver feedbackBroadcastReceiver;
-
-  @Inject
-  private Themer themer;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {

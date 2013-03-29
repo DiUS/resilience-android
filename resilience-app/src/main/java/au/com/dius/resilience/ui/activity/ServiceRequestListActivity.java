@@ -1,7 +1,6 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.app.LoaderManager;
-import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,8 +8,6 @@ import android.view.View;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
-import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.ui.Themer;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
@@ -19,14 +16,9 @@ import roboguice.activity.RoboListActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static au.com.dius.resilience.Constants.EXTRA_INCIDENT;
-
 public class ServiceRequestListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
 
   private static final String LOG_TAG = ServiceRequestListActivity.class.getName();
-
-  @Inject
-  private Themer themer;
 
   private ListViewAdapter adapter;
 
@@ -42,10 +34,11 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
-    Incident incident = (Incident) getListAdapter().getItem(position);
-    Intent viewIncident = new Intent(this, ViewIncidentActivity.class);
-    viewIncident.putExtra(EXTRA_INCIDENT, incident);
-    startActivityForResult(viewIncident, 0);
+    ServiceRequest incident = (ServiceRequest) getListAdapter().getItem(position);
+    // TODO
+//    Intent viewIncident = new Intent(this, ViewIncidentActivity.class);
+//    viewIncident.putExtra(EXTRA_INCIDENT, incident);
+//    startActivityForResult(viewIncident, 0);
   }
 
   @Override

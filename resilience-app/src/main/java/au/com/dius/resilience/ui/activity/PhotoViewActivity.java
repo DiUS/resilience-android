@@ -5,14 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
 import au.com.dius.resilience.Constants;
-import au.com.dius.resilience.ui.Themer;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 
 public class PhotoViewActivity extends RoboActivity {
-
-  @Inject
-  private Themer themer;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
