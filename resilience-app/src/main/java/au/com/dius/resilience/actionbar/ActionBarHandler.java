@@ -7,8 +7,8 @@ import android.view.MenuItem;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
-import au.com.dius.resilience.service.SendFeedbackService;
 import au.com.dius.resilience.ui.Codes;
+import au.com.dius.resilience.ui.ResilienceActionBarThemer;
 import au.com.dius.resilience.ui.activity.EditIncidentActivity;
 import au.com.dius.resilience.ui.activity.FeedbackActivity;
 import au.com.dius.resilience.ui.activity.PreferenceActivity;
@@ -17,6 +17,9 @@ import com.google.inject.Inject;
 public class ActionBarHandler {
 
   private Activity activity;
+
+  @Inject
+  private ResilienceActionBarThemer actionBar;
 
   @Inject
   private PreferenceAdapter preferenceAdapter;

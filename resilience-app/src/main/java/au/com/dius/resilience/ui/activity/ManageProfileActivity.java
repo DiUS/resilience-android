@@ -9,7 +9,6 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Profile;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ProfileRepository;
-import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;

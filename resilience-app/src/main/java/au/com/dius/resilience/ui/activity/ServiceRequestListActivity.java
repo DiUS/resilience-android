@@ -10,7 +10,6 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import au.com.justinb.open311.model.ServiceRequest;
-import com.google.inject.Inject;
 import roboguice.activity.RoboListActivity;
 
 import java.util.ArrayList;
@@ -28,7 +27,8 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     adapter = new ListViewAdapter(this, R.layout.incident_list_view_item, new ArrayList<ServiceRequest>());
     super.setListAdapter(adapter);
 
-    Log.d(LOG_TAG, "Calling load manager");
+    getListView().setSelector(R.drawable.background_selector);
+
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
 

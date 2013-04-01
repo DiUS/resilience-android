@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:id="@+id/all_issues"
-          android:title="@string/all_incidents"
-          android:showAsAction="always|withText" android:visible="true"/>
-
-  <!--<item android:id="@+id/tracked_issues"-->
-  <!--android:title="@string/tracked_incidents"-->
-  <!--android:showAsAction="always|withText" android:enabled="true"/>-->
-
   <item android:id="@+id/refresh"
           android:icon="@drawable/ic_menu_refresh"
           android:title="@string/refresh"
@@ -20,7 +12,7 @@
           android:showAsAction="ifRoom" android:enabled="true" android:visible="true"/>
 
   <item android:id="@+id/send_feedback"
-        android:icon="@drawable/ic_menu_start_conversation"
+        android:icon="@drawable/feedback"
         android:title="@string/feedback"
         android:showAsAction="ifRoom" android:enabled="true" android:visible="true"/>
 

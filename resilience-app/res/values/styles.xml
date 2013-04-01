@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="light_theme" parent="@android:style/Theme.DeviceDefault.Light" />
-  <style name="dark_theme" parent="@android:style/Theme.DeviceDefault" />
+  <style name="light_theme" parent="@android:style/Theme.DeviceDefault.Light" >
+    <item name="android:actionBarStyle">@style/action_bar</item>
+    <item name="android:actionMenuTextAppearance">@style/action_bar_text_style</item>
+    <item name="android:absListViewStyle">@style/list_view</item>
+  </style>
+
 </resources>

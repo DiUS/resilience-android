@@ -15,7 +15,8 @@
   <application
           android:name="au.com.dius.resilience.ResilienceApplication"
           android:icon="@drawable/icon"
-          android:label="@string/app_name">
+          android:label="@string/app_name"
+          android:theme="@style/light_theme">
 
     <uses-library android:name="com.google.android.maps"/>
 

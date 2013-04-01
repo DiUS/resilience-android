@@ -1,11 +1,9 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
 import au.com.dius.resilience.Constants;
-import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 
 public class PhotoViewActivity extends RoboActivity {
