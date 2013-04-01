@@ -3,7 +3,7 @@
   <style name="light_theme" parent="@android:style/Theme.DeviceDefault.Light" >
     <item name="android:actionBarStyle">@style/action_bar</item>
     <item name="android:actionMenuTextAppearance">@style/action_bar_text_style</item>
-    <item name="android:absListViewStyle">@style/list_view</item>
+    <item name="android:selectableItemBackground">@drawable/selector_background</item>
   </style>
 
 </resources>

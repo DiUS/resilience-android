@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="background">#E6E4DE</color>
+  <color name="selected">#FF9946</color>
   <color name="action_bar_background">#EE6624</color>
   <color name="list_item_background">#E6E4DE</color>
   <color name="list_item_image_background">#DADADA</color>
   <color name="list_item_border">#999999</color>
-  <color name="list_item_background_selected">#66EE6624</color>
+  <color name="list_item_background_selected">#AAFF9946</color>
   <color name="time_reported">#939393</color>
 </resources>
 
