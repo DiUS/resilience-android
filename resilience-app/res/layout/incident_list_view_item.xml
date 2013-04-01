@@ -1,61 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="@dimen/list_view_padding"
+              android:paddingRight="@dimen/list_view_padding"
+              android:paddingTop="@dimen/list_view_padding"
+              android:background="@color/list_item_background">
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/list_view_padding"
+                android:background="@drawable/selector_list_item_background_inner">
+
+    <ImageView
+        android:id="@+id/list_view_category_icon"
+        android:layout_width="@dimen/list_item_image_width"
+        android:layout_height="@dimen/list_item_inner_height"
+        android:layout_gravity="left|center_vertical"
+        android:layout_weight="30"
+        android:clickable="false"
+        android:contentDescription="@string/list_view_category_desc"
+        android:src="@drawable/fire"
+        android:background="@color/list_item_image_background"/>
+
+    <LinearLayout
+        android:id="@+id/list_view_details_layout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/list_view_padding">
+        android:layout_height="@dimen/list_item_inner_height"
+        android:layout_gravity="left|center_vertical"
+        android:layout_weight="70"
+        android:paddingLeft="@dimen/list_item_description_padding"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/list_view_category_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_gravity="left"
-            android:layout_weight="3"
-            android:clickable="false"
-            android:contentDescription="@string/list_view_category_desc"
-            android:src="@drawable/fire"/>
+      <TextView
+          android:id="@+id/list_view_item_location"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textStyle="bold"
+          android:includeFontPadding="false"
+          android:text="Melbourne CBD"/>
 
-        <LinearLayout
-            android:id="@+id/list_view_details_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_gravity="left|center_vertical"
-            android:layout_weight="10"
-            android:orientation="vertical" >
+      <TextView
+          android:id="@+id/list_view_item_time_reported"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textColor="@color/time_reported"/>
 
-            <TextView
-                android:id="@+id/list_view_item_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
-                android:maxLength="@integer/list_view_name_max"
-                android:text="Zombie sighting"
-                android:textStyle="bold" >
-                
-            </TextView>
-
-            <TextView
-                android:id="@+id/list_view_item_time_reported"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Reported 3 hours ago" />
-
-            <TextView
-                android:id="@+id/list_view_item_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Melbourne CBD" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/list_view_more_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="63dp"
-            android:layout_gravity="right"
-            android:layout_weight="0"
-            android:contentDescription="@string/list_view_category_desc"
-            android:src="@drawable/navigation_forward" />
+      <TextView
+          android:id="@+id/list_view_item_name"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:maxLines="2"
+          android:ellipsize="end"
+          android:maxLength="@integer/list_view_name_max"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/list_view_more_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="63dp"
+        android:layout_gravity="right"
+        android:layout_weight="0"
+        android:contentDescription="@string/list_view_category_desc"
+        android:src="@drawable/navigation_forward"/>
+
+  </LinearLayout>
+
+</LinearLayout>

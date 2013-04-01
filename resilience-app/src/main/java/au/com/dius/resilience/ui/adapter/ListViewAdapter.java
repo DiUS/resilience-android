@@ -6,15 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.model.Category;
-import au.com.dius.resilience.model.Incident;
-import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.justinb.open311.model.ServiceRequest;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,13 +17,8 @@ import java.util.List;
  */
 public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
 
-  public static final String DRAWABLE = "drawable";
-  public static final String DARK_THEME_SUFFIX = "_white";
-  private PreferenceAdapter preferenceAdapter;
-
   public ListViewAdapter(Context context, int textViewResourceId, List<ServiceRequest> incidents) {
     super(context, textViewResourceId, incidents);
-    preferenceAdapter = new PreferenceAdapter(context);
   }
 
   @Override
@@ -40,14 +30,14 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
     ServiceRequest serviceRequest = getItem(position);
 
     TextView nameField = (TextView) rowView.findViewById(R.id.list_view_item_name);
-    nameField.setText(serviceRequest.getServiceName());
+    nameField.setText(serviceRequest.getDescription());
 
     TextView reportedTime = (TextView) rowView.findViewById(R.id.list_view_item_time_reported);
     reportedTime.setText(DateUtils.getRelativeDateTimeString(
-            getContext(),
-            serviceRequest.getRequestedDatetime().getTime(),
-            DateUtils.SECOND_IN_MILLIS,
-            DateUtils.YEAR_IN_MILLIS, 0));
+      getContext(),
+      serviceRequest.getRequestedDatetime().getTime(),
+      DateUtils.SECOND_IN_MILLIS,
+      DateUtils.YEAR_IN_MILLIS, 0).toString().toUpperCase());
 
     return rowView;
   }

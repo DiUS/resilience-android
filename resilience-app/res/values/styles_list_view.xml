@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <style name="list_view" parent="@android:style/Widget.AbsListView">
-    <item name="android:background">@drawable/background_selector</item>
+    <item name="android:background">@drawable/selector_background</item>
   </style>
 </resources>

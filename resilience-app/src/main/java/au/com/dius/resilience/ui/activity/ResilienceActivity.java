@@ -105,10 +105,10 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
     for (int i = 0; i < tabHost.getTabWidget().getTabCount(); ++i) {
       View nextTab = tabHost.getTabWidget().getChildTabViewAt(i);
       if (i == getTabHost().getCurrentTab()) {
-        nextTab.setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_selector_selected));
+        nextTab.setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_tab_selected));
       }
       else {
-        nextTab.setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_selector_unselected));
+        nextTab.setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_tab_unselected));
       }
     }
   }

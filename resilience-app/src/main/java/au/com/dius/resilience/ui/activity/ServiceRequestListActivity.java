@@ -27,7 +27,8 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     adapter = new ListViewAdapter(this, R.layout.incident_list_view_item, new ArrayList<ServiceRequest>());
     super.setListAdapter(adapter);
 
-    getListView().setSelector(R.drawable.background_selector);
+    getListView().setSelector(R.drawable.selector_background);
+    getListView().setDividerHeight(0);
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
