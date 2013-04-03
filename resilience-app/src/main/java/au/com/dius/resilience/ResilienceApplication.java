@@ -12,8 +12,6 @@ import org.restlet.ext.jackson.JacksonConverter;
 
 public class ResilienceApplication extends Application {
 
-  private static final String LOG_TAG = "ResilienceApplication";
-
   private static final boolean SHOULD_ALWAYS_LOAD_DEFAULT_PREFS = false;
 
   @Override
