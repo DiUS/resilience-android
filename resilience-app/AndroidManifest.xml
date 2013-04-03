@@ -32,6 +32,7 @@
 
     <activity android:name=".ui.activity.ViewIncidentActivity"/>
     <activity android:name=".ui.activity.EditIncidentActivity"/>
+    <activity android:name=".ui.activity.CreateServiceRequestActivity"/>
     <activity android:name=".ui.activity.ServiceRequestListActivity"/>
     <activity android:name=".ui.activity.MapViewActivity"/>
     <activity android:name=".ui.activity.PhotoViewActivity"/>

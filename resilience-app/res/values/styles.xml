@@ -4,6 +4,24 @@
     <item name="android:actionBarStyle">@style/action_bar</item>
     <item name="android:actionMenuTextAppearance">@style/action_bar_text_style</item>
     <item name="android:selectableItemBackground">@drawable/selector_background</item>
+
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+
+    <item name="android:preferenceStyle">@style/preference</item>
+    <item name="android:checkBoxPreferenceStyle">@style/preference</item>
+    <item name="android:dialogPreferenceStyle">@style/preference</item>
+    <item name="android:editTextPreferenceStyle">@style/preference</item>
+  </style>
+
+  <!-- TODO -->
+  <style name="edit_text">
+    <item name="android:background">@drawable/background_border</item>
+  </style>
+
+  <style name="preference">
+    <item name="android:background">@drawable/selector_background</item>
+    <item name="android:textSize">9sp</item>
   </style>
 
 </resources>

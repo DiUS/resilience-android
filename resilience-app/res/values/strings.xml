@@ -16,6 +16,9 @@
   <string name="menu_settings">Settings</string>
   <string name="refresh">Refresh</string>
 
+  <!-- NEW create incident -->
+  <string name="incident_type">Nature of the incident</string>
+
   <!-- View/create incident -->
   <string name="extra_notes">Extra Notes</string>
   <string name="name">Name</string>

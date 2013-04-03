@@ -9,6 +9,7 @@ import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.Codes;
 import au.com.dius.resilience.ui.ResilienceActionBarThemer;
+import au.com.dius.resilience.ui.activity.CreateServiceRequestActivity;
 import au.com.dius.resilience.ui.activity.EditIncidentActivity;
 import au.com.dius.resilience.ui.activity.FeedbackActivity;
 import au.com.dius.resilience.ui.activity.PreferenceActivity;
@@ -50,7 +51,7 @@ public class ActionBarHandler {
         break;
 
       case R.id.create_incident:
-        Intent raiseIncident = new Intent(activity, EditIncidentActivity.class);
+        Intent raiseIncident = new Intent(activity, CreateServiceRequestActivity.class);
         raiseIncident.putExtra(EditIncidentActivity.LOCATION, preferenceAdapter.retrieveLastKnownLocation());
         activity.startActivityForResult(raiseIncident, Codes.CreateIncident.REQUEST_CODE);
         break;
