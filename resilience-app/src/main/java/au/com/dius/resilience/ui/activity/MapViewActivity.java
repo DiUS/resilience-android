@@ -1,84 +1,45 @@
 package au.com.dius.resilience.ui.activity;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.loader.ServiceRequestLoader;
-import au.com.dius.resilience.model.Point;
-import au.com.dius.resilience.persistence.repository.Repository;
-import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
-import au.com.dius.resilience.ui.map.IncidentOverlay;
 import au.com.justinb.open311.model.ServiceRequest;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
-import com.google.inject.Inject;
-import roboguice.activity.RoboMapActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 
 import java.util.List;
 
-/**
- * @author georgepapas
- */
-@ContentView(R.layout.activity_map_view)
-public class MapViewActivity extends RoboMapActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
+//@ContentView(R.layout.activity_map_view)
+public class MapViewActivity extends Activity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
 
-  public static final int ZOOM_LEVEL = 17;
-  @InjectView(R.id.map_view)
-  private MapView mapView;
-
-  @InjectResource(R.drawable.blue_poi)
-  private Drawable itemIcon;
-
-  @Inject
-  private Repository repository;
-
-  @Inject
-  private PreferenceAdapter preferenceAdapter;
+  private GoogleMap map;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_map_view);
 
-    getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
-    Point lastKnownLocation = preferenceAdapter.retrieveLastKnownLocation();
+    if (map == null) {
+      map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
-    if (lastKnownLocation != null) {
-      GeoPoint geoPoint = new GeoPoint((int) (lastKnownLocation.getLatitude() * 1E6), (int) (lastKnownLocation.getLongitude() * 1E6));
-      mapView.setBuiltInZoomControls(true);
-      mapView.getController().setCenter(geoPoint);
-      mapView.getController().setZoom(ZOOM_LEVEL);
+      map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
     }
-  }
-
-  @Override
-  protected boolean isRouteDisplayed() {
-    return false;
   }
 
   @Override
   public Loader<List<ServiceRequest>> onCreateLoader(int id, Bundle args) {
-    return new ServiceRequestLoader(this);
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> loader, List<ServiceRequest> data) {
-    IncidentOverlay overlay = new IncidentOverlay(itemIcon, mapView, repository);
-    overlay.populateWith(data);
-
-    mapView.getOverlays().clear();
-
-    if (overlay.hasItems()) {
-      mapView.getOverlays().add(overlay);
-      mapView.invalidate();
-    }
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> loader) {
+    //To change body of implemented methods use File | Settings | File Templates.
   }
 }

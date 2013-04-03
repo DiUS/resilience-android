@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.model.Profile;
-import com.google.android.maps.GeoPoint;
 import com.google.inject.Inject;
 
 import java.util.Set;
