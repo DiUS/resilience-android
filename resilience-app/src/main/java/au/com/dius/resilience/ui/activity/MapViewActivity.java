@@ -1,6 +1,5 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import org.apache.commons.lang.StringUtils;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
@@ -41,15 +39,16 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> loader, List<ServiceRequest> data) {
 
-    for (ServiceRequest serviceRequest : data) {
+    if (loader.getId() != ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER) {
+      return;
+    }
 
-      // TODO - test me!
-      if (StringUtils.isNotBlank(serviceRequest.getLat()) || StringUtils.isNotBlank(serviceRequest.getLong())) {
-        LatLng latLng = new LatLng(Double.parseDouble(serviceRequest.getLat()), Double.parseDouble(serviceRequest.getLong()));
+    for (ServiceRequest serviceRequest : data) {
+      if (serviceRequest.getLat() != null && serviceRequest.getLong() != null) {
+        LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());
         map.addMarker(new MarkerOptions().position(latLng).title(serviceRequest.getServiceName()));
       }
     }
-
   }
 
   @Override
