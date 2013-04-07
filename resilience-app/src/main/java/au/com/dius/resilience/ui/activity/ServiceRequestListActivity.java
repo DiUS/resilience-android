@@ -1,12 +1,14 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import au.com.justinb.open311.model.ServiceRequest;
@@ -24,7 +26,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    adapter = new ListViewAdapter(this, R.layout.incident_list_view_item, new ArrayList<ServiceRequest>());
+    adapter = new ListViewAdapter(this, R.layout.service_request_list_view_item, new ArrayList<ServiceRequest>());
     super.setListAdapter(adapter);
 
     getListView().setDividerHeight(0);
@@ -34,16 +36,21 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
-    ServiceRequest incident = (ServiceRequest) getListAdapter().getItem(position);
-    // TODO
-//    Intent viewIncident = new Intent(this, ViewIncidentActivity.class);
-//    viewIncident.putExtra(EXTRA_INCIDENT, incident);
-//    startActivityForResult(viewIncident, 0);
+
+    ServiceRequest serviceRequest = adapter.getItem(position);
+
+    Bundle bundle = new Bundle();
+    bundle.putSerializable(Extras.SERVICE_REQUEST, serviceRequest);
+
+    Intent intent = new Intent(this, ViewServiceRequestActivity.class);
+    intent.putExtras(bundle);
+
+    startActivity(intent);
   }
 
   @Override
   public Loader<List<ServiceRequest>> onCreateLoader(int i, Bundle bundle) {
-    Log.d(LOG_TAG, "Creating IncidentListLoader.");
+    Log.d(LOG_TAG, "Creating ServiceRequestLoader.");
     return new ServiceRequestLoader(this);
   }
 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_margin="@dimen/border_margin">
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:layout_marginBottom="@dimen/border_margin"
+      android:padding="@dimen/border_padding"
+      android:background="@drawable/background_border">
+
+    <TextView
+        android:id="@+id/title"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/time_reported"
+        android:textColor="@color/time_reported"/>
+
+    <TextView
+        android:id="@+id/description"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:layout_gravity="center_vertical"
+      android:layout_width="fill_parent"
+      android:background="@drawable/background_border"
+      android:padding="@dimen/border_padding">
+
+    <!-- TODO - finish properly -->
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_weight="50"
+        android:layout_height="150dp"
+        android:src="@drawable/pollution"
+        android:contentDescription=""/>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/map"
+              android:layout_weight="50"
+              class="com.google.android.gms.maps.MapFragment"
+              android:layout_width="fill_parent"
+              android:layout_height="150dp"/>
+
+  </LinearLayout>
+
+</LinearLayout>

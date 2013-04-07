@@ -5,5 +5,10 @@
     <dimen name="list_item_description_padding">10dp</dimen>
     <dimen name="list_item_image_width">128dp</dimen>
 
+    <dimen name="list_view_padding">10dp</dimen>
+    <dimen name="border_margin">5dp</dimen>
+    <dimen name="border_padding">@dimen/list_view_padding</dimen>
     <dimen name="create_service_request_label_padding">5dp</dimen>
+
+    <dimen name="title_text_size">28sp</dimen>
 </resources>

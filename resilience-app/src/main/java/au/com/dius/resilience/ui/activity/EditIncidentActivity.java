@@ -47,7 +47,7 @@ public class EditIncidentActivity extends RoboActivity implements OnSeekBarChang
 
   @Inject
   private ActionBarHandler actionBarHandler;
-  
+
   // TODO - This object is shared between calls to another activity.
   // It may need to be bundled/deserialised during onPause/onResume?
   private CameraFacade cameraFacade;

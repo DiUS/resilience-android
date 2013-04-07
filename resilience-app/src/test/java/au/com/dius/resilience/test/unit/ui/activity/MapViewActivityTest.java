@@ -59,7 +59,7 @@ public class MapViewActivityTest {
 
     // Since we can't (as far as I know) use Robolectric alongside Powermock, I'm mocking MapViewActivity
     // and using callReadMethod on methods I want to test. Otherwise a Stub! exception is thrown
-    // form the MapViewActivity constructor.
+    // from the MapViewActivity constructor.
     Mockito.doCallRealMethod().when(mapViewActivity).onLoadFinished(eq(serviceRequestLoader), anyList());
     Mockito.doCallRealMethod().when(mapViewActivity).onLoaderReset(null);
     googleMap = PowerMockito.mock(GoogleMap.class);

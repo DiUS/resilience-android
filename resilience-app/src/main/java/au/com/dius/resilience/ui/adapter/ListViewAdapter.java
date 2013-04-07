@@ -25,7 +25,7 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
   public View getView(int position, View convertView, ViewGroup parent) {
     LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    View rowView = inflater.inflate(R.layout.incident_list_view_item, null);
+    View rowView = inflater.inflate(R.layout.service_request_list_view_item, null);
 
     ServiceRequest serviceRequest = getItem(position);
 
