@@ -87,5 +87,5 @@ Integration with IntelliJ
   * Create a new Android project using existing sources. Point it to the resilience-app folder.
   * Create a new Android library project and point it to the libraries/google-play-services_lib project.
   * Add google-play-services_lib as a compile dependency to resilience-app.
-  * Have the jars under libs/ to your compile classpath, and the ones under libs/test to your test classpath.
+  * Add the jars under libs/ to your compile classpath, and the ones under libs/test to your test classpath.
   * Launch the main activity - ResilienceActivity.
