@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="list_view_name_max">100</integer>
+
+    <integer name="minimum_location_age_ms">10000</integer>
+    <integer name="minimum_location_accuracy_meters">1000</integer>
 </resources>

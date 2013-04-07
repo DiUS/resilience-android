@@ -1,6 +1,6 @@
 package au.com.dius.resilience.model;
 
-
+@Deprecated
 public enum Impact {
   LOW(0, 25),
   MEDIUM(25, 75),

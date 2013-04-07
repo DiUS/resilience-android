@@ -1,10 +1,9 @@
 package au.com.dius.resilience.model;
 
-import android.location.Location;
-
 import java.io.Serializable;
 import java.util.*;
 
+@Deprecated
 public class Incident implements Serializable {
 
   private String id;

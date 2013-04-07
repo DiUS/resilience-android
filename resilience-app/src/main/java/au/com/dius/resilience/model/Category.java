@@ -1,5 +1,6 @@
 package au.com.dius.resilience.model;
 
+@Deprecated
 public enum Category {
   UNKNOWN("unknown"),
   FIRE("fire"),

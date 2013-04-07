@@ -2,6 +2,7 @@ package au.com.dius.resilience.model;
 
 import java.io.Serializable;
 
+@Deprecated
 public class Point implements Serializable{
 
   double latitude;

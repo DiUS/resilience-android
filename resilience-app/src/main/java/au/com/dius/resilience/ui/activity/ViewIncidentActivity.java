@@ -33,6 +33,7 @@ import roboguice.inject.InjectView;
 
 import java.util.List;
 
+@Deprecated
 @ContentView(R.layout.activity_view_incident)
 public class ViewIncidentActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<Photo>> {
 
