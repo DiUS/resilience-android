@@ -1,9 +1,6 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.factory.SerializableExtraFactory;
@@ -11,17 +8,21 @@ import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.ui.ResilienceActionBarThemer;
 import au.com.dius.resilience.util.ResilienceDateUtils;
 import au.com.justinb.open311.model.ServiceRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-import java.io.Serializable;
-
 @ContentView(R.layout.activity_view_service_request)
 public class ViewServiceRequestActivity extends RoboActivity {
+
+  public static final int ZOOM_LEVEL = 12;
 
   @Inject
   private ResilienceActionBarThemer themer;
@@ -56,6 +57,14 @@ public class ViewServiceRequestActivity extends RoboActivity {
       map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
       map.getUiSettings().setZoomControlsEnabled(false);
       map.getUiSettings().setAllGesturesEnabled(false);
+
+      LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());
+      CameraPosition cameraPosition = new CameraPosition.Builder()
+        .target(latLng)
+        .zoom(ZOOM_LEVEL)
+        .build();
+      map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+      map.addMarker(new MarkerOptions().position(latLng));
     }
   }
 
