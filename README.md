@@ -8,19 +8,13 @@ Prerequisite software
 * Google Android Developer SDK
 	* Android 4.0.3 (API 15)
 	* Android 2.3.3 (API 10) - Required by one of the testing libraries, Robolectric
-	* Android 4.0 (API 14) - Required by mapviewballoons
 * Maven 3.x
 * Eclipse + ADT plugin *or* IntelliJ *or* whatever works for you
 
 
 Setup procedure
 ----------------
-There are a few jars that are not available in any public maven repositories which are hosted on DiUS Resilience artifactory instance which is on the same box as the CI Server.  Therefore if you are not on the DiUS network when you do your first build, you will need the following jars to be in your local maven repository.  They are checked in to the libs/external folder for convenience.  Run the install command in that folder.
 
-	./install-local-libs.sh
-
-  * Parse.jar, required for integration with the parse service.
-  * maps-15r2.jar, required to integrate with google maps
 
 Emulator
 --------
@@ -48,7 +42,10 @@ Emulator
 Building
 --------
 
-	mvn clean install
+	ant debug install
+
+
+-- NOT CURRENTLY WORKING WITH NEW BUILD --
 	
   We have externalised parse API keys and Google maps api keys as they differ per developer.  Create a *resilience-local.properties* in the resilience-app directory and ensure you have the relevant key values specified, then run the maven resources target generate the filtered resource. e.g. add the the following keys
 
@@ -58,13 +55,21 @@ Building
 
 	mvn resource:resources
 
+----
+
+Instead (for now):
+  * Modify config.xml manually, and specify the base url of your Open311 server.
+  * Edit AndroidManifest.xml and set the com.google.android.maps.v2.API_KEY property to your Google Maps V2 API key.
+
 
 Running tests:
 --------------
 
   Unit tests:
 
-    mvn test
+    ant test
+
+  -- NOT CURRENTLY WORKING WITH NEW BUILD --
 
   Integration (instrumentation) tests
 
@@ -74,18 +79,13 @@ Running tests:
 
   Running unit tests from the IDE
 	Ensure the working directory for JUnit tests is set to resilience/resilience-app
-
-
-Integration with Eclipse:
--------------------------
-
-    mvn eclipse:eclipse
+  ----
 
 
 Integration with IntelliJ
 -------------------------
-  * Import the project as a regular maven project, ensuring all submodules are imported
-  * IntelliJ should pick up the two Android facets, resilience-app and resilience-it
-  * Add the android sdk as a module: http://blogs.jetbrains.com/idea/2011/03/new-concept-of-android-sdk-in-intellij-idea-105/
-  * When running integration tests from the IDE, you will need to change the classpath to ensure that the Junit 4.x dependency is before the Android dependency
-  * We use an external apklib to generate balloon tips on the map view.  In the project dependecies for this android module, you will need to ensure the maps.jar is added as a 'provided' dependency in order to be able to deploy from within your IDE.
+  * Create a new Android project using existing sources. Point it to the resilience-app folder.
+  * Create a new Android library project and point it to the libraries/google-play-services_lib project.
+  * Add google-play-services_lib as a compile dependency to resilience-app.
+  * Have the jars under libs/ to your compile classpath, and the ones under libs/test to your test classpath.
+  * Launch the main activity - ResilienceActivity.
