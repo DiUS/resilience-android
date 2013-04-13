@@ -1,10 +1,13 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.app.LoaderManager;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.os.Bundle;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.observer.LocationUpdatedMapBroadcastReceiver;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -28,6 +31,8 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
       map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
     }
 
+    registerReceiver(new LocationUpdatedMapBroadcastReceiver(), new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
+
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
 
@@ -43,6 +48,10 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
       return;
     }
 
+    plotServiceRequestMarkers(data);
+  }
+
+  private void plotServiceRequestMarkers(List<ServiceRequest> data) {
     for (ServiceRequest serviceRequest : data) {
       if (serviceRequest.getLat() != null && serviceRequest.getLong() != null) {
         LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());

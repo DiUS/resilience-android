@@ -12,7 +12,7 @@
                 android:background="@drawable/selector_list_item_background_inner">
 
     <ImageView
-        android:id="@+id/list_view_category_icon"
+        android:id="@+id/list_view_preview_icon"
         android:layout_width="@dimen/list_item_image_width"
         android:layout_height="@dimen/list_item_inner_height"
         android:layout_gravity="left|center_vertical"
@@ -36,7 +36,7 @@
           android:layout_width="fill_parent"
           android:textStyle="bold"
           android:includeFontPadding="false"
-          android:text="Melbourne CBD"/>
+          android:text=""/>
 
       <TextView
           android:id="@+id/list_view_item_time_reported"
@@ -55,6 +55,7 @@
     <ImageView
         android:id="@+id/list_view_more_icon"
         android:layout_gravity="right|center_vertical"
+        android:paddingRight="@dimen/list_item_more_icon_padding_right"
         android:layout_weight="0"
         android:contentDescription="@string/list_view_category_desc"
         android:src="@drawable/navigation_forward"/>

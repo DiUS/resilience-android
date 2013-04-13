@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:textSize="@dimen/title_text_size"
+        android:textSize="@dimen/view_service_request_title_size"
         android:textStyle="bold"/>
 
     <TextView
@@ -43,10 +43,10 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/map"
+              android:layout_height="@dimen/view_service_request_map_height"
               android:layout_weight="50"
               class="com.google.android.gms.maps.MapFragment"
-              android:layout_width="fill_parent"
-              android:layout_height="150dp"/>
+              android:layout_width="fill_parent" />
 
   </LinearLayout>
 

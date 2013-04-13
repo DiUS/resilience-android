@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TabHost;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
+import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.ResilienceActionBarThemer;
@@ -36,6 +37,9 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   private Point lastKnownLocation;
 
   @Inject
+  private LocationBroadcaster locationBroadcaster;
+
+  @Inject
   private PreferenceAdapter preferenceAdapter;
 
   @Inject
@@ -54,6 +58,8 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
     setupTabs();
 
     setupLocationListener();
+
+    locationBroadcaster.startPolling();
   }
 
   private void setupTabs() {
@@ -81,6 +87,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_bar, menu);
+
     return true;
   }
 

@@ -4,11 +4,15 @@
     <dimen name="list_item_inner_height">70dp</dimen>
     <dimen name="list_item_description_padding">10dp</dimen>
     <dimen name="list_item_image_width">128dp</dimen>
+    <dimen name="list_item_more_icon_padding_right">10dp</dimen>
 
     <dimen name="list_view_padding">10dp</dimen>
     <dimen name="border_margin">5dp</dimen>
     <dimen name="border_padding">@dimen/list_view_padding</dimen>
     <dimen name="create_service_request_label_padding">5dp</dimen>
 
-    <dimen name="title_text_size">28sp</dimen>
+    <dimen name="create_service_request_label_padding">5dp</dimen>
+    <dimen name="view_service_request_title_size">28sp</dimen>
+    <dimen name="view_service_request_map_height">150dp</dimen>
+
 </resources>

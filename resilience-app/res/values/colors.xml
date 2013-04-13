@@ -6,7 +6,7 @@
   <color name="list_item_background">#E6E4DE</color>
   <color name="list_item_image_background">#DADADA</color>
   <color name="list_item_border">#999999</color>
-  <color name="list_item_background_selected">#AAFF9946</color>
+  <color name="list_item_background_selected">#F1F1F1</color>
   <color name="time_reported">#939393</color>
 </resources>
 

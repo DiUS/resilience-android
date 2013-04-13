@@ -15,6 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.xtremelabs.robolectric.Robolectric.shadowOf;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -68,5 +71,17 @@ public class ServiceRequestListActivityTest {
 
     ServiceRequest retrievedServiceRequest = (ServiceRequest) intent.getExtras().get(Extras.SERVICE_REQUEST);
     assertSame(retrievedServiceRequest, serviceRequest);
+  }
+
+//  @Test
+//  public void shouldShowLoadingIconWhenLoadingIncidents() {
+//
+//  }
+
+  @Test
+  public void shouldShowNoIncidentsMessageWhenNoIncidentsReturned() {
+    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
+
+//    assertThat
   }
 }

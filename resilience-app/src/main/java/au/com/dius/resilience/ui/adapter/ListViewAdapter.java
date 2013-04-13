@@ -32,6 +32,9 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
     TextView nameField = (TextView) rowView.findViewById(R.id.list_view_item_name);
     nameField.setText(serviceRequest.getDescription());
 
+    TextView locationField = (TextView) rowView.findViewById(R.id.list_view_item_location);
+    locationField.setText(formatAddress(serviceRequest));
+
     TextView reportedTime = (TextView) rowView.findViewById(R.id.list_view_item_time_reported);
     reportedTime.setText(DateUtils.getRelativeDateTimeString(
       getContext(),
@@ -40,6 +43,10 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
       DateUtils.YEAR_IN_MILLIS, 0).toString().toUpperCase());
 
     return rowView;
+  }
+
+  private String formatAddress(ServiceRequest serviceRequest) {
+    return serviceRequest.getAddress();
   }
 
   public void setData(List<ServiceRequest> incidents) {
