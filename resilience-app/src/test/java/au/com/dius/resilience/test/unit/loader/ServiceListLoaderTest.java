@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.restlet.ext.jackson.JacksonConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,6 @@ public class ServiceListLoaderTest {
     serviceLists.add(serviceList1);
     serviceLists.add(serviceList2);
     when(genericRequestAdapter.list()).thenReturn(serviceLists);
-
     setField(serviceListLoader, "serviceListRequest", genericRequestAdapter);
   }
 

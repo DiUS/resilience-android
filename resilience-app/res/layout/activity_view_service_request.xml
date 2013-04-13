@@ -4,13 +4,13 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:layout_margin="@dimen/border_margin">
+              android:layout_margin="@dimen/content_margin">
 
   <LinearLayout
       android:orientation="vertical"
       android:layout_width="fill_parent"
-      android:layout_marginBottom="@dimen/border_margin"
-      android:padding="@dimen/border_padding"
+      android:layout_marginBottom="@dimen/content_margin"
+      android:padding="@dimen/content_padding"
       android:background="@drawable/background_border">
 
     <TextView
@@ -31,7 +31,7 @@
       android:layout_gravity="center_vertical"
       android:layout_width="fill_parent"
       android:background="@drawable/background_border"
-      android:padding="@dimen/border_padding">
+      android:padding="@dimen/content_padding">
 
     <!-- TODO - finish properly -->
     <ImageView

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:paddingLeft="@dimen/border_margin"
-              android:paddingRight="@dimen/border_margin"
-              android:paddingTop="@dimen/border_margin"
+              android:paddingLeft="@dimen/content_margin"
+              android:paddingRight="@dimen/content_margin"
+              android:paddingTop="@dimen/content_margin"
               android:background="@color/list_item_background">
 
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:padding="@dimen/list_view_padding"
+                android:padding="@dimen/content_padding"
                 android:background="@drawable/selector_list_item_background_inner">
 
     <ImageView
@@ -19,7 +19,7 @@
         android:layout_weight="30"
         android:clickable="false"
         android:contentDescription="@string/list_view_category_desc"
-        android:src="@drawable/fire"
+        android:src="@drawable/unknown"
         android:background="@color/list_item_image_background"/>
 
     <LinearLayout

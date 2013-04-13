@@ -24,4 +24,9 @@
     <item name="android:textSize">9sp</item>
   </style>
 
+  <style name="spinner_item" >
+    <item name="android:background">@drawable/selector_list_item_background_inner</item>
+    <item name="android:padding">@dimen/content_padding</item>
+  </style>
+
 </resources>
