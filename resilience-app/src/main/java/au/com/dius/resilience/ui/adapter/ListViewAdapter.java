@@ -6,9 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.loader.ImageLoader;
 import au.com.justinb.open311.model.ServiceRequest;
+import com.google.inject.Inject;
+import roboguice.RoboGuice;
 
 import java.util.List;
 
@@ -17,8 +21,12 @@ import java.util.List;
  */
 public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
 
+  @Inject
+  private ImageLoader imageLoader;
+
   public ListViewAdapter(Context context, int textViewResourceId, List<ServiceRequest> incidents) {
     super(context, textViewResourceId, incidents);
+    RoboGuice.injectMembers(context, this);
   }
 
   @Override
@@ -41,6 +49,9 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
       serviceRequest.getRequestedDatetime().getTime(),
       DateUtils.SECOND_IN_MILLIS,
       DateUtils.YEAR_IN_MILLIS, 0).toString().toUpperCase());
+
+    ImageView previewImage = (ImageView) rowView.findViewById(R.id.list_view_preview_icon);
+    imageLoader.loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());
 
     return rowView;
   }

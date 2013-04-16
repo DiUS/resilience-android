@@ -8,13 +8,15 @@
 
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
+                android:layout_height="@dimen/list_item_inner_height"
                 android:padding="@dimen/content_padding"
                 android:background="@drawable/selector_list_item_background_inner">
 
     <ImageView
         android:id="@+id/list_view_preview_icon"
         android:layout_width="@dimen/list_item_image_width"
-        android:layout_height="@dimen/list_item_inner_height"
+        android:layout_height="fill_parent"
+        android:padding="@dimen/list_item_image_padding"
         android:layout_gravity="left|center_vertical"
         android:layout_weight="30"
         android:clickable="false"
@@ -25,7 +27,7 @@
     <LinearLayout
         android:id="@+id/list_view_details_layout"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/list_item_inner_height"
+        android:layout_height="fill_parent"
         android:layout_gravity="left|center_vertical"
         android:layout_weight="70"
         android:paddingLeft="@dimen/list_item_description_padding"

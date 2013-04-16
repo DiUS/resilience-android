@@ -12,6 +12,7 @@ import com.google.inject.Provider;
 import com.google.inject.util.Modules;
 import com.xtremelabs.robolectric.Robolectric;
 import junit.framework.Assert;
+import junitx.util.PrivateAccessor;
 import roboguice.RoboGuice;
 
 import java.util.ArrayList;
@@ -87,5 +88,21 @@ public class TestHelper {
   public static void overrideRoboguiceModule(Module module) {
     RoboGuice.setBaseApplicationInjector(Robolectric.application, RoboGuice.DEFAULT_STAGE, Modules.override(
       RoboGuice.newDefaultRoboModule(Robolectric.application)).with(module));
+  }
+
+  public static Object getField(Object target, String fieldName) {
+    try {
+      return PrivateAccessor.getField(target, fieldName);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException("Failed to get field '" + fieldName + "'" + " on " + target);
+    }
+  }
+
+  public static void setField(Object target, String fieldName, Object value) {
+    try {
+      PrivateAccessor.setField(target, fieldName, value);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException("Failed to set field '" + fieldName + "'" + " on " + target);
+    }
   }
 }

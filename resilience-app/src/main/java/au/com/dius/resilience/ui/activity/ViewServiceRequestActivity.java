@@ -1,11 +1,13 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.factory.SerializableExtraFactory;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.ui.ResilienceActionBarThemer;
+import au.com.dius.resilience.loader.ImageLoader;
 import au.com.dius.resilience.util.ResilienceDateUtils;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +38,12 @@ public class ViewServiceRequestActivity extends RoboActivity {
   @InjectView(R.id.description)
   private TextView description;
 
+  @InjectView(R.id.view_service_request_preview_image)
+  private ImageView previewImage;
+
+  @Inject
+  private ImageLoader imageLoader;
+
   private ServiceRequest serviceRequest;
 
   @Inject
@@ -55,25 +63,30 @@ public class ViewServiceRequestActivity extends RoboActivity {
     if (map == null) {
       // TODO - should this be in onResume? Look at docs to verify.
       map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-      map.getUiSettings().setZoomControlsEnabled(false);
-      map.getUiSettings().setAllGesturesEnabled(false);
 
-      LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());
-      CameraPosition cameraPosition = new CameraPosition.Builder()
-        .target(latLng)
-        .zoom(ZOOM_LEVEL)
-        .build();
-      map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-      map.addMarker(new MarkerOptions().position(latLng));
+      if (map != null) {
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setAllGesturesEnabled(false);
+
+        LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+          .target(latLng)
+          .zoom(ZOOM_LEVEL)
+          .build();
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        map.addMarker(new MarkerOptions().position(latLng));
+      }
     }
   }
 
   @Override
   public void onResume() {
 
-    title.setText("Melbourne CBD");
+    title.setText(serviceRequest.getAddress());
     timeReported.setText(dateUtils.formatRelativeDate(serviceRequest.getRequestedDatetime()));
     description.setText(serviceRequest.getDescription());
+
+    imageLoader.loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());
 
     super.onResume();
   }

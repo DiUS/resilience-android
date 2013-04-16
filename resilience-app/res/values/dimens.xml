@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="list_item_inner_height">70dp</dimen>
+  <dimen name="list_item_inner_height">90dp</dimen>
   <dimen name="list_item_description_padding">10dp</dimen>
   <dimen name="list_item_image_width">128dp</dimen>
+  <dimen name="list_item_image_padding">3dp</dimen>
   <dimen name="list_item_more_icon_padding_right">10dp</dimen>
 
   <dimen name="content_padding">10dp</dimen>

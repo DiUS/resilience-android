@@ -5,10 +5,6 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.justinb.open311.Open311;
-import au.com.justinb.open311.model.ServiceList;
-import com.google.common.collect.ImmutableList;
-
-import java.util.List;
 
 public class ResilienceApplication extends Application {
 
