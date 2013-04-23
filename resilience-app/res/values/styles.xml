@@ -12,6 +12,7 @@
     <item name="android:checkBoxPreferenceStyle">@style/preference</item>
     <item name="android:dialogPreferenceStyle">@style/preference</item>
     <item name="android:editTextPreferenceStyle">@style/preference</item>
+    <item name="android:actionOverflowButtonStyle">@style/action_overflow_button</item>
   </style>
 
   <!-- TODO -->

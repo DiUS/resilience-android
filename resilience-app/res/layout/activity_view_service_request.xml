@@ -38,8 +38,8 @@
         android:id="@+id/view_service_request_preview_image"
         android:layout_width="fill_parent"
         android:layout_weight="50"
-        android:layout_height="150dp"
-        android:src="@drawable/pollution"
+        android:paddingRight="@dimen/content_padding"
+        android:layout_height="@dimen/view_service_request_map_height"
         android:contentDescription=""/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
