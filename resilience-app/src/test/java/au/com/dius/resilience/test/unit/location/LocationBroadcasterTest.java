@@ -12,6 +12,8 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.location.LocationBroadcaster;
+import au.com.dius.resilience.location.ScheduledExecutorFactory;
+import au.com.dius.resilience.location.StopLocatingRunnable;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.xtremelabs.robolectric.Robolectric;
 import junitx.util.PrivateAccessor;
@@ -20,8 +22,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -37,15 +45,19 @@ public class LocationBroadcasterTest {
   @Mock
   private Location location;
 
+  @Mock
+  private ScheduledThreadPoolExecutor threadPoolExecutor;
+
   @Before
   public void setup() throws Exception {
-    locationBroadcaster = new LocationBroadcaster();
+    locationBroadcaster = new LocationBroadcaster(mock(ScheduledExecutorFactory.class));
 
     resources = Robolectric.application.getApplicationContext().getResources();
     LocationManager locationManager = Robolectric.newInstanceOf(LocationManager.class);
     locationManagerSpy = spy(locationManager);
     PrivateAccessor.setField(locationBroadcaster, "locationManager", locationManagerSpy);
     PrivateAccessor.setField(locationBroadcaster, "context", Robolectric.application.getApplicationContext());
+    PrivateAccessor.setField(locationBroadcaster, "threadPoolExecutor", threadPoolExecutor);
   }
 
   @Test
@@ -74,6 +86,24 @@ public class LocationBroadcasterTest {
       new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
 
     locationBroadcaster.onLocationChanged(location);
+  }
+
+  @Test
+  public void shouldStopPollingOnLocationChange() {
+    locationBroadcaster.onLocationChanged(location);
+    verify(locationManagerSpy).removeUpdates(locationBroadcaster);
+  }
+
+  @Test
+  public void shouldScheduleTimeoutOnLocationPoll() {
+    locationBroadcaster.startPolling();
+    verify(threadPoolExecutor).schedule((StopLocatingRunnable) notNull(), eq(LocationBroadcaster.TIMEOUT), eq(TimeUnit.SECONDS));
+  }
+
+  @Test
+  public void shouldRemoveLocationUpdates() {
+    locationBroadcaster.stopPolling();
+    verify(locationManagerSpy).removeUpdates(locationBroadcaster);
   }
 
   private class TestBroadcastLocationReceiver extends BroadcastReceiver {

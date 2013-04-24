@@ -4,12 +4,6 @@
   <string name="current_profile_key">current_profile</string>
 
   <!--
-    Location
-  -->
-  <string name="last_known_latitude_key">last_known_latitude</string>
-  <string name="last_known_longtitude_key">last_known_longtitude</string>
-
-  <!--
     Profiles
   -->
   <string name="default_user">Default User</string>

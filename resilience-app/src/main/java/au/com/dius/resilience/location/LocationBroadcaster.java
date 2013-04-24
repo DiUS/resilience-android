@@ -10,8 +10,15 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
 import com.google.inject.Inject;
+import roboguice.inject.ContextSingleton;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+@ContextSingleton
 public class LocationBroadcaster implements LocationListener {
+
+  public static final int TIMEOUT = 20;
 
   @Inject
   private LocationManager locationManager;
@@ -19,7 +26,19 @@ public class LocationBroadcaster implements LocationListener {
   @Inject
   private Context context;
 
+  private final ScheduledExecutorService threadPoolExecutor;
+
+  @Inject
+  public LocationBroadcaster(ScheduledExecutorFactory scheduledExecutorFactory) {
+    threadPoolExecutor = scheduledExecutorFactory.createScheduledExecutor();
+  }
+
   public void startPolling() {
+
+    // TODO - Use last known location if it's good enough.
+
+    threadPoolExecutor.schedule(new StopLocatingRunnable(), TIMEOUT, TimeUnit.SECONDS);
+
     for (String provider : locationManager.getAllProviders()) {
       locationManager.requestLocationUpdates(provider,
         context.getResources().getInteger(R.integer.minimum_location_age_ms),
@@ -34,6 +53,8 @@ public class LocationBroadcaster implements LocationListener {
     extras.putParcelable(Extras.LOCATION, location);
     intent.putExtras(extras);
     context.sendBroadcast(intent);
+
+    stopPolling();
   }
 
   @Override
@@ -46,5 +67,9 @@ public class LocationBroadcaster implements LocationListener {
 
   @Override
   public void onProviderDisabled(String provider) {
+  }
+
+  public void stopPolling() {
+    locationManager.removeUpdates(this);
   }
 }

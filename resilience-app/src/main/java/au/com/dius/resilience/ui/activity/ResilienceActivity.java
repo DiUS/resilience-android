@@ -22,7 +22,7 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 @ContentView(R.layout.main)
-public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTabChangeListener, LocationListener {
+public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTabChangeListener {
 
   private static final String LOG_TAG = "ResilienceActivity";
   private static final String TAB_TAG_LIST_VIEW = "list_view";
@@ -32,9 +32,6 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   private TabHost tabHost;
 
   private String currentTabTag;
-
-  //TODO Very lame implementation, will need to change to use intents and broadcast listeners
-  private Point lastKnownLocation;
 
   @Inject
   private LocationBroadcaster locationBroadcaster;
@@ -48,17 +45,11 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   @Inject
   private ResilienceActionBarThemer actionBar;
 
-  /**
-   * Called when the activity is first created.
-   */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setupTabs();
-
-    setupLocationListener();
-
     locationBroadcaster.startPolling();
   }
 
@@ -103,9 +94,10 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
     restyleTabs();
 
     currentTabTag = tabTag;
-
   }
 
+  // TODO - Now that the map is a fragment, we should be able to use the standard
+  // actionbar tabs, hoowee!
   private void restyleTabs() {
     // Each tab needs to have their own selector fo their individual states. Nothing else
     // seems to work.
@@ -118,39 +110,5 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
         nextTab.setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_tab_unselected));
       }
     }
-  }
-
-  private void setupLocationListener() {
-    LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-    for (String provider : lm.getAllProviders()) {
-      lm.requestLocationUpdates(provider, 10000, 0, this);
-    }
-  }
-
-  @Override
-  public void onLocationChanged(Location location) {
-    Log.d(LOG_TAG, "location changed " + location);
-    lastKnownLocation = new Point(location.getLatitude(), location.getLongitude());
-
-    preferenceAdapter.save(preferenceAdapter.getCommonPreferences()
-                          , R.string.last_known_latitude_key, Double.toString(lastKnownLocation.getLatitude()));
-    preferenceAdapter.save(preferenceAdapter.getCommonPreferences()
-      , R.string.last_known_longtitude_key, Double.toString(lastKnownLocation.getLongitude()));
-
-  }
-
-  @Override
-  public void onStatusChanged(String s, int i, Bundle bundle) {
-    Log.d(LOG_TAG, (String.format("status changed %s - %d", s, i)));
-  }
-
-  @Override
-  public void onProviderEnabled(String s) {
-   Log.d(LOG_TAG, "Provider enabled " + s);
-  }
-
-  @Override
-  public void onProviderDisabled(String s) {
-    Log.d(LOG_TAG, "Provider disabled " + s);
   }
 }
