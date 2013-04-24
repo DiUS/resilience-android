@@ -1,7 +1,8 @@
-package au.com.dius.resilience.factory;
+package au.com.dius.resilience.test.unit.factory;
 
 import android.app.Activity;
 import android.content.Context;
+import au.com.dius.resilience.factory.ImageManagerFactory;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.novoda.imageloader.core.ImageManager;
 import org.junit.Before;

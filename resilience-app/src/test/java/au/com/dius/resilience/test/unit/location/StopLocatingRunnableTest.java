@@ -1,5 +1,7 @@
-package au.com.dius.resilience.location;
+package au.com.dius.resilience.test.unit.location;
 
+import au.com.dius.resilience.location.LocationBroadcaster;
+import au.com.dius.resilience.location.StopLocatingRunnable;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import au.com.dius.resilience.test.unit.utils.TestHelper;
 import org.junit.Before;
