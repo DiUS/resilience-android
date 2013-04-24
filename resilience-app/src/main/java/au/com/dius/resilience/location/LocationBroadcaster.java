@@ -12,13 +12,14 @@ import au.com.dius.resilience.intent.Intents;
 import com.google.inject.Inject;
 import roboguice.inject.ContextSingleton;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @ContextSingleton
 public class LocationBroadcaster implements LocationListener {
 
-  public static final int TIMEOUT = 20;
+  public static final long TIMEOUT = 20;
 
   @Inject
   private LocationManager locationManager;
@@ -29,8 +30,8 @@ public class LocationBroadcaster implements LocationListener {
   private final ScheduledExecutorService threadPoolExecutor;
 
   @Inject
-  public LocationBroadcaster(ScheduledExecutorFactory scheduledExecutorFactory) {
-    threadPoolExecutor = scheduledExecutorFactory.createScheduledExecutor();
+  public LocationBroadcaster() {
+    threadPoolExecutor = Executors.newSingleThreadScheduledExecutor();
   }
 
   public void startPolling() {

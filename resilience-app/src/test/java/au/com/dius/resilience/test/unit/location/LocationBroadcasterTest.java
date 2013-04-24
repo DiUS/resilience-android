@@ -12,7 +12,6 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.location.LocationBroadcaster;
-import au.com.dius.resilience.location.ScheduledExecutorFactory;
 import au.com.dius.resilience.location.StopLocatingRunnable;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import com.xtremelabs.robolectric.Robolectric;
@@ -27,9 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -48,9 +46,12 @@ public class LocationBroadcasterTest {
   @Mock
   private ScheduledThreadPoolExecutor threadPoolExecutor;
 
+  @Mock
+  private StopLocatingRunnable stopLocatingRunnable;
+
   @Before
   public void setup() throws Exception {
-    locationBroadcaster = new LocationBroadcaster(mock(ScheduledExecutorFactory.class));
+    locationBroadcaster = new LocationBroadcaster();
 
     resources = Robolectric.application.getApplicationContext().getResources();
     LocationManager locationManager = Robolectric.newInstanceOf(LocationManager.class);
@@ -97,7 +98,7 @@ public class LocationBroadcasterTest {
   @Test
   public void shouldScheduleTimeoutOnLocationPoll() {
     locationBroadcaster.startPolling();
-    verify(threadPoolExecutor).schedule((StopLocatingRunnable) notNull(), eq(LocationBroadcaster.TIMEOUT), eq(TimeUnit.SECONDS));
+    verify(threadPoolExecutor).schedule(any(StopLocatingRunnable.class), eq(LocationBroadcaster.TIMEOUT), eq(TimeUnit.SECONDS));
   }
 
   @Test

@@ -94,18 +94,4 @@ public class PreferenceAdapter {
     editor.putStringSet(context.getString(key), values);
     closeEditor(editor);
   }
-
-  /*
-   * Helper methods
-   */
-  public Point retrieveLastKnownLocation() {
-    String lastKnownLatitude = (String) getCommonPreference(R.string.last_known_latitude_key);
-    String lastKnownLongtitude = (String) getCommonPreference(R.string.last_known_longtitude_key);
-
-    if (lastKnownLatitude == null || lastKnownLongtitude == null) {
-      return null;
-    }
-
-    return new Point(Double.parseDouble(lastKnownLatitude), Double.parseDouble(lastKnownLongtitude));
-  }
 }
