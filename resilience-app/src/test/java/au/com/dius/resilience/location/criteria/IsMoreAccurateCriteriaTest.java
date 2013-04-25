@@ -56,7 +56,7 @@ public class IsMoreAccurateCriteriaTest {
 
   @Test
   public void shouldFailIfBothAreNull() {
-    IsMoreAccurateCriteria moreAccurateCriteriaNBothNull = new IsMoreAccurateCriteria(null, null);
-    assertThat(moreAccurateCriteriaNBothNull.passes(), is(false));
+    IsMoreAccurateCriteria moreAccurateCriteriaBothNull = new IsMoreAccurateCriteria(null, null);
+    assertThat(moreAccurateCriteriaBothNull.passes(), is(false));
   }
 }
