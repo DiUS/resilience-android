@@ -1,4 +1,4 @@
-package au.com.dius.resilience.location;
+package au.com.dius.resilience.location.criteria;
 
 import android.location.Location;
 import au.com.dius.resilience.factory.TimeFactory;
@@ -15,9 +15,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @RunWith(ResilienceTestRunner.class)
-public class IsNewEnoughCriteriaTest {
+public class IsRecentEnoughCriteriaTest {
 
-  private IsNewEnoughCriteria isNewEnoughCriteria;
+  private IsRecentEnoughCriteria recentEnoughCriteria;
 
   @Mock
   private Location location;
@@ -30,25 +30,25 @@ public class IsNewEnoughCriteriaTest {
   @Before
   public void setup() {
     when(timeFactory.currentTimeMillis()).thenReturn(NOW);
-    isNewEnoughCriteria = new IsNewEnoughCriteria(location);
-    setField(isNewEnoughCriteria, "timeFactory", timeFactory);
+    recentEnoughCriteria = new IsRecentEnoughCriteria(location);
+    setField(recentEnoughCriteria, "timeFactory", timeFactory);
   }
 
   @Test
   public void shouldPassIfLocationIsNewEnough() {
-    given(location.getTime()).willReturn(NOW + IsNewEnoughCriteria.MIN_AGE - 1L);
-    assertThat(isNewEnoughCriteria.passes(), is(true));
+    given(location.getTime()).willReturn(NOW + IsRecentEnoughCriteria.MIN_AGE - 1L);
+    assertThat(recentEnoughCriteria.passes(), is(true));
   }
 
   @Test
   public void shouldFailIfLocationIsTooOld() {
-    given(location.getTime()).willReturn(NOW + IsNewEnoughCriteria.MIN_AGE + 1L);
-    assertThat(isNewEnoughCriteria.passes(), is(false));
+    given(location.getTime()).willReturn(NOW + IsRecentEnoughCriteria.MIN_AGE + 1L);
+    assertThat(recentEnoughCriteria.passes(), is(false));
   }
 
   @Test
   public void shouldFailIfLocationIsNull() {
-    IsNewEnoughCriteria isNewEnoughCriteriaNullLocation = new IsNewEnoughCriteria(null);
-    assertThat(isNewEnoughCriteriaNullLocation.passes(), is(false));
+    IsRecentEnoughCriteria recentEnoughCriteriaNullLocation = new IsRecentEnoughCriteria(null);
+    assertThat(recentEnoughCriteriaNullLocation.passes(), is(false));
   }
 }

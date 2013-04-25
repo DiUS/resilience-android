@@ -9,9 +9,6 @@ import roboguice.inject.ContextSingleton;
 @ContextSingleton
 public class BestLocationDelegate {
 
-  public static final float MIN_ACCURACY_METRES = 1000;
-  public static final float SIGNIFICANT_ACCURACY_DIFFERENCE = 500;
-
   @Inject
   private LocationManager locationManager;
 
@@ -45,9 +42,9 @@ public class BestLocationDelegate {
 //      return bestLocation;
 //    }
 
-    if (candidateLocation.getAccuracy() > MIN_ACCURACY_METRES) {
-      return bestLocation;
-    }
+//    if (candidateLocation.getAccuracy() > MIN_ACCURACY_METRES) {
+//      return bestLocation;
+//    }
 
     // The last location is within the threshold of acceptability and we don't have a
     // good location yet. So candidateLocation must be the new best.
@@ -57,9 +54,9 @@ public class BestLocationDelegate {
 
     // candidateLocation ought to only be thrown out
     // if it's significantly older.
-    if (isSignificantlyOlderThan(candidateLocation, bestLocation)) {
-      return bestLocation;
-    }
+//    if (isSignificantlyOlderThan(candidateLocation, bestLocation)) {
+//      return bestLocation;
+//    }
 
     // candidateLocation is new enough - if it's more accurate than the best,
     // then use it.
@@ -69,10 +66,5 @@ public class BestLocationDelegate {
     else {
       return bestLocation;
     }
-  }
-
-  public boolean isSignificantlyOlderThan(Location lastKnownLocation, Location bestLocation) {
-    long timeDifference = lastKnownLocation.getTime() - bestLocation.getTime();
-    return timeDifference > SIGNIFICANT_ACCURACY_DIFFERENCE;
   }
 }

@@ -1,10 +1,11 @@
-package au.com.dius.resilience.location;
+package au.com.dius.resilience.location.criteria;
 
 import android.location.Location;
 import au.com.dius.resilience.factory.TimeFactory;
+import au.com.dius.resilience.location.LocationCriteria;
 import com.google.inject.Inject;
 
-public class IsNewEnoughCriteria implements LocationCriteria {
+public class IsRecentEnoughCriteria implements LocationCriteria {
 
   public static final long MIN_AGE = 1000 * 60 * 2; // Two minutes
 
@@ -13,7 +14,7 @@ public class IsNewEnoughCriteria implements LocationCriteria {
   @Inject
   private TimeFactory timeFactory;
 
-  public IsNewEnoughCriteria(Location aLocation) {
+  public IsRecentEnoughCriteria(Location aLocation) {
     location = aLocation;
   }
 
