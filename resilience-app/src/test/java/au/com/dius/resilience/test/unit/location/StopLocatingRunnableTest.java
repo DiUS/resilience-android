@@ -21,7 +21,7 @@ public class StopLocatingRunnableTest {
 
   @Before
   public void setup() {
-    stopLocatingRunnable = new StopLocatingRunnable();
+    stopLocatingRunnable = new StopLocatingRunnable(locationBroadcaster);
     TestHelper.setField(stopLocatingRunnable, "locationBroadcaster", locationBroadcaster);
   }
 

@@ -7,12 +7,14 @@ import android.os.Bundle;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.observer.LocationUpdatedMapBroadcastReceiver;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
@@ -23,6 +25,9 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   private GoogleMap map;
 
+  @Inject
+  private LocationBroadcaster locationBroadcaster;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -31,9 +36,11 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
       map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
     }
 
-    registerReceiver(new LocationUpdatedMapBroadcastReceiver(), new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
+    registerReceiver(new LocationUpdatedMapBroadcastReceiver(map), new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
+
+    locationBroadcaster.startPolling();
   }
 
   @Override

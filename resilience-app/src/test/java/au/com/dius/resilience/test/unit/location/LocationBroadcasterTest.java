@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
+import au.com.dius.resilience.location.BestLocationDelegate;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.location.StopLocatingRunnable;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
@@ -28,8 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(ResilienceTestRunner.class)
 public class LocationBroadcasterTest {
@@ -49,6 +49,9 @@ public class LocationBroadcasterTest {
   @Mock
   private StopLocatingRunnable stopLocatingRunnable;
 
+  @Mock
+  private BestLocationDelegate bestLocationDelegate;
+
   @Before
   public void setup() throws Exception {
     locationBroadcaster = new LocationBroadcaster();
@@ -59,6 +62,7 @@ public class LocationBroadcasterTest {
     PrivateAccessor.setField(locationBroadcaster, "locationManager", locationManagerSpy);
     PrivateAccessor.setField(locationBroadcaster, "context", Robolectric.application.getApplicationContext());
     PrivateAccessor.setField(locationBroadcaster, "threadPoolExecutor", threadPoolExecutor);
+    PrivateAccessor.setField(locationBroadcaster, "bestLocationDelegate", bestLocationDelegate);
   }
 
   @Test
@@ -81,7 +85,8 @@ public class LocationBroadcasterTest {
   @Test
   public void shouldBroadcastLocationOnLocationUpdate() {
 
-    TestBroadcastLocationReceiver locationUpdatedReceiver = new TestBroadcastLocationReceiver(Intents.RESILIENCE_LOCATION_UPDATED);
+    TestBroadcastLocationReceiver locationUpdatedReceiver
+      = new TestBroadcastLocationReceiver(Intents.RESILIENCE_LOCATION_UPDATED, location);
 
     Robolectric.application.registerReceiver(locationUpdatedReceiver,
       new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
@@ -107,12 +112,20 @@ public class LocationBroadcasterTest {
     verify(locationManagerSpy).removeUpdates(locationBroadcaster);
   }
 
+  @Test
+  public void shouldDelegateFindingBestLocation() {
+    locationBroadcaster.startPolling();
+    verify(bestLocationDelegate).getBestLastKnownLocation();
+  }
+
   private class TestBroadcastLocationReceiver extends BroadcastReceiver {
 
     private final String action;
+    private final Location goodCachedLocation;
 
-    public TestBroadcastLocationReceiver(String anAction) {
+    public TestBroadcastLocationReceiver(String anAction, Location aGoodCachedLocation) {
       action = anAction;
+      goodCachedLocation = aGoodCachedLocation;
     }
 
     @Override
@@ -120,7 +133,7 @@ public class LocationBroadcasterTest {
       assertThat(intent.getAction(), is(action));
       Parcelable parcelableExtra = intent.getParcelableExtra(Extras.LOCATION);
       assertNotNull(parcelableExtra);
-      assertSame(parcelableExtra, location);
+      assertSame(parcelableExtra, goodCachedLocation);
     }
   }
 }

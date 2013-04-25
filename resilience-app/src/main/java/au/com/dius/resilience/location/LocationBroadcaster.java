@@ -30,25 +30,39 @@ public class LocationBroadcaster implements LocationListener {
   private final ScheduledExecutorService threadPoolExecutor;
 
   @Inject
+  private BestLocationDelegate bestLocationDelegate;
+
+  @Inject
   public LocationBroadcaster() {
     threadPoolExecutor = Executors.newSingleThreadScheduledExecutor();
   }
 
   public void startPolling() {
 
-    // TODO - Use last known location if it's good enough.
+    Location lastLocation = bestLocationDelegate.getBestLastKnownLocation();
 
-    threadPoolExecutor.schedule(new StopLocatingRunnable(), TIMEOUT, TimeUnit.SECONDS);
+    if (lastLocation == null) {
+      requestLocationUpdates();
+    } else {
+      broadcastLocationUpdate(lastLocation);
+    }
+  }
 
+  private void requestLocationUpdates() {
     for (String provider : locationManager.getAllProviders()) {
       locationManager.requestLocationUpdates(provider,
         context.getResources().getInteger(R.integer.minimum_location_age_ms),
         context.getResources().getInteger(R.integer.minimum_location_accuracy_meters), this);
     }
+    threadPoolExecutor.schedule(new StopLocatingRunnable(this), TIMEOUT, TimeUnit.SECONDS);
   }
 
   @Override
   public void onLocationChanged(Location location) {
+    broadcastLocationUpdate(location);
+  }
+
+  private void broadcastLocationUpdate(Location location) {
     Intent intent = new Intent(Intents.RESILIENCE_LOCATION_UPDATED);
     Bundle extras = new Bundle();
     extras.putParcelable(Extras.LOCATION, location);
