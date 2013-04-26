@@ -25,38 +25,38 @@ public class IsMoreAccurateCriteriaTest {
 
   @Before
   public void setup() {
-    moreAccurateCriteria = new IsMoreAccurateCriteria(bestLocation, candidateLocation);
+    moreAccurateCriteria = new IsMoreAccurateCriteria();
   }
 
   @Test
   public void shouldPassIfCandidateLocationIsMoreAccurateThanBest() {
     given(bestLocation.getAccuracy()).willReturn(600.0f);
     given(candidateLocation.getAccuracy()).willReturn(600.0f - SIGNIFICANT_ACCURACY_DIFFERENCE_METRES);
-    assertThat(moreAccurateCriteria.passes(), is(true));
+    assertThat(moreAccurateCriteria.passes(candidateLocation, bestLocation), is(true));
   }
 
   @Test
   public void shouldFailIfCandidateLocationIsLessAccurateThanBest() {
     given(bestLocation.getAccuracy()).willReturn(600.0f);
     given(candidateLocation.getAccuracy()).willReturn(600.0f - SIGNIFICANT_ACCURACY_DIFFERENCE_METRES + 1L);
-    assertThat(moreAccurateCriteria.passes(), is(false));
+    assertThat(moreAccurateCriteria.passes(candidateLocation, bestLocation), is(false));
   }
 
   @Test
   public void shouldFailIfCandidateLocationIsNull() {
-    IsMoreAccurateCriteria moreAccurateCriteriaNullCandidate = new IsMoreAccurateCriteria(bestLocation, null);
-    assertThat(moreAccurateCriteriaNullCandidate.passes(), is(false));
+    IsMoreAccurateCriteria moreAccurateCriteriaNullCandidate = new IsMoreAccurateCriteria();
+    assertThat(moreAccurateCriteriaNullCandidate.passes(null, bestLocation), is(false));
   }
 
   @Test
   public void shouldPassIfBestIsNullAndCandidateIsNot() {
-    IsMoreAccurateCriteria moreAccurateCriteriaNullBest = new IsMoreAccurateCriteria(null, candidateLocation);
-    assertThat(moreAccurateCriteriaNullBest.passes(), is(true));
+    IsMoreAccurateCriteria moreAccurateCriteriaNullBest = new IsMoreAccurateCriteria();
+    assertThat(moreAccurateCriteriaNullBest.passes(candidateLocation, null), is(true));
   }
 
   @Test
   public void shouldFailIfBothAreNull() {
-    IsMoreAccurateCriteria moreAccurateCriteriaBothNull = new IsMoreAccurateCriteria(null, null);
-    assertThat(moreAccurateCriteriaBothNull.passes(), is(false));
+    IsMoreAccurateCriteria moreAccurateCriteriaBothNull = new IsMoreAccurateCriteria();
+    assertThat(moreAccurateCriteriaBothNull.passes(null, null), is(false));
   }
 }

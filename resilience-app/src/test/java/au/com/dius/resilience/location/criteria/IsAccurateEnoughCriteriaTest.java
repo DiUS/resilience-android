@@ -21,24 +21,24 @@ public class IsAccurateEnoughCriteriaTest {
 
   @Before
   public void setup() {
-    isAccurateEnoughCriteria = new IsAccurateEnoughCriteria(location);
+    isAccurateEnoughCriteria = new IsAccurateEnoughCriteria();
   }
 
   @Test
   public void shouldPassIfLocationAccurateEnough() {
     given(location.getAccuracy()).willReturn(IsAccurateEnoughCriteria.MIN_ACCURACY_METRES);
-    assertThat(isAccurateEnoughCriteria.passes(), is(true));
+    assertThat(isAccurateEnoughCriteria.passes(location, null), is(true));
   }
 
   @Test
   public void shouldFailIfLocationNotAccurateEnough() {
     given(location.getAccuracy()).willReturn(IsAccurateEnoughCriteria.MIN_ACCURACY_METRES + 1L);
-    assertThat(isAccurateEnoughCriteria.passes(), is(false));
+    assertThat(isAccurateEnoughCriteria.passes(location, null), is(false));
   }
 
   @Test
   public void shouldFailIfLocationIsNull() {
-    IsAccurateEnoughCriteria isAccurateEnoughCriteriaNullLocation = new IsAccurateEnoughCriteria(null);
-    assertThat(isAccurateEnoughCriteriaNullLocation.passes(), is(false));
+    IsAccurateEnoughCriteria isAccurateEnoughCriteriaNullLocation = new IsAccurateEnoughCriteria();
+    assertThat(isAccurateEnoughCriteriaNullLocation.passes(null, null), is(false));
   }
 }

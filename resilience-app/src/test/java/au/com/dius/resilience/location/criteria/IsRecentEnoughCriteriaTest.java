@@ -3,6 +3,7 @@ package au.com.dius.resilience.location.criteria;
 import android.location.Location;
 import au.com.dius.resilience.factory.TimeFactory;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
+import au.com.dius.resilience.test.unit.utils.TestHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,25 +31,26 @@ public class IsRecentEnoughCriteriaTest {
   @Before
   public void setup() {
     when(timeFactory.currentTimeMillis()).thenReturn(NOW);
-    recentEnoughCriteria = new IsRecentEnoughCriteria(location);
+    recentEnoughCriteria = new IsRecentEnoughCriteria();
     setField(recentEnoughCriteria, "timeFactory", timeFactory);
   }
 
   @Test
   public void shouldPassIfLocationIsNewEnough() {
     given(location.getTime()).willReturn(NOW + IsRecentEnoughCriteria.MIN_AGE - 1L);
-    assertThat(recentEnoughCriteria.passes(), is(true));
+    assertThat(recentEnoughCriteria.passes(location, null), is(true));
   }
 
   @Test
   public void shouldFailIfLocationIsTooOld() {
     given(location.getTime()).willReturn(NOW + IsRecentEnoughCriteria.MIN_AGE + 1L);
-    assertThat(recentEnoughCriteria.passes(), is(false));
+    assertThat(recentEnoughCriteria.passes(location, null), is(false));
   }
 
   @Test
   public void shouldFailIfLocationIsNull() {
-    IsRecentEnoughCriteria recentEnoughCriteriaNullLocation = new IsRecentEnoughCriteria(null);
-    assertThat(recentEnoughCriteriaNullLocation.passes(), is(false));
+    IsRecentEnoughCriteria recentEnoughCriteriaNullLocation = new IsRecentEnoughCriteria();
+    TestHelper.setField(recentEnoughCriteriaNullLocation, "timeFactory", timeFactory);
+    assertThat(recentEnoughCriteriaNullLocation.passes(null, null), is(false));
   }
 }
