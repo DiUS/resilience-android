@@ -32,14 +32,14 @@ public class IsMoreRecentCriteriaTest {
   @Test
   public void shouldPassIfCandidateLocationIsMoreRecentThanBest() {
     given(bestLocation.getTime()).willReturn(NOW);
-    given(candidateLocation.getTime()).willReturn(NOW - 100L);
+    given(candidateLocation.getTime()).willReturn(NOW + IsMoreRecentCriteria.SIGNIFICANT_AGE_DIFFERENCE_MS);
     assertThat(isMoreRecentCriteria.passes(candidateLocation, bestLocation), is(true));
   }
 
   @Test
   public void shouldFailIfCandidateLocationIsLessRecentThanBest() {
     given(bestLocation.getTime()).willReturn(NOW);
-    given(candidateLocation.getTime()).willReturn(NOW + 100L);
+    given(candidateLocation.getTime()).willReturn(NOW + IsMoreRecentCriteria.SIGNIFICANT_AGE_DIFFERENCE_MS - 1L);
     assertThat(isMoreRecentCriteria.passes(candidateLocation, bestLocation), is(false));
   }
 }

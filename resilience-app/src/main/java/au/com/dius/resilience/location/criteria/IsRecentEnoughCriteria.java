@@ -4,7 +4,9 @@ import android.location.Location;
 import au.com.dius.resilience.factory.TimeFactory;
 import au.com.dius.resilience.location.LocationCriteria;
 import com.google.inject.Inject;
+import roboguice.inject.ContextSingleton;
 
+@ContextSingleton
 public class IsRecentEnoughCriteria implements LocationCriteria {
 
   public static final long MIN_AGE = 1000 * 60 * 2; // Two minutes

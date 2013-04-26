@@ -2,7 +2,9 @@ package au.com.dius.resilience.location.criteria;
 
 import android.location.Location;
 import au.com.dius.resilience.location.LocationCriteria;
+import roboguice.inject.ContextSingleton;
 
+@ContextSingleton
 public class IsMoreAccurateCriteria implements LocationCriteria {
 
   public static final float SIGNIFICANT_ACCURACY_DIFFERENCE_METRES = 500.0f;
