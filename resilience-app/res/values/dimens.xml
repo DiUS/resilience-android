@@ -2,7 +2,7 @@
 <resources>
   <dimen name="list_item_inner_height">90dp</dimen>
   <dimen name="list_item_description_padding">10dp</dimen>
-  <dimen name="list_item_image_width">115dp</dimen>
+  <dimen name="list_item_image_width">114dp</dimen>
   <dimen name="list_item_image_padding">3dp</dimen>
   <dimen name="list_item_more_icon_padding_right">10dp</dimen>
 
