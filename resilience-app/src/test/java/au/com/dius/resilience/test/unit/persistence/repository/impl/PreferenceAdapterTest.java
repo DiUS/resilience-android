@@ -76,13 +76,13 @@ public class PreferenceAdapterTest {
   @Test
   public void shouldReturnUserPrefKeyValue() {
     SharedPreferences.Editor editor = context.getSharedPreferences(preferenceAdapter.getCurrentUserPreferenceFile(), MODE_PRIVATE).edit();
-    editor.putInt(context.getString(R.string.response_radius_key), 10);
+    editor.putInt(context.getString(R.string.current_profile_key), 10);
     editor.commit();
 
-    Integer responseRadius = (Integer) preferenceAdapter.getUserPreference(R.string.response_radius_key);
+    Integer responseRadius = (Integer) preferenceAdapter.getUserPreference(R.string.current_profile_key);
     assertThat(responseRadius, is(10));
 
-    String commonPreference = (String) preferenceAdapter.getCommonPreference(R.string.response_radius_key);
+    String commonPreference = (String) preferenceAdapter.getCommonPreference(R.string.current_profile_key);
     assertNull(commonPreference);
   }
 

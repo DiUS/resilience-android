@@ -11,18 +11,12 @@
   <string name="create_plus">Create +</string>
   <string name="profile_entries">profile_entries</string>
   <string name="profile_exists_error">Profile already exists or is invalid, please choose another name.</string>
-  <string name="profile_id">profile_id</string>
-
-  <!--
-    Response willingness
-  -->
-  <string name="response_willingness">Response willingness</string>
-  <string name="response_willingness_summary">How can you help?</string>
-
-  <!-- RW values -->
-  <string name="response_radius">Response radius</string>
-  <string name="response_radius_summary">How far you\'re willing to travel</string>
-  <string name="response_radius_key">response_radius_key</string>
+  <string name="user_profile">User Profile</string>
+  <string name="account_id">Account Id</string>
+  <string name="first_name">First Name</string>
+  <string name="surname">Surname</string>
+  <string name="phone_number">Phone Number</string>
+  <string name="email_address">Email Address</string>
 
   <!--
     Visual preferences

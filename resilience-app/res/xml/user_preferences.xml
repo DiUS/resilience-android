@@ -4,12 +4,24 @@
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent">
   <PreferenceCategory
-      android:title="@string/response_willingness">
+      android:title="@string/user_profile">
     <EditTextPreference
-        android:key="@string/response_radius_key"
-        android:title="@string/response_radius"
-        android:summary="@string/response_radius_summary"
-        android:persistent="true"
-        android:defaultValue="10"/>
+        android:key="profile_first_name"
+        android:title="@string/first_name"
+        android:defaultValue="true"
+        android:summary=""
+        android:persistent="true"/>
+    <EditTextPreference
+        android:key="profile_surname"
+        android:title="@string/surname"
+        android:persistent="true"/>
+    <EditTextPreference
+        android:key="profile_phone"
+        android:title="@string/phone_number"
+        android:persistent="true"/>
+    <EditTextPreference
+        android:key="profile_email"
+        android:title="@string/email_address"
+        android:persistent="true"/>
   </PreferenceCategory>
 </PreferenceScreen>
