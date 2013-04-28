@@ -11,7 +11,12 @@ public class IsMoreRecentCriteria implements LocationCriteria {
 
   @Override
   public boolean passes(Location candidateLocation, Location previousLocation) {
-    return isSignificantlyOlderThan(candidateLocation, previousLocation);
+
+    if (previousLocation == null && candidateLocation != null) {
+      return true;
+    }
+
+    return candidateLocation != null && isSignificantlyOlderThan(candidateLocation, previousLocation);
   }
 
   private boolean isSignificantlyOlderThan(Location candidateLocation, Location previousLocation) {

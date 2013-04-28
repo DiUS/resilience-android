@@ -40,7 +40,7 @@ public class BestLocationDelegateTest {
 
   @Before
   public void setup() {
-    bestLocationDelegate = new BestLocationDelegate();
+    bestLocationDelegate = new BestLocationDelegate(null, null, null, null);
 
     List<String> providers = new ArrayList<String>();
     when(locationManager.getAllProviders()).thenReturn(providers);

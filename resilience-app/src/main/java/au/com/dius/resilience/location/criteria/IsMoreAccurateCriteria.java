@@ -16,10 +16,10 @@ public class IsMoreAccurateCriteria implements LocationCriteria {
       return true;
     }
 
-    return candidateLocation != null && isSignificantlyMoreAccurateThan(previousLocation, candidateLocation);
+    return candidateLocation != null && isSignificantlyMoreAccurateThan(candidateLocation, previousLocation);
   }
 
-  private boolean isSignificantlyMoreAccurateThan(Location previousLocation, Location candidateLocation) {
+  private boolean isSignificantlyMoreAccurateThan(Location candidateLocation, Location previousLocation) {
     float accuracyDifference = previousLocation.getAccuracy() - candidateLocation.getAccuracy();
 
     // if accuracyDifference SIGNIFICANT_ACCURACY_DIFFERENCE_METRES, then candidate is at least as accurate as best

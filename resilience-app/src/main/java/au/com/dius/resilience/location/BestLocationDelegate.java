@@ -20,11 +20,16 @@ public class BestLocationDelegate {
 
   private List<LocationCriteria> criteria = new ArrayList<LocationCriteria>();
 
-  public BestLocationDelegate() {
-    criteria.add(new IsMoreAccurateCriteria());
-    criteria.add(new IsRecentEnoughCriteria());
-    criteria.add(new IsRecentEnoughCriteria());
-    criteria.add(new IsMoreRecentCriteria());
+  @Inject
+  public BestLocationDelegate(IsAccurateEnoughCriteria isAccurateEnoughCriteria,
+                              IsMoreAccurateCriteria isMoreAccurateCriteria,
+                              IsRecentEnoughCriteria isRecentEnoughCriteria,
+                              IsMoreRecentCriteria isMoreRecentCriteria) {
+
+    criteria.add(isAccurateEnoughCriteria);
+    criteria.add(isMoreAccurateCriteria);
+    criteria.add(isRecentEnoughCriteria);
+    criteria.add(isMoreRecentCriteria);
   }
 
   public Location getBestLastKnownLocation() {

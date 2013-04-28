@@ -49,7 +49,7 @@ public class IsMoreAccurateCriteriaTest {
   }
 
   @Test
-  public void shouldPassIfBestIsNullAndCandidateIsNot() {
+  public void shouldPassIfPreviousIsNullAndCandidateIsNot() {
     IsMoreAccurateCriteria moreAccurateCriteriaNullBest = new IsMoreAccurateCriteria();
     assertThat(moreAccurateCriteriaNullBest.passes(candidateLocation, null), is(true));
   }

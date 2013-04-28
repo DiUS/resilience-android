@@ -17,7 +17,7 @@ public class IsMoreRecentCriteriaTest {
   private IsMoreRecentCriteria isMoreRecentCriteria;
 
   @Mock
-  private Location bestLocation;
+  private Location previousLocation;
 
   @Mock
   private Location candidateLocation;
@@ -30,16 +30,31 @@ public class IsMoreRecentCriteriaTest {
   }
 
   @Test
-  public void shouldPassIfCandidateLocationIsMoreRecentThanBest() {
-    given(bestLocation.getTime()).willReturn(NOW);
+  public void shouldPassIfCandidateLocationIsMoreRecentThanPrevious() {
+    given(previousLocation.getTime()).willReturn(NOW);
     given(candidateLocation.getTime()).willReturn(NOW + IsMoreRecentCriteria.SIGNIFICANT_AGE_DIFFERENCE_MS);
-    assertThat(isMoreRecentCriteria.passes(candidateLocation, bestLocation), is(true));
+    assertThat(isMoreRecentCriteria.passes(candidateLocation, previousLocation), is(true));
   }
 
   @Test
   public void shouldFailIfCandidateLocationIsLessRecentThanBest() {
-    given(bestLocation.getTime()).willReturn(NOW);
+    given(previousLocation.getTime()).willReturn(NOW);
     given(candidateLocation.getTime()).willReturn(NOW + IsMoreRecentCriteria.SIGNIFICANT_AGE_DIFFERENCE_MS - 1L);
-    assertThat(isMoreRecentCriteria.passes(candidateLocation, bestLocation), is(false));
+    assertThat(isMoreRecentCriteria.passes(candidateLocation, previousLocation), is(false));
+  }
+
+  @Test
+  public void shouldPassIfPreviousLocationIsNullAndCandidateIsNot() {
+    assertThat(isMoreRecentCriteria.passes(candidateLocation, null), is(true));
+  }
+
+  @Test
+  public void shouldFailIfPreviousAndCandidateLocationAreNull() {
+    assertThat(isMoreRecentCriteria.passes(null, null), is(false));
+  }
+
+  @Test
+  public void shouldFailIfCandidateLocationIsNullAndPreviousIsNot() {
+    assertThat(isMoreRecentCriteria.passes(null, previousLocation), is(false));
   }
 }
