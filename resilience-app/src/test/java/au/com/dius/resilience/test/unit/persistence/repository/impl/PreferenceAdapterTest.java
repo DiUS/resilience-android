@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import static android.content.Context.MODE_PRIVATE;
 import static au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter.PREFERENCES_FILE_PREFIX;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
@@ -79,11 +80,22 @@ public class PreferenceAdapterTest {
     editor.putInt(context.getString(R.string.current_profile_key), 10);
     editor.commit();
 
-    Integer responseRadius = (Integer) preferenceAdapter.getUserPreference(R.string.current_profile_key);
-    assertThat(responseRadius, is(10));
+    Integer someIntegerPreference = (Integer) preferenceAdapter.getUserPreference(R.string.current_profile_key);
+    assertThat(someIntegerPreference, is(10));
 
     String commonPreference = (String) preferenceAdapter.getCommonPreference(R.string.current_profile_key);
     assertNull(commonPreference);
+  }
+
+  @Test
+  public void shouldReturnUserPreferenceKeyValueByName() {
+    SharedPreferences.Editor editor = context.getSharedPreferences(preferenceAdapter.getCurrentUserPreferenceFile(), MODE_PRIVATE).edit();
+    editor.putString("someKey", "someValue");
+    editor.commit();
+
+    String retrievedPreference = (String) preferenceAdapter.getUserPreference("someKey");
+    assertNotNull(retrievedPreference);
+    assertThat(retrievedPreference, is("someValue"));
   }
 
   @Test
@@ -141,7 +153,7 @@ public class PreferenceAdapterTest {
     assertThat(preferenceValue2, is(2));
   }
 
-// TODO - There appears to be a bug with Roboguice and putStringSet.
+// TODO - There appears to be a bug with Roboguice and putStringSet:
 // reading/writing works on the emulator but not here. Need to come back and fix this (hopefully they'll patch it for us!)
 // @Test
 //  public void shouldSaveStringSet() {

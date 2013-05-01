@@ -5,20 +5,20 @@
                   android:layout_height="fill_parent">
   <PreferenceCategory
       android:title="@string/user_profile">
-    <EditTextPreference
-        android:key="profile_first_name"
+    <au.com.dius.resilience.ui.SummarisedEditTextPreference
+        android:key="@string/profile_first_name_key"
         android:title="@string/first_name"
         android:persistent="true"/>
-    <EditTextPreference
-        android:key="profile_surname"
+    <au.com.dius.resilience.ui.SummarisedEditTextPreference
+        android:key="@string/profile_surname_key"
         android:title="@string/surname"
         android:persistent="true"/>
-    <EditTextPreference
-        android:key="profile_phone"
+    <au.com.dius.resilience.ui.SummarisedEditTextPreference
+        android:key="@string/profile_phone_key"
         android:title="@string/phone_number"
         android:persistent="true"/>
-    <EditTextPreference
-        android:key="profile_email"
+    <au.com.dius.resilience.ui.SummarisedEditTextPreference
+        android:key="@string/profile_email_key"
         android:title="@string/email_address"
         android:persistent="true"/>
   </PreferenceCategory>

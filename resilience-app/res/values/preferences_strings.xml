@@ -2,6 +2,10 @@
   <string name="user_preferences">User Preferences</string>
   <string name="current_profile">Switch Profile</string>
   <string name="current_profile_key">current_profile</string>
+  <string name="profile_first_name_key">first_name</string>
+  <string name="profile_surname_key">surname</string>
+  <string name="profile_phone_key">phone_number</string>
+  <string name="profile_email_key">email_address</string>
 
   <!--
     Profiles

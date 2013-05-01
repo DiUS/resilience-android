@@ -6,12 +6,14 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.model.Profile;
 import com.google.inject.Inject;
+import roboguice.inject.ContextSingleton;
 
 import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 import static au.com.dius.resilience.Constants.DEFAULT_USER_KEY;
 
+@ContextSingleton
 public class PreferenceAdapter {
 
   public static final String PREFERENCES_FILE_PREFIX = "au.com.dius.resilience.preference.";
@@ -40,6 +42,10 @@ public class PreferenceAdapter {
 
   public Object getCommonPreference(int key) {
     return getCommonPreferences().getAll().get(context.getString(key));
+  }
+
+  public Object getUserPreference(String keyName) {
+    return getCurrentUserPreferences().getAll().get(keyName);
   }
 
   public Object getUserPreference(int key) {
