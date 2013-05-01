@@ -10,17 +10,6 @@
       android:defaultValue="@string/default_user"/>
 
   <PreferenceCategory
-      android:title="@string/appearance"
-      android:order="2">
-    <CheckBoxPreference
-        android:key="@string/use_light_theme_key"
-        android:title="@string/use_light_theme"
-        android:summary="@string/use_light_theme_summary"
-        android:persistent="true"
-        android:defaultValue="true"/>
-  </PreferenceCategory>
-
-  <PreferenceCategory
       android:title="@string/contribute"
       android:order="3">
     <Preference

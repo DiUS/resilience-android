@@ -53,8 +53,6 @@
     <activity android:name=".ui.activity.FeedbackActivity"/>
     <activity android:name=".ui.activity.ViewServiceRequestActivity"/>
 
-    <receiver android:name=".receiver.LocationChangedReceiver"/>
-
     <service android:name=".service.CreateIncidentService"/>
     <service android:name=".service.TrackIncidentService"/>
     <service android:name=".service.UntrackIncidentService"/>
@@ -62,7 +60,7 @@
 
     <!-- TODO - extract from properties file -->
     <meta-data android:name="com.google.android.maps.v2.API_KEY"
-               android:value="YOUR_KEY" />
+               android:value="AIzaSyDTpNpP7fh20uISO8MI3opvmDxQTbQlhp0" />
 
   </application>
 

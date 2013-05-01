@@ -40,6 +40,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     ServiceRequest serviceRequest = adapter.getItem(position);
 
     Bundle bundle = new Bundle();
+    // FIXME - use parceable instead of serializable since it's faster.
     bundle.putSerializable(Extras.SERVICE_REQUEST, serviceRequest);
 
     Intent intent = new Intent(this, ViewServiceRequestActivity.class);
