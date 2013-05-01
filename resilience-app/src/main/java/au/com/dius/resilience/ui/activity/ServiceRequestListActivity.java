@@ -21,6 +21,8 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   private static final String LOG_TAG = ServiceRequestListActivity.class.getName();
 
+  private static final int MAX_RESULT_SIZE = 10;
+
   private ListViewAdapter adapter;
 
   @Override
@@ -58,7 +60,11 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> listLoader, List<ServiceRequest> incidentList) {
     Log.d(LOG_TAG, "Adding " + incidentList + " Objects to the UI.");
-    adapter.setData(incidentList);
+
+    // TODO - a better solution would be to load more on demand. Just going to set a
+    // hard limit for now.
+    List<ServiceRequest> limitedList = incidentList.subList(0, MAX_RESULT_SIZE);
+    adapter.setData(limitedList);
   }
 
   @Override

@@ -8,8 +8,6 @@
     <EditTextPreference
         android:key="profile_first_name"
         android:title="@string/first_name"
-        android:defaultValue="true"
-        android:summary=""
         android:persistent="true"/>
     <EditTextPreference
         android:key="profile_surname"

@@ -8,10 +8,10 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
 
-    <item name="android:preferenceStyle">@style/preference</item>
-    <item name="android:checkBoxPreferenceStyle">@style/preference</item>
-    <item name="android:dialogPreferenceStyle">@style/preference</item>
-    <item name="android:editTextPreferenceStyle">@style/preference</item>
+    <!--<item name="android:preferenceStyle">@style/preference</item>-->
+    <!--<item name="android:checkBoxPreferenceStyle">@style/preference</item>-->
+    <!--<item name="android:dialogPreferenceStyle">@style/preference</item>-->
+    <!--<item name="android:editTextPreferenceStyle">@style/preference</item>-->
     <item name="android:actionOverflowButtonStyle">@style/action_overflow_button</item>
   </style>
 
