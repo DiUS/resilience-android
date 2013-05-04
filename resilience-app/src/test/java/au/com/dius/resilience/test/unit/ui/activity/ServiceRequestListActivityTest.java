@@ -23,6 +23,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(ResilienceTestRunner.class)
@@ -71,6 +72,34 @@ public class ServiceRequestListActivityTest {
 
     ServiceRequest retrievedServiceRequest = (ServiceRequest) intent.getExtras().get(Extras.SERVICE_REQUEST);
     assertSame(retrievedServiceRequest, serviceRequest);
+  }
+
+  @Test
+  public void shouldSetAdapterDataWithMaximumSizeList() {
+    ArrayList<ServiceRequest> incidentList = new ArrayList<ServiceRequest>();
+
+    for (int i = 0; i < ServiceRequestListActivity.MAX_RESULT_SIZE; ++i) {
+      incidentList.add(serviceRequest);
+    }
+
+    serviceRequestListActivity.onLoadFinished(null, incidentList);
+    verify(listViewAdapter).setData(incidentList);
+  }
+
+  @Test
+  public void shouldSetAdapterDataWithOneElement() {
+    ArrayList<ServiceRequest> incidentList = new ArrayList<ServiceRequest>();
+    incidentList.add(serviceRequest);
+
+    serviceRequestListActivity.onLoadFinished(null, incidentList);
+    verify(listViewAdapter).setData(incidentList);
+  }
+
+  @Test
+  public void shouldNotSetAdapterDataWhenListIsEmpty() {
+    ArrayList<ServiceRequest> incidentList = new ArrayList<ServiceRequest>();
+    serviceRequestListActivity.onLoadFinished(null, incidentList);
+    verify(listViewAdapter).setData(incidentList);
   }
 
 //  @Test
