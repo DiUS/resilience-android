@@ -14,4 +14,12 @@
            android:paddingLeft="@dimen/create_service_request_label_padding"
            android:layout_width="fill_parent"/>
 
+  <ImageButton
+      android:id="@+id/camera_button"
+      android:src="@drawable/ic_menu_camera"
+      android:onClick="onCameraButtonClick"/>
+
+  <ImageView
+      android:id="@+id/photo_preview_image"/>
+
 </LinearLayout>
