@@ -2,8 +2,8 @@ package au.com.dius.resilience.test.unit.loader;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
+import au.com.justinb.open311.model.ServiceRequest;
 import com.xtremelabs.robolectric.Robolectric;
 import junitx.util.PrivateAccessor;
 import org.junit.Assert;
@@ -117,7 +117,7 @@ public class SimpleListLoaderTest {
 
   @Test
   public void startLoadingShouldDeliverResultIfDataAlreadySet() throws NoSuchFieldException {
-    ArrayList<Incident> data = new ArrayList<Incident>();
+    ArrayList<ServiceRequest> data = new ArrayList<ServiceRequest>();
     PrivateAccessor.setField(listLoader, DATA, data);
     shadowLoader.setStarted(true);
 
@@ -130,7 +130,7 @@ public class SimpleListLoaderTest {
   @Test
   public void startLoadingShouldNotForceLoadWhenDataIsNullOrContentHasNotChanged() throws NoSuchFieldException {
     shadowLoader.setTakeContentChanged(false);
-    PrivateAccessor.setField(listLoader, DATA, new ArrayList<Incident>());
+    PrivateAccessor.setField(listLoader, DATA, new ArrayList<ServiceRequest>());
 
     listLoader.onStartLoading();
     assertThat(shadowLoader.isForceLoadCalled(), is(false));

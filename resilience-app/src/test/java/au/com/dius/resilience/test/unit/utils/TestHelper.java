@@ -2,7 +2,6 @@ package au.com.dius.resilience.test.unit.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.model.Photo;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResult;
 import au.com.dius.resilience.persistence.repository.RepositoryCommandResultListener;
@@ -34,22 +33,6 @@ public class TestHelper {
           callbackFlag.setBool(true);
         }
       };
-  }
-
-  public static RepositoryCommandResultListener<Incident> createIncidentListener(
-      final MutableBoolean callbackFlag,
-      final List<Incident> resultList, final CountDownLatch... latch) {
-    return new RepositoryCommandResultListener<Incident>() {
-
-      public void commandComplete(RepositoryCommandResult<Incident> result) {
-        callbackFlag.setBool(result.isSuccess());
-        resultList.addAll(result.getResults());
-
-        if (latch != null) {
-          latch[0].countDown();
-        }
-      }
-    };
   }
 
   public static RepositoryCommandResultListener<Photo> createPhotoListener(
