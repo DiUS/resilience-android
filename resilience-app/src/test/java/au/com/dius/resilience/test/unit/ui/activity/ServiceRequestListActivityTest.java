@@ -1,6 +1,7 @@
 package au.com.dius.resilience.test.unit.ui.activity;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.ListView;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
@@ -16,13 +17,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.xtremelabs.robolectric.Robolectric.shadowOf;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,6 +39,9 @@ public class ServiceRequestListActivityTest {
 
   @Mock
   private ServiceRequest serviceRequest;
+
+  @Mock
+  private View button;
 
   @Before
   public void setup() throws NoSuchFieldException {

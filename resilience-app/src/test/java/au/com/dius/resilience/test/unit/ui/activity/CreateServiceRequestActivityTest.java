@@ -1,8 +1,12 @@
 package au.com.dius.resilience.test.unit.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import au.com.dius.resilience.factory.MediaFileFactory;
+import au.com.dius.resilience.model.MediaType;
 import au.com.dius.resilience.model.ServiceListDefaults;
 import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
@@ -17,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
+import java.io.File;
 import java.util.List;
 
 import static au.com.dius.resilience.test.unit.utils.TestHelper.getField;
@@ -24,7 +29,11 @@ import static au.com.dius.resilience.test.unit.utils.TestHelper.setField;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(ResilienceTestRunner.class)
 public class CreateServiceRequestActivityTest {
@@ -34,9 +43,17 @@ public class CreateServiceRequestActivityTest {
   @Mock
   private ServiceListSpinnerAdapter serviceListSpinnerAdapter;
 
+  @Mock
+  private View button;
+
+  @Mock
+  private MediaFileFactory mediaFileFactory;
+
   @Before
   public void setup() throws NoSuchFieldException {
+    when(mediaFileFactory.createMediaFile(MediaType.PHOTO)).thenReturn(new File("test"));
     createServiceRequestActivity = new CreateServiceRequestActivity();
+    setField(createServiceRequestActivity, "mediaFileFactory", mediaFileFactory);
   }
 
   @Test
@@ -46,6 +63,14 @@ public class CreateServiceRequestActivityTest {
     Spinner serviceSpinner = (Spinner) getField(createServiceRequestActivity, "serviceSpinner");
     SpinnerAdapter adapter = serviceSpinner.getAdapter();
     assertThat(adapter, instanceOf(ServiceListSpinnerAdapter.class));
+  }
+
+  @Test
+  public void shouldLaunchCameraIntentOnButtonClick() {
+    CreateServiceRequestActivity spy = spy(createServiceRequestActivity);
+    spy.onCameraButtonClick(button);
+    verify(spy).startActivityForResult(any(Intent.class),
+      eq(CreateServiceRequestActivity.CAPTURE_PHOTO_REQUEST_CODE));
   }
 
   /* TODO - In addition to the default stored services, we should

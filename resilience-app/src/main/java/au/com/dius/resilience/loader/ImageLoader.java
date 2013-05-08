@@ -1,6 +1,7 @@
 package au.com.dius.resilience.loader;
 
 import android.content.Context;
+import android.net.Uri;
 import android.widget.ImageView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.factory.ImageManagerFactory;
@@ -45,7 +46,7 @@ public class ImageLoader {
     imageTagFactory.setErrorImageId(R.drawable.border_white);
   }
 
-  public void loadThumbnailImage(final ImageView view, final String imageName) {
+  public void loadThumbnailImage(ImageView view, String imageName) {
     String thumbnailUrl = cloudinary.url().transformation(thumbnailTransformation).generate(imageName);
 
     ImageTag tag = imageTagFactory.build(thumbnailUrl, context);

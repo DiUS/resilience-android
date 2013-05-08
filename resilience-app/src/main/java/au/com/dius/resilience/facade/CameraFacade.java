@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import au.com.dius.resilience.model.Photo;
 
+@Deprecated
 public class CameraFacade {
 
   private static final String FILENAME_DATE_FORMAT = "yyyyMMdd_HHmmss";
