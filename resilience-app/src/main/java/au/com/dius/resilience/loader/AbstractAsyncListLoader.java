@@ -4,7 +4,6 @@ import android.content.AsyncTaskLoader;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.util.Log;
-import au.com.dius.resilience.persistence.repository.Repository;
 
 import java.util.List;
 
@@ -19,13 +18,6 @@ public abstract class AbstractAsyncListLoader<T> extends AsyncTaskLoader<List<T>
 
   protected AbstractAsyncListLoader(Context context) {
     super(context);
-  }
-
-  protected Repository repository;
-  @Deprecated
-  protected AbstractAsyncListLoader(Context context, Repository repository) {
-    super(context);
-    this.repository = repository;
   }
 
   @Override

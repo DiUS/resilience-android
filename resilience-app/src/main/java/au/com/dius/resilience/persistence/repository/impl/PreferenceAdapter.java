@@ -3,7 +3,6 @@ package au.com.dius.resilience.persistence.repository.impl;
 import android.content.Context;
 import android.content.SharedPreferences;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.model.Profile;
 import com.google.inject.Inject;
 import roboguice.inject.ContextSingleton;

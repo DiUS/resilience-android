@@ -9,17 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.persistence.repository.Repository;
 import au.com.dius.resilience.ui.fragment.FeedbackFragment;
-import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 
 import static au.com.dius.resilience.intent.Intents.RESILIENCE_FEEDBACK_SUBMITTED;
 
 public class FeedbackActivity extends RoboActivity {
-
-  @Inject
-  private Repository repository;
 
   private FeedbackBroadcastReceiver feedbackBroadcastReceiver;
 

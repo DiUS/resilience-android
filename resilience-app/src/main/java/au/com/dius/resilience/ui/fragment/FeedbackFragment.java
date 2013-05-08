@@ -9,7 +9,6 @@ import android.widget.TextView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Device;
 import au.com.dius.resilience.model.Feedback;
-import au.com.dius.resilience.service.SendFeedbackService;
 
 public class FeedbackFragment extends Fragment {
 
@@ -38,7 +37,7 @@ public class FeedbackFragment extends Fragment {
 
     if (text != null && text.trim().length() > 0) {
       button.setEnabled(false);
-      getActivity().startService(SendFeedbackService.createFeedbackSaveCompleteIntent(getActivity(), feedback));
+//      getActivity().startService(SendFeedbackService.createFeedbackSaveCompleteIntent(getActivity(), feedback));
     }
   }
 }
