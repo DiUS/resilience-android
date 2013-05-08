@@ -18,6 +18,7 @@
 
   <!-- NEW create incident -->
   <string name="incident_type">Nature of the incident</string>
+  <string name="incident_filename_prefix">IncidentAt_</string>
 
   <!-- View/create incident -->
   <string name="extra_notes">Extra Notes</string>
