@@ -21,7 +21,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   private static final String LOG_TAG = ServiceRequestListActivity.class.getName();
 
-  public static final int MAX_RESULT_SIZE = 10;
+  public static final int MAX_RESULT_SIZE = 20;
 
   private ListViewAdapter adapter;
 

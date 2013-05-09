@@ -4,12 +4,28 @@ import android.content.Context;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.util.AttributeSet;
+import android.util.Patterns;
+import au.com.dius.resilience.R;
+import org.apache.commons.lang.StringUtils;
 
-public class SummarisedEditTextPreference extends EditTextPreference implements Preference.OnPreferenceChangeListener{
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import static android.util.Patterns.EMAIL_ADDRESS;
+
+public class SummarisedEditTextPreference extends EditTextPreference implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
+
+  private final Map<String, Pattern> KEY_TO_PATTERN = new HashMap<String, Pattern>();
 
   public SummarisedEditTextPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
     setOnPreferenceChangeListener(this);
+    setOnPreferenceClickListener(this);
+
+    KEY_TO_PATTERN.put(context.getString(R.string.profile_email_key), Patterns.EMAIL_ADDRESS);
+    KEY_TO_PATTERN.put(context.getString(R.string.profile_phone_key), Patterns.PHONE);
+
   }
 
   @Override
@@ -20,7 +36,30 @@ public class SummarisedEditTextPreference extends EditTextPreference implements 
 
   @Override
   public boolean onPreferenceChange(Preference preference, Object newValue) {
-    setSummary(newValue.toString());
-    return false;
+
+    String asString = newValue.toString();
+
+    if (asString.length() == 0) {
+      getEditText().setError("Cannot be blank");
+      showDialog(null);
+      return false;
+    }
+
+    Pattern verificationPattern = KEY_TO_PATTERN.get(preference.getKey());
+    if (verificationPattern != null && !verificationPattern.matcher(asString).matches()) {
+      getEditText().setError("Not valid");
+      showDialog(null);
+      return false;
+    }
+
+      setSummary(asString);
+
+    return true;
+  }
+
+  @Override
+  public boolean onPreferenceClick(Preference preference) {
+    getEditText().setError(null);
+    return true;
   }
 }
