@@ -20,7 +20,6 @@
         android:layout_weight="30"
         android:clickable="false"
         android:contentDescription="@string/list_view_category_desc"
-        android:src="@drawable/unknown"
         android:background="@color/list_item_image_background"/>
 
     <LinearLayout

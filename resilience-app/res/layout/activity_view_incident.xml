@@ -15,8 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:clickable="false"
-            android:contentDescription="@string/list_view_category_desc"
-            android:src="@drawable/fire" />
+            android:contentDescription="@string/list_view_category_desc" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -81,8 +80,7 @@
             android:layout_height="200dp"
             android:layout_weight="1"
             android:contentDescription="@string/map"
-            android:onClick="onMapClick"
-            android:src="@drawable/map_icon" />
+            android:onClick="onMapClick"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
