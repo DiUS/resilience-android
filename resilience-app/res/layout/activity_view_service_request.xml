@@ -10,7 +10,7 @@
       android:orientation="vertical"
       android:layout_width="fill_parent"
       android:layout_marginBottom="@dimen/content_margin"
-      android:padding="@dimen/content_padding"
+      android:padding="@dimen/medium_padding"
       android:background="@drawable/background_border">
 
     <TextView
@@ -31,14 +31,14 @@
       android:layout_gravity="center_vertical"
       android:layout_width="fill_parent"
       android:background="@drawable/background_border"
-      android:padding="@dimen/content_padding">
+      android:padding="@dimen/medium_padding">
 
     <!-- TODO - finish properly -->
     <ImageView
         android:id="@+id/view_service_request_preview_image"
         android:layout_width="fill_parent"
         android:layout_weight="50"
-        android:paddingRight="@dimen/content_padding"
+        android:paddingRight="@dimen/medium_padding"
         android:layout_height="@dimen/view_service_request_map_height"
         android:contentDescription=""/>
 

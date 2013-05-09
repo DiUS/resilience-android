@@ -1,9 +1,6 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +10,6 @@ import android.widget.TabHost;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.location.LocationBroadcaster;
-import au.com.dius.resilience.model.Point;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.ResilienceActionBarThemer;
 import com.google.inject.Inject;

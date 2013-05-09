@@ -8,10 +8,10 @@
 
   <TextView android:text="@string/incident_type"
             android:textStyle="bold"
-            android:paddingLeft="@dimen/create_service_request_label_padding"/>
+            android:paddingLeft="@dimen/small_padding"/>
 
   <Spinner android:id="@+id/service_spinner"
-           android:paddingLeft="@dimen/create_service_request_label_padding"
+           style="@style/spinner"
            android:layout_width="fill_parent"/>
 
   <ImageButton

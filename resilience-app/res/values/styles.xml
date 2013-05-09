@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="light_theme" parent="@android:style/Theme.DeviceDefault.Light" >
+
+  <style name="light_theme" parent="@android:style/Theme.DeviceDefault.Light">
     <item name="android:actionBarStyle">@style/action_bar</item>
     <item name="android:actionMenuTextAppearance">@style/action_bar_text_style</item>
     <item name="android:selectableItemBackground">@drawable/selector_background</item>
 
+    <item name="android:actionOverflowButtonStyle">@style/action_overflow_button</item>
+
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
-
-    <!--<item name="android:preferenceStyle">@style/preference</item>-->
-    <!--<item name="android:checkBoxPreferenceStyle">@style/preference</item>-->
-    <!--<item name="android:dialogPreferenceStyle">@style/preference</item>-->
-    <!--<item name="android:editTextPreferenceStyle">@style/preference</item>-->
-    <item name="android:actionOverflowButtonStyle">@style/action_overflow_button</item>
   </style>
 
-  <!-- TODO -->
   <style name="edit_text">
     <item name="android:background">@drawable/background_border</item>
   </style>
 
-  <style name="preference">
-    <item name="android:background">@drawable/selector_background</item>
-    <item name="android:textSize">9sp</item>
+  <style name="spinner_item">
+    <item name="android:background">@drawable/selector_list_item_background_inner</item>
+    <item name="android:padding">@dimen/medium_padding</item>
   </style>
 
-  <style name="spinner_item" >
+  <style name="spinner">
     <item name="android:background">@drawable/selector_list_item_background_inner</item>
-    <item name="android:padding">@dimen/content_padding</item>
   </style>
 
 </resources>

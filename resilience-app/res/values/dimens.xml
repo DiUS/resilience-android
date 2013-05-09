@@ -6,9 +6,11 @@
   <dimen name="list_item_image_padding">3dp</dimen>
   <dimen name="list_item_more_icon_padding_right">10dp</dimen>
 
-  <dimen name="content_padding">10dp</dimen>
   <dimen name="content_margin">5dp</dimen>
 
   <dimen name="view_service_request_title_size">28sp</dimen>
   <dimen name="view_service_request_map_height">150dp</dimen>
+
+  <dimen name="small_padding">5dp</dimen>
+  <dimen name="medium_padding">10dp</dimen>
 </resources>
