@@ -6,13 +6,10 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Patterns;
 import au.com.dius.resilience.R;
-import org.apache.commons.lang.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import static android.util.Patterns.EMAIL_ADDRESS;
 
 public class SummarisedEditTextPreference extends EditTextPreference implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
@@ -25,7 +22,6 @@ public class SummarisedEditTextPreference extends EditTextPreference implements 
 
     KEY_TO_PATTERN.put(context.getString(R.string.profile_email_key), Patterns.EMAIL_ADDRESS);
     KEY_TO_PATTERN.put(context.getString(R.string.profile_phone_key), Patterns.PHONE);
-
   }
 
   @Override
@@ -39,21 +35,14 @@ public class SummarisedEditTextPreference extends EditTextPreference implements 
 
     String asString = newValue.toString();
 
-    if (asString.length() == 0) {
-      getEditText().setError("Cannot be blank");
-      showDialog(null);
-      return false;
-    }
-
     Pattern verificationPattern = KEY_TO_PATTERN.get(preference.getKey());
     if (verificationPattern != null && !verificationPattern.matcher(asString).matches()) {
-      getEditText().setError("Not valid");
+      getEditText().setError("Invalid");
       showDialog(null);
       return false;
     }
 
-      setSummary(asString);
-
+    setSummary(asString);
     return true;
   }
 
