@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import au.com.dius.resilience.intent.Intents;
-import au.com.dius.resilience.model.Incident;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.justinb.open311.GenericRequestAdapter;
 import au.com.justinb.open311.model.ServiceRequest;

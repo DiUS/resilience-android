@@ -6,6 +6,7 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Patterns;
 import au.com.dius.resilience.R;
+import roboguice.test.RobolectricRoboTestRunner;
 
 import java.util.HashMap;
 import java.util.Map;
