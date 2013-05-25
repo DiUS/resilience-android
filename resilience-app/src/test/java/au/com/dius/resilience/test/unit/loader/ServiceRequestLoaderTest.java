@@ -18,9 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static au.com.dius.resilience.test.unit.utils.TestHelper.getField;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
@@ -68,5 +70,28 @@ public class ServiceRequestLoaderTest {
 
     assertNotNull(serviceRequests);
     assertThat(serviceRequests.size(), is(2));
+  }
+
+  @Test
+  public void shouldIncrementPageWhenResultsAreReturned() {
+    int initialPage = (Integer) getField(listLoader, "page");
+
+    List<ServiceRequest> serviceRequests = listLoader.loadInBackground();
+    assertThat(serviceRequests.size(), is(2));
+
+    int currentPage = (Integer) getField(listLoader, "page");
+    assertThat(currentPage, is(initialPage + 1));
+  }
+
+  @Test
+  public void shouldNotIncrementPageWhenNoResultsAreReturned() {
+    int initialPage = (Integer) getField(listLoader, "page");
+
+    given(requestAdapter.list((Map<String, String>) anyObject())).willReturn(new ArrayList<ServiceRequest>());
+    List<ServiceRequest> serviceRequests = listLoader.loadInBackground();
+    assertThat(serviceRequests.size(), is(0));
+
+    int currentPage = (Integer) getField(listLoader, "page");
+    assertThat(currentPage, is(initialPage));
   }
 }

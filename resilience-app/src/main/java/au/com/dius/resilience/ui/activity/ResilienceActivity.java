@@ -2,7 +2,6 @@ package au.com.dius.resilience.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +11,7 @@ import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.ResilienceActionBarThemer;
+import au.com.dius.resilience.util.Logger;
 import com.google.inject.Inject;
 import roboguice.activity.RoboTabActivity;
 import roboguice.inject.ContentView;
@@ -85,7 +85,7 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
 
   @Override
   public void onTabChanged(String tabTag) {
-    Log.d(LOG_TAG, "onTabChanged(): tabId=" + tabTag);
+    Logger.d(this, "onTabChanged(): tabId=", tabTag);
 
     restyleTabs();
 

@@ -4,6 +4,7 @@ import android.content.AsyncTaskLoader;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.util.Log;
+import au.com.dius.resilience.util.Logger;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public abstract class AbstractAsyncListLoader<T> extends AsyncTaskLoader<List<T>
 
   @Override
   public void deliverResult(List<T> data) {
-    Log.d(LOG_TAG, "Loader delivering results");
+    Logger.d(this, "Loader delivering results");
 
     // Keep a reference to the old data so it is not garbage collected
     // during delivery.
@@ -36,7 +37,7 @@ public abstract class AbstractAsyncListLoader<T> extends AsyncTaskLoader<List<T>
 
   @Override
   public void onStartLoading() {
-    Log.d(LOG_TAG, "Starting loader");
+    Logger.d(this, "Starting loader");
 
     if (data != null) {
       deliverResult(data);
@@ -54,7 +55,7 @@ public abstract class AbstractAsyncListLoader<T> extends AsyncTaskLoader<List<T>
   @Override
   public void onReset() {
     super.onReset();
-    Log.d(LOG_TAG, "Resetting loader, clearing data and unregistering observer.");
+    Logger.d(this, "Resetting loader, clearing data and unregistering observer.");
 
     data = null;
 

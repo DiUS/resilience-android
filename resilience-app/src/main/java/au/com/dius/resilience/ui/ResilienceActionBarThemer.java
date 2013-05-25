@@ -2,6 +2,7 @@ package au.com.dius.resilience.ui;
 
 import android.app.Activity;
 import android.util.Log;
+import au.com.dius.resilience.util.Logger;
 import com.google.inject.Inject;
 
 public class ResilienceActionBarThemer {
@@ -14,7 +15,7 @@ public class ResilienceActionBarThemer {
   public ResilienceActionBarThemer(Activity context) {
 
     if (context.getActionBar() == null) {
-      Log.w(LOG_TAG, "Warning: Action bar is null!");
+      Logger.w(this, "Warning: Action bar is null!");
       return;
     }
 

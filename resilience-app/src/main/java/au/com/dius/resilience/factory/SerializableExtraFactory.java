@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import au.com.dius.resilience.util.Logger;
 import com.google.inject.Inject;
 import roboguice.inject.ContextSingleton;
 
@@ -46,6 +47,6 @@ public class SerializableExtraFactory {
   }
 
   private void logWarning(String key, String reason) {
-    Log.w(LOG_TAG, "Couldn't deserialise for key " + key + ": " + reason);
+    Logger.w(this, "Couldn't deserialise for key ", key, ": ", reason);
   }
 }

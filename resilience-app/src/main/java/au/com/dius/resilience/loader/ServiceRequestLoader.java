@@ -48,7 +48,7 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
       ++page;
     }
 
-    Logger.d(this, "Loaded " + list.size() + " service requests.");
+    Logger.d(this, "Loaded ", list.size(), " service requests.");
 
     return list;
   }

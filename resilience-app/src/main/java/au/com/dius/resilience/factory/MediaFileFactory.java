@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.MediaType;
+import au.com.dius.resilience.util.Logger;
 import au.com.dius.resilience.util.ResilienceDateUtils;
 import com.google.inject.Inject;
 import roboguice.inject.ContextSingleton;
@@ -36,7 +37,7 @@ public class MediaFileFactory {
   public File createMediaFile(MediaType mediaType) {
 
     if (!isExternalStorageMounted()) {
-      Log.w(MediaFileFactory.class.getName(), "No external storage is mounted.");
+      Logger.w(this, "No external storage is mounted.");
       return null;
     }
 
@@ -44,7 +45,7 @@ public class MediaFileFactory {
     File storageDirectory = getStorageDirectory(mediaType);
 
     if (filename == null || storageDirectory == null) {
-      Log.w(MediaFileFactory.class.getName(), "Couldn't find acceptable filename or storage directory:"
+      Logger.w(this, "Couldn't find acceptable filename or storage directory:"
         + " Filename = " + filename + ", Dir = " + storageDirectory);
       return null;
     }
@@ -66,7 +67,7 @@ public class MediaFileFactory {
         return filenamePrefix + resilienceDateUtils.formatFilenameFriendly(now) + MP4_EXT;
     }
 
-    Log.e(MediaFileFactory.class.getName(), "Failed to find filename for media type " + type);
+    Logger.e(this, "Failed to find filename for media type ", type);
 
     return null;
   }
@@ -78,7 +79,7 @@ public class MediaFileFactory {
     File mediaStorageDir = new File(getExternalStoragePublicDirectory(mediaDirectory), MEDIA_DIR_NAME);
 
     if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-      Log.d(MediaFileFactory.class.getName(), "Failed to create directory.");
+      Logger.d(this, "Failed to create directory.");
       return null;
     }
 
