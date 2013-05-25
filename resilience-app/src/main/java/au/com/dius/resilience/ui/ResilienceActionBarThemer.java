@@ -9,8 +9,6 @@ public class ResilienceActionBarThemer {
 
   private static final String ACTION_BAR_TITLE = "RESILIENCE.";
 
-  public static final String LOG_TAG = ResilienceActionBarThemer.class.getName();
-
   @Inject
   public ResilienceActionBarThemer(Activity context) {
 

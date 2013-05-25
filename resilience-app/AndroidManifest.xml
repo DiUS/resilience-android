@@ -47,7 +47,6 @@
     <activity android:name=".ui.activity.CreateServiceRequestActivity"/>
     <activity android:name=".ui.activity.ServiceRequestListActivity"/>
     <activity android:name=".ui.activity.MapViewActivity"/>
-    <activity android:name=".ui.activity.PhotoViewActivity"/>
     <activity android:name=".ui.activity.PreferenceActivity"/>
     <activity android:name=".ui.activity.ManageProfileActivity"/>
     <activity android:name=".ui.activity.FeedbackActivity"/>

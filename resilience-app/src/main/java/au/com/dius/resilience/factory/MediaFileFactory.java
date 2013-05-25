@@ -46,7 +46,7 @@ public class MediaFileFactory {
 
     if (filename == null || storageDirectory == null) {
       Logger.w(this, "Couldn't find acceptable filename or storage directory:"
-        + " Filename = " + filename + ", Dir = " + storageDirectory);
+        , " Filename = ", filename, ", Dir = ", storageDirectory);
       return null;
     }
 

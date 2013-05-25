@@ -3,7 +3,6 @@ package au.com.dius.resilience.factory;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import au.com.dius.resilience.util.Logger;
 import com.google.inject.Inject;
 import roboguice.inject.ContextSingleton;
@@ -17,8 +16,6 @@ import java.io.Serializable;
  */
 @ContextSingleton
 public class SerializableExtraFactory {
-
-  public static final String LOG_TAG = SerializableExtraFactory.class.getName();
 
   // TODO - tests!
   @Inject

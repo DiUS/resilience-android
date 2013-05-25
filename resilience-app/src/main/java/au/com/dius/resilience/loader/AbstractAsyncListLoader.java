@@ -10,8 +10,6 @@ import java.util.List;
 
 public abstract class AbstractAsyncListLoader<T> extends AsyncTaskLoader<List<T>> {
 
-  private static final String LOG_TAG = AbstractAsyncListLoader.class.getName();
-
   private List<T> data;
   private BroadcastReceiver refreshObserver;
 

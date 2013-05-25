@@ -20,7 +20,6 @@ import roboguice.inject.InjectView;
 @ContentView(R.layout.main)
 public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTabChangeListener {
 
-  private static final String LOG_TAG = "ResilienceActivity";
   private static final String TAB_TAG_LIST_VIEW = "list_view";
   private static final String TAB_TAG_MAP_VIEW = "map_view";
 
