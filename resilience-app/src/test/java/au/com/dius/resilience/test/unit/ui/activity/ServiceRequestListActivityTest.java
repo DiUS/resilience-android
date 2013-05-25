@@ -1,7 +1,10 @@
 package au.com.dius.resilience.test.unit.ui.activity;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
@@ -18,21 +21,21 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 
+import static au.com.dius.resilience.loader.ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER;
 import static com.xtremelabs.robolectric.Robolectric.shadowOf;
+import static junitx.util.PrivateAccessor.setField;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @RunWith(ResilienceTestRunner.class)
 public class ServiceRequestListActivityTest {
 
   public static final int INDEX = 50;
+  public static final int LAST_VISIBLE_POSITION = 1;
 
   private ServiceRequestListActivity serviceRequestListActivity;
-
-  @Mock
-  private ListView listView;
 
   @Mock
   private ListViewAdapter listViewAdapter;
@@ -43,12 +46,26 @@ public class ServiceRequestListActivityTest {
   @Mock
   private View button;
 
+  @Mock
+  private Loader<Object> serviceRequestLoader;
+
+  private LoaderManager loaderManagerMock;
+
+  private ListView listViewMock;
+
   @Before
   public void setup() throws NoSuchFieldException {
     serviceRequestListActivity = new ServiceRequestListActivity();
-    PrivateAccessor.setField(serviceRequestListActivity, "adapter", listViewAdapter);
 
+    when(listViewAdapter.getCount()).thenReturn(LAST_VISIBLE_POSITION + 1);
     when(listViewAdapter.getItem(INDEX)).thenReturn(serviceRequest);
+    setField(serviceRequestListActivity, "adapter", listViewAdapter);
+
+    loaderManagerMock = serviceRequestListActivity.getLoaderManager();
+    when(loaderManagerMock.getLoader(SERVICE_REQUEST_LIST_LOADER)).thenReturn(serviceRequestLoader);
+
+    listViewMock = serviceRequestListActivity.getListView();
+    when(listViewMock.getLastVisiblePosition()).thenReturn(LAST_VISIBLE_POSITION);
   }
 
   @Test
@@ -76,42 +93,60 @@ public class ServiceRequestListActivityTest {
   }
 
   @Test
-  public void shouldSetAdapterDataWithMaximumSizeList() {
-    ArrayList<ServiceRequest> incidentList = new ArrayList<ServiceRequest>();
-
-    for (int i = 0; i < ServiceRequestListActivity.MAX_RESULT_SIZE; ++i) {
-      incidentList.add(serviceRequest);
-    }
-
-    serviceRequestListActivity.onLoadFinished(null, incidentList);
-    verify(listViewAdapter).setData(incidentList);
-  }
-
-  @Test
   public void shouldSetAdapterDataWithOneElement() {
     ArrayList<ServiceRequest> incidentList = new ArrayList<ServiceRequest>();
     incidentList.add(serviceRequest);
 
     serviceRequestListActivity.onLoadFinished(null, incidentList);
-    verify(listViewAdapter).setData(incidentList);
+    verify(listViewAdapter).addAll(incidentList);
   }
 
   @Test
   public void shouldNotSetAdapterDataWhenListIsEmpty() {
     ArrayList<ServiceRequest> incidentList = new ArrayList<ServiceRequest>();
     serviceRequestListActivity.onLoadFinished(null, incidentList);
-    verify(listViewAdapter).setData(incidentList);
+    verify(listViewAdapter).addAll(incidentList);
   }
 
+  @Test
+  public void shouldFlagContentChangedOnLoaderWhenScrolledToEnd() {
+    serviceRequestListActivity.onScrollStateChanged(listViewMock, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
+    verify(serviceRequestLoader).onContentChanged();
+  }
+
+  @Test
+  public void shouldNotFlagContentChangedOnLoaderWhenNotAtEnd() {
+    given(listViewMock.getLastVisiblePosition()).willReturn(0);
+    serviceRequestListActivity.onScrollStateChanged(listViewMock, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
+    verify(serviceRequestLoader, never()).onContentChanged();
+  }
+
+  @Test
+  public void shouldNotFlagContentChangedWhenLoaderIsNull() {
+    given(loaderManagerMock.getLoader(SERVICE_REQUEST_LIST_LOADER)).willReturn(null);
+    serviceRequestListActivity.onScrollStateChanged(listViewMock, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
+    verifyZeroInteractions(listViewMock);
+    verifyZeroInteractions(serviceRequestLoader);
+  }
+
+  @Test
+  public void shouldDoNothingForNonIdleScrollStates() {
+    serviceRequestListActivity.onScrollStateChanged(listViewMock, AbsListView.OnScrollListener.SCROLL_STATE_FLING);
+    verifyZeroInteractions(listViewMock);
+    verifyZeroInteractions(serviceRequestLoader);
+  }
+
+  // TODO
 //  @Test
 //  public void shouldShowLoadingIconWhenLoadingIncidents() {
 //
 //  }
 
-  @Test
-  public void shouldShowNoIncidentsMessageWhenNoIncidentsReturned() {
-    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
-
-//    assertThat
-  }
+  // TODO
+//  @Test
+//  public void shouldShowNoIncidentsMessageWhenNoIncidentsReturned() {
+//    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
+//
+////    assertThat
+//  }
 }

@@ -4,24 +4,22 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
+import au.com.dius.resilience.util.Logger;
 import au.com.justinb.open311.model.ServiceRequest;
 import roboguice.activity.RoboListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceRequestListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
-
-  private static final String LOG_TAG = ServiceRequestListActivity.class.getName();
-
-  public static final int MAX_RESULT_SIZE = 20;
+public class ServiceRequestListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>>
+  , AbsListView.OnScrollListener {
 
   private ListViewAdapter adapter;
 
@@ -32,6 +30,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     super.setListAdapter(adapter);
 
     getListView().setDividerHeight(0);
+    getListView().setOnScrollListener(this);
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
@@ -53,26 +52,36 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Override
   public Loader<List<ServiceRequest>> onCreateLoader(int i, Bundle bundle) {
-    Log.d(LOG_TAG, "Creating ServiceRequestLoader.");
+    Logger.d(this, "Creating ServiceRequestLoader.");
     return new ServiceRequestLoader(this);
   }
 
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> listLoader, List<ServiceRequest> incidentList) {
-    Log.d(LOG_TAG, "Adding " + incidentList + " Objects to the UI.");
-
-    List<ServiceRequest> limitedList = incidentList;
-    if (incidentList.size() > MAX_RESULT_SIZE) {
-      // TODO - a better solution would be to load more on demand. Just going to set a
-      // hard limit for now.
-      limitedList = incidentList.subList(0, MAX_RESULT_SIZE);
-    }
-
-    adapter.setData(limitedList);
+    adapter.addAll(incidentList);
   }
 
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> listLoader) {
     adapter.setData(null);
   }
+
+  @Override
+  public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+      Loader<Object> serviceRequestLoader = getLoaderManager().getLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER);
+      if (serviceRequestLoader == null) {
+        return;
+      }
+
+      if (getListView().getLastVisiblePosition() == adapter.getCount() - 1) {
+        serviceRequestLoader.onContentChanged();
+      }
+    }
+
+  }
+
+  @Override
+  public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) { }
 }

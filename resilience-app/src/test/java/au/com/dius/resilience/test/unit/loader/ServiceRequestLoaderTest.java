@@ -16,11 +16,12 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.never;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
 @RunWith(ResilienceTestRunner.class)
@@ -48,6 +49,7 @@ public class ServiceRequestLoaderTest {
     serviceRequests.add(new ServiceRequest());
 
     when(requestAdapter.list()).thenReturn(serviceRequests);
+    when(requestAdapter.list((Map<String, String>) anyObject())).thenReturn(serviceRequests);
 
     PrivateAccessor.setField(listLoader, "requestAdapter", requestAdapter);
   }
