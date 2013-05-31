@@ -44,11 +44,15 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
     locationField.setText(formatAddress(serviceRequest));
 
     TextView reportedTime = (TextView) rowView.findViewById(R.id.list_view_item_time_reported);
-    reportedTime.setText(DateUtils.getRelativeDateTimeString(
-      getContext(),
-      serviceRequest.getRequestedDatetime().getTime(),
-      DateUtils.SECOND_IN_MILLIS,
-      DateUtils.YEAR_IN_MILLIS, 0).toString().toUpperCase());
+
+    if (serviceRequest.getRequestedDatetime() != null) {
+      reportedTime.setText(DateUtils.getRelativeDateTimeString(
+        getContext(),
+        serviceRequest.getRequestedDatetime().getTime(),
+        DateUtils.SECOND_IN_MILLIS,
+        DateUtils.YEAR_IN_MILLIS, 0).toString().toUpperCase());
+    }
+
 
     ImageView previewImage = (ImageView) rowView.findViewById(R.id.list_view_preview_icon);
     imageLoader.loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());

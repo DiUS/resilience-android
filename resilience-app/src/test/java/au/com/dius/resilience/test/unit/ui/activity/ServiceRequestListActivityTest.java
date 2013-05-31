@@ -6,14 +6,15 @@ import android.content.Loader;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.Toast;
 import au.com.dius.resilience.intent.Extras;
+import au.com.dius.resilience.persistence.async.AnonymousRepeatableTask;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import au.com.dius.resilience.ui.activity.ServiceRequestListActivity;
 import au.com.dius.resilience.ui.activity.ViewServiceRequestActivity;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.xtremelabs.robolectric.shadows.ShadowActivity;
-import junitx.util.PrivateAccessor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,7 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 
 import static au.com.dius.resilience.loader.ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER;
+import static au.com.dius.resilience.test.unit.utils.TestHelper.getField;
 import static com.xtremelabs.robolectric.Robolectric.shadowOf;
 import static junitx.util.PrivateAccessor.setField;
 import static org.hamcrest.core.Is.is;
@@ -49,6 +51,12 @@ public class ServiceRequestListActivityTest {
   @Mock
   private Loader<Object> serviceRequestLoader;
 
+  @Mock
+  private AnonymousRepeatableTask blockRefreshTask;
+
+  @Mock
+  private Toast toast;
+
   private LoaderManager loaderManagerMock;
 
   private ListView listViewMock;
@@ -56,6 +64,8 @@ public class ServiceRequestListActivityTest {
   @Before
   public void setup() throws NoSuchFieldException {
     serviceRequestListActivity = new ServiceRequestListActivity();
+    setField(serviceRequestListActivity, "blockRefreshTask", blockRefreshTask);
+    setField(serviceRequestListActivity, "toast", toast);
 
     when(listViewAdapter.getCount()).thenReturn(LAST_VISIBLE_POSITION + 1);
     when(listViewAdapter.getItem(INDEX)).thenReturn(serviceRequest);
@@ -136,17 +146,34 @@ public class ServiceRequestListActivityTest {
     verifyZeroInteractions(serviceRequestLoader);
   }
 
-  // TODO
-//  @Test
-//  public void shouldShowLoadingIconWhenLoadingIncidents() {
-//
-//  }
+  @Test
+  public void shouldShowNoIncidentsMessageWhenNoIncidentsReturned() {
+    given(listViewAdapter.getCount()).willReturn(0);
+    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
+    verify(toast).setText("No incidents found!");
+    verify(toast).show();
+  }
 
-  // TODO
-//  @Test
-//  public void shouldShowNoIncidentsMessageWhenNoIncidentsReturned() {
-//    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
-//
-////    assertThat
-//  }
+  @Test
+  public void shouldShowNoMOREIncidentsMessageWhenNoIncidentsReturned() {
+    given(listViewAdapter.getCount()).willReturn(1);
+    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
+    verify(toast).setText("No more incidents found!");
+    verify(toast).show();
+  }
+
+  @Test
+  public void shouldBlockRefreshOnStartLoad() {
+    Boolean isLoading = (Boolean) getField(serviceRequestListActivity, "isLoading");
+    assertFalse(isLoading);
+    serviceRequestListActivity.onScrollStateChanged(listViewMock, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
+    isLoading = (Boolean) getField(serviceRequestListActivity, "isLoading");
+    assertTrue(isLoading);
+  }
+
+  @Test
+  public void shouldStartBlockingTaskOnRefresh() {
+    serviceRequestListActivity.onScrollStateChanged(listViewMock, AbsListView.OnScrollListener.SCROLL_STATE_IDLE);
+    verify(blockRefreshTask).execute();
+  }
 }
