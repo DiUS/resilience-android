@@ -86,7 +86,7 @@ public class ViewServiceRequestActivity extends RoboActivity {
     timeReported.setText(dateUtils.formatRelativeDate(serviceRequest.getRequestedDatetime()));
     description.setText(serviceRequest.getDescription());
 
-    imageLoader.loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());
+    imageLoader.loadFullsizeImage(previewImage, serviceRequest.getMediaUrl());
 
     super.onResume();
   }

@@ -1,7 +1,6 @@
 package au.com.dius.resilience.loader;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import au.com.dius.resilience.R;
@@ -10,16 +9,17 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.google.inject.Inject;
 import com.novoda.imageloader.core.ImageManager;
-import com.novoda.imageloader.core.LoaderSettings;
 import com.novoda.imageloader.core.model.ImageTag;
 import com.novoda.imageloader.core.model.ImageTagFactory;
 import roboguice.inject.ContextSingleton;
-import roboguice.inject.InjectResource;
 
 @ContextSingleton
 public class ImageLoader {
 
   public static final String CLOUD_NAME = "cloud_name";
+
+  private static final int THUMBNAIL_SIZE = 150;
+  private static final String THUMB = "thumb";
 
   private ImageTagFactory imageTagFactory;
   private ImageManager imageManager;
@@ -38,13 +38,7 @@ public class ImageLoader {
   }
 
   private void initialiseCloudinary() {
-
-    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-    int widthPixels = metrics.widthPixels;
-
-    // TODO - should account for thumb-sized images.
-    thumbnailTransformation = new Transformation().width(widthPixels);
-
+    thumbnailTransformation = new Transformation();
     cloudinary.setConfig(CLOUD_NAME, context.getString(R.string.cloudinary_cloud_name));
   }
 
@@ -54,9 +48,29 @@ public class ImageLoader {
     imageTagFactory.setErrorImageId(R.drawable.border_white);
   }
 
-  public void loadThumbnailImage(ImageView view, String imageName) {
-    String thumbnailUrl = cloudinary.url().transformation(thumbnailTransformation).generate(imageName);
+  public void loadFullsizeImage(ImageView view, String imageName) {
+    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+    int widthPixels = metrics.widthPixels;
+    int heightPixels = metrics.heightPixels;
 
+    String thumbnailUrl = cloudinary.url().transformation(thumbnailTransformation
+      .width(widthPixels > heightPixels ? widthPixels : heightPixels)
+      .crop(THUMB)
+    ).generate(imageName);
+
+    load(view, thumbnailUrl);
+  }
+
+  public void loadThumbnailImage(ImageView view, String imageName) {
+    String thumbnailUrl = cloudinary.url().transformation(thumbnailTransformation.
+      width(THUMBNAIL_SIZE)
+      .height(THUMBNAIL_SIZE)
+      .crop(THUMB))
+      .generate(imageName);
+    load(view, thumbnailUrl);
+  }
+
+  private void load(ImageView view, String thumbnailUrl) {
     ImageTag tag = imageTagFactory.build(thumbnailUrl, context);
     view.setTag(tag);
     imageManager.getLoader().load(view);

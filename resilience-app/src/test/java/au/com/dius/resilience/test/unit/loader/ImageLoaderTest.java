@@ -64,5 +64,11 @@ public class ImageLoaderTest {
     verify(loader).load(view);
   }
 
+  @Test
+  public void shouldLoadFullsizeImage() {
+    imageLoader.loadFullsizeImage(view, "");
+    verify(loader).load(view);
+  }
+
   // TODO - add tests around when load fails.
 }
