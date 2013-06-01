@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="open_311_base_url">http://10.0.2.2:4567</string>
+  <string name="open_311_base_url">http://api.resilience-app.org</string>
+  <string name="cloudinary_cloud_name">resilience</string>
 </resources>
