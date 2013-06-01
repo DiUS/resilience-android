@@ -51,7 +51,7 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> loader, List<ServiceRequest> data) {
 
-    if (loader.getId() != ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER) {
+    if (loader.getId() != ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER || map == null) {
       return;
     }
 
@@ -69,6 +69,11 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> loader) {
+
+    if (map == null) {
+      return;
+    }
+
     map.clear();
   }
 }

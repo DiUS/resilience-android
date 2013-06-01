@@ -2,6 +2,7 @@ package au.com.dius.resilience.loader;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.factory.ImageManagerFactory;
@@ -22,7 +23,7 @@ public class ImageLoader {
 
   private ImageTagFactory imageTagFactory;
   private ImageManager imageManager;
-  private Transformation thumbnailTransformation = new Transformation().width(150).height(150).crop("thumb");
+  private Transformation thumbnailTransformation;
 
   private Cloudinary cloudinary;
   private Context context;
@@ -37,6 +38,13 @@ public class ImageLoader {
   }
 
   private void initialiseCloudinary() {
+
+    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+    int widthPixels = metrics.widthPixels;
+
+    // TODO - should account for thumb-sized images.
+    thumbnailTransformation = new Transformation().width(widthPixels);
+
     cloudinary.setConfig(CLOUD_NAME, context.getString(R.string.cloudinary_cloud_name));
   }
 

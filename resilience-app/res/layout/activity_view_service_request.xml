@@ -4,14 +4,51 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:layout_margin="@dimen/content_margin">
+              android:weightSum="100"
+    >
+
+  <ImageView
+      android:id="@+id/view_service_request_preview_image"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:background="@android:color/black"
+      android:scaleType="center"
+      android:layout_weight="35"
+      android:contentDescription=""
+      />
+
+  <RelativeLayout
+      android:layout_weight="35"
+      android:layout_height="0dp"
+      >
+
+    <fragment
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.MapFragment"
+        />
+
+    <View
+        android:layout_alignLeft="@id/map"
+        android:layout_alignTop="@id/map"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_service_request_map_shadow_height"
+        android:background="@drawable/drop_shadow"
+        />
+  </RelativeLayout>
 
   <LinearLayout
       android:orientation="vertical"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
       android:layout_marginBottom="@dimen/content_margin"
       android:padding="@dimen/medium_padding"
-      android:background="@drawable/background_border">
+      android:background="@drawable/background_border"
+      android:layout_margin="@dimen/content_margin"
+      android:layout_weight="30"
+      >
 
     <TextView
         android:id="@+id/title"
@@ -24,30 +61,6 @@
 
     <TextView
         android:id="@+id/description"/>
-
-  </LinearLayout>
-
-  <LinearLayout
-      android:layout_gravity="center_vertical"
-      android:layout_width="fill_parent"
-      android:background="@drawable/background_border"
-      android:padding="@dimen/medium_padding">
-
-    <!-- TODO - finish properly -->
-    <ImageView
-        android:id="@+id/view_service_request_preview_image"
-        android:layout_width="fill_parent"
-        android:layout_weight="50"
-        android:paddingRight="@dimen/medium_padding"
-        android:layout_height="@dimen/view_service_request_map_height"
-        android:contentDescription=""/>
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/map"
-              android:layout_height="@dimen/view_service_request_map_height"
-              android:layout_weight="50"
-              class="com.google.android.gms.maps.MapFragment"
-              android:layout_width="fill_parent" />
 
   </LinearLayout>
 
