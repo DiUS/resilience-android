@@ -1,39 +1,40 @@
 <resources>
-  <string name="user_preferences">User Preferences</string>
-  <string name="current_profile">Switch Profile</string>
-  <string name="current_profile_key">current_profile</string>
-  <string name="profile_first_name_key">first_name</string>
-  <string name="profile_surname_key">surname</string>
-  <string name="profile_phone_key">phone_number</string>
-  <string name="profile_email_key">email_address</string>
+    <string name="user_preferences">User Preferences</string>
+    <string name="current_profile">Switch Profile</string>
+    <string name="current_profile_key">current_profile</string>
+    <string name="profile_first_name_key">first_name</string>
+    <string name="profile_surname_key">surname</string>
+    <string name="profile_phone_key">phone_number</string>
+    <string name="profile_email_key">email_address</string>
 
-  <!--
-    Profiles
-  -->
-  <string name="default_user">Default User</string>
-  <string name="new_profile_hint">Enter profile name</string>
-  <string name="create_plus">Create +</string>
-  <string name="profile_entries">profile_entries</string>
-  <string name="profile_exists_error">Profile already exists or is invalid, please choose another name.</string>
-  <string name="user_profile">User Profile</string>
-  <string name="account_id">Account Id</string>
-  <string name="first_name">First Name</string>
-  <string name="surname">Surname</string>
-  <string name="phone_number">Phone Number</string>
-  <string name="email_address">Email Address</string>
+    <!--
+      Profiles
+    -->
+    <string name="default_user">Default User</string>
+    <string name="new_profile_hint">Enter profile name</string>
+    <string name="create_plus">Create +</string>
+    <string name="profile_entries">profile_entries</string>
+    <string name="profile_exists_error">Profile already exists or is invalid, please choose another name.</string>
+    <string name="user_profile">User Profile</string>
+    <string name="account_id">Account Id</string>
+    <string name="first_name">First Name</string>
+    <string name="surname">Surname</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email_address">Email Address</string>
 
-  <!--
-    Contribute
-  -->
-  <string name="contribute">Contribute</string>
-  <string name="github">Resilience on Github</string>
+    <!--
+      Contribute
+    -->
+    <string name="contribute">Contribute</string>
+    <string name="github">Resilience on Github</string>
 
-  <!--
-    Feedback
-  -->
-  <string name="feedback_summary">Tell us what you think</string>
-  <string name="feedback_description_highlight">Resilience is all about community engagement.</string>
-  <string name="feedback_description">Use the form below to provide feedback, suggestions or complaints.</string>
-  <string name="feedback_thanks">Thank you for your feedback!</string>
+    <!--
+      Feedback
+    -->
+    <string name="feedback_summary">Tell us what you think</string>
+    <string name="feedback_description_highlight">Resilience is all about community engagement.</string>
+    <string name="feedback_description">Use the form below to provide feedback, suggestions or complaints.</string>
+    <string name="feedback_thanks">Thank you for your feedback!</string>
+    <string name="feedback_failure">Failed to send feedback. Please try again.</string>
 
 </resources>

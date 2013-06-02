@@ -6,9 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Device;
 import au.com.dius.resilience.model.Feedback;
+import au.com.dius.resilience.model.FeedbackResult;
+import au.com.dius.resilience.persistence.async.SendFeedbackTask;
+import au.com.dius.resilience.persistence.async.SendFeedbackTask.SendFeedbackCallback;
 
 public class FeedbackFragment extends Fragment {
 
@@ -33,11 +37,35 @@ public class FeedbackFragment extends Fragment {
   public void onFeedbackSubmitClick(View button) {
     String deviceId = Device.getDeviceId(getActivity());
     String text = feedbackText.getText().toString();
-    Feedback feedback = new Feedback(text, deviceId);
 
     if (text != null && text.trim().length() > 0) {
       button.setEnabled(false);
-//      getActivity().startService(SendFeedbackService.createFeedbackSaveCompleteIntent(getActivity(), feedback));
+
+      Feedback feedbackArgs = new Feedback(text, deviceId);
+
+      SendFeedbackTask feedbackTask = new SendFeedbackTask(getActivity(), new SendFeedbackCallback() {
+
+        @Override
+        public void onTaskDone(FeedbackResult result) {
+          feedbackResult(result);
+        }
+
+      });
+
+      feedbackTask.execute(feedbackArgs);
+
+      button.setEnabled(true);
+    }
+  }
+
+  protected void feedbackResult(FeedbackResult result) {
+    Toast toast;
+
+    if (result.getResult() = true) {
+      toast = Toast.makeText(getActivity(), R.string.feedback_thanks, Toast.LENGTH_LONG);
+      toast.show();
+    } else {
+      toast = Toast.makeText(getActivity(), R.string.feedback_failure + ": " + result.getException().getMessage(), Toast.LENGTH_LONG);
     }
   }
 }

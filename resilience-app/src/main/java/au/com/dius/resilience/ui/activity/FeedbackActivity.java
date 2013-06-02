@@ -41,10 +41,11 @@ public class FeedbackActivity extends RoboActivity {
     FragmentManager fragmentManager = getFragmentManager();
     FeedbackFragment fragment = (FeedbackFragment) fragmentManager.findFragmentById(R.id.feedback_fragment);
     fragment.onFeedbackSubmitClick(button);
+
   }
 
   private class FeedbackBroadcastReceiver
-    extends BroadcastReceiver {
+      extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
