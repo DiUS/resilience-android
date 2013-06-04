@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.model.FeedbackResult;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
@@ -26,6 +26,7 @@ public class SendFeedbackTask extends AsyncTask<Feedback, Void, FeedbackResult> 
   private static final String JSON_ATTRIBUTE_COMMENT = "comment";
   private static final String OPEN311_REQUEST_PAGE = "feedback.json";
   private static final int TIMEOUT_MILLISEC = 10000;
+  private static final int FEEDBACK_SUCCESSFUL_STATUS = 201;
 
   public interface SendFeedbackCallback {
     public void onTaskDone(FeedbackResult result);
@@ -59,6 +60,7 @@ public class SendFeedbackTask extends AsyncTask<Feedback, Void, FeedbackResult> 
     HttpClient client = null;
     StringBuilder address = null;
     HttpPost request = null;
+    HttpResponse response = null;
 
     // Create JSON object
     try {
@@ -95,23 +97,22 @@ public class SendFeedbackTask extends AsyncTask<Feedback, Void, FeedbackResult> 
 
     // Send request
     try {
-      HttpResponse response = client.execute(request);
-      HttpEntity entity = response.getEntity();
+      response = client.execute(request);
 
-      // If there is a response, I'm considering that a win
-      if (entity != null) {
-        return new FeedbackResult(true, null);
-      }
     } catch (IOException e) {
 
       return new FeedbackResult(false, e);
     }
 
-    return new FeedbackResult(false, null);
+    // Get response
+    StatusLine status = response.getStatusLine();
+
+    return new FeedbackResult(status.getStatusCode() == FEEDBACK_SUCCESSFUL_STATUS, null);
   }
 
   @Override
   protected void onPostExecute(FeedbackResult result) {
     callback.onTaskDone(result);
   }
+
 }
