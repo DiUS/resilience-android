@@ -7,13 +7,15 @@
     <item name="android:selectableItemBackground">@drawable/selector_background</item>
 
     <item name="android:actionOverflowButtonStyle">@style/action_overflow_button</item>
+    <item name="android:editTextStyle">@style/edit_text</item>
 
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
 
-  <style name="edit_text">
-    <item name="android:background">@drawable/background_border</item>
+  <style name="edit_text" parent="@android:style/Widget.DeviceDefault.Light.EditText">
+    <item name="android:background">@drawable/selector_list_item_background_inner</item>
+    <item name="android:textSize">@dimen/medium_text</item>
   </style>
 
   <style name="spinner_item">
@@ -21,7 +23,7 @@
     <item name="android:padding">@dimen/medium_padding</item>
   </style>
 
-  <style name="spinner">
+  <style name="bordered_content">
     <item name="android:background">@drawable/selector_list_item_background_inner</item>
   </style>
 

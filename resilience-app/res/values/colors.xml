@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <color name="light_green">#71C200</color>
   <color name="background">#E6E4DE</color>
   <color name="selected">#FF9946</color>
   <color name="action_bar_background">#EE6624</color>
