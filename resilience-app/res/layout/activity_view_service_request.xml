@@ -13,55 +13,78 @@
       android:layout_height="0dp"
       android:background="@android:color/black"
       android:scaleType="center"
-      android:layout_weight="35"
       android:contentDescription=""
+      android:layout_weight="40"
+      android:onClick="onImageClick"
       />
 
   <RelativeLayout
-      android:layout_weight="35"
       android:layout_height="0dp"
+      android:layout_weight="60"
       >
 
-    <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/map_and_details"
         android:layout_height="match_parent"
-        class="com.google.android.gms.maps.MapFragment"
-        />
+        android:fillViewport="true"
+        >
+
+      <LinearLayout
+          android:orientation="vertical"
+          android:layout_width="match_parent"
+          android:weightSum="100"
+          >
+
+        <!-- TODO - use weights instead of harcoding height.
+             TODO - already had one attempt at this, doesn't appear to be
+             TODO - straightforward. -->
+        <fragment
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_weight="30"
+            class="com.google.android.gms.maps.MapFragment"
+            />
+
+        <!-- TODO - turn into fragment -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="70"
+            android:layout_marginBottom="@dimen/content_margin"
+            android:padding="@dimen/medium_padding"
+            android:background="@drawable/background_border"
+            android:layout_margin="@dimen/content_margin"
+            >
+
+          <TextView
+              android:id="@+id/title"
+              android:textSize="@dimen/view_service_request_title_size"
+              android:textStyle="bold"/>
+
+          <TextView
+              android:id="@+id/time_reported"
+              android:textColor="@color/time_reported"/>
+
+          <TextView
+              android:id="@+id/description"/>
+
+        </LinearLayout>
+
+      </LinearLayout>
+
+    </ScrollView>
 
     <View
-        android:layout_alignLeft="@id/map"
-        android:layout_alignTop="@id/map"
+        android:layout_alignLeft="@id/map_and_details"
+        android:layout_alignTop="@id/map_and_details"
         android:layout_width="match_parent"
         android:layout_height="@dimen/view_service_request_map_shadow_height"
         android:background="@drawable/drop_shadow"
         />
+
   </RelativeLayout>
-
-  <LinearLayout
-      android:orientation="vertical"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_marginBottom="@dimen/content_margin"
-      android:padding="@dimen/medium_padding"
-      android:background="@drawable/background_border"
-      android:layout_margin="@dimen/content_margin"
-      android:layout_weight="30"
-      >
-
-    <TextView
-        android:id="@+id/title"
-        android:textSize="@dimen/view_service_request_title_size"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/time_reported"
-        android:textColor="@color/time_reported"/>
-
-    <TextView
-        android:id="@+id/description"/>
-
-  </LinearLayout>
 
 </LinearLayout>

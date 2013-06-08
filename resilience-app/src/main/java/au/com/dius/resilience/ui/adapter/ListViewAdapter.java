@@ -55,7 +55,7 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
 
 
     ImageView previewImage = (ImageView) rowView.findViewById(R.id.list_view_preview_icon);
-    imageLoader.loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());
+    imageLoader.  loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());
 
     return rowView;
   }

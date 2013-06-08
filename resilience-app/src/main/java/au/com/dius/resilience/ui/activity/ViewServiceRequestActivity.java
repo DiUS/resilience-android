@@ -1,6 +1,11 @@
 package au.com.dius.resilience.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
@@ -54,6 +59,8 @@ public class ViewServiceRequestActivity extends RoboActivity {
 
   private GoogleMap map;
 
+  private AlertDialog.Builder imageAlert;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -77,6 +84,13 @@ public class ViewServiceRequestActivity extends RoboActivity {
         map.addMarker(new MarkerOptions().position(latLng));
       }
     }
+
+    imageAlert = new AlertDialog.Builder(this, android.R.style.Theme_Translucent_NoTitleBar);
+    imageAlert.setNeutralButton("Dismiss", new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int buttonId) {
+        dialog.dismiss();
+      }
+    });
   }
 
   @Override
@@ -89,5 +103,15 @@ public class ViewServiceRequestActivity extends RoboActivity {
     imageLoader.loadFullsizeImage(previewImage, serviceRequest.getMediaUrl());
 
     super.onResume();
+  }
+
+  public void onImageClick(View image) {
+
+    ImageView view = new ImageView(this);
+
+    imageLoader.loadFullsizeImage(view, serviceRequest.getMediaUrl());
+
+    imageAlert.setView(view);
+    imageAlert.show();
   }
 }

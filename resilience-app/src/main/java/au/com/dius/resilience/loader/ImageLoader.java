@@ -5,6 +5,7 @@ import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.factory.ImageManagerFactory;
+import au.com.dius.resilience.util.Logger;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.google.inject.Inject;
@@ -43,7 +44,6 @@ public class ImageLoader {
   }
 
   private void initialiseImageLoader() {
-
     imageTagFactory = ImageTagFactory.newInstance(context, R.drawable.background_border);
     imageTagFactory.setErrorImageId(R.drawable.border_white);
   }
@@ -54,9 +54,11 @@ public class ImageLoader {
     int heightPixels = metrics.heightPixels;
 
     String thumbnailUrl = cloudinary.url().transformation(thumbnailTransformation
-      .width(widthPixels > heightPixels ? widthPixels : heightPixels)
+      .width(widthPixels)
       .crop(THUMB)
     ).generate(imageName);
+
+    Logger.i(this, "Loading full sized image with width:", widthPixels);
 
     load(view, thumbnailUrl);
   }
@@ -67,6 +69,9 @@ public class ImageLoader {
       .height(THUMBNAIL_SIZE)
       .crop(THUMB))
       .generate(imageName);
+
+    Logger.i(this, "Loading thumbnail.");
+
     load(view, thumbnailUrl);
   }
 

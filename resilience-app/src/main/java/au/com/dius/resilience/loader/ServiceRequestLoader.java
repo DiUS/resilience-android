@@ -3,6 +3,7 @@ package au.com.dius.resilience.loader;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.util.Logger;
@@ -39,10 +40,12 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
   public List<ServiceRequest> loadInBackground() {
     extraProperties.put(PAGE_PROPERTY, String.valueOf(page));
 
-    Logger.d(this, "Loading service requests.");
+    Logger.d(this, "Loading page", page, "of service requests from", getContext().getString(R.string.open_311_base_url));
 
     List<ServiceRequest> list = requestAdapter.list(extraProperties);
 
+    // TODO - perhaps this should only increment when size = max page size?
+    // TOOD - otherwise could lose issues if a full page wasn't loaded on the last refresh.
     if (list.size() > 0) {
       ++page;
     }
