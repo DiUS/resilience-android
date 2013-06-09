@@ -7,16 +7,20 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.factory.MediaFileFactory;
-import au.com.dius.resilience.loader.ImageLoader;
+import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.model.MediaType;
 import au.com.dius.resilience.model.ServiceListDefaults;
 import au.com.dius.resilience.ui.adapter.ServiceListSpinnerAdapter;
+import au.com.justinb.open311.GenericRequestAdapter;
+import au.com.justinb.open311.model.ServiceList;
+import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
@@ -38,11 +42,16 @@ public class CreateServiceRequestActivity extends RoboActivity {
   @InjectView(R.id.photo_preview_image)
   private ImageView photoPreview;
 
+  @InjectView(R.id.description_field)
+  private EditText descriptionField;
+
+  @Inject
+  private LocationBroadcaster locationBroadcaster;
+
   @Inject
   private MediaFileFactory mediaFileFactory;
 
-  @Inject
-  private ImageLoader imageLoader;
+  public GenericRequestAdapter<ServiceRequest> requestAdapter;
 
   private ServiceListSpinnerAdapter serviceListSpinnerAdapter;
 
@@ -52,6 +61,10 @@ public class CreateServiceRequestActivity extends RoboActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setupAdapter();
+
+    // Instead of 'this' make the receiver the to-be-implemented location fragment.
+//    registerReceiver(null, new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
+    requestAdapter = new GenericRequestAdapter<ServiceRequest>(ServiceRequest.class);
   }
 
   private void setupAdapter() {
@@ -100,5 +113,23 @@ public class CreateServiceRequestActivity extends RoboActivity {
         photoPreview.setImageURI(cachedPhotoUri);
       }
     }
+  }
+
+  public void onSubmitClick(View button) {
+    ServiceRequest.Builder builder = new ServiceRequest.Builder();
+
+    ServiceList serviceList = (ServiceList) serviceSpinner.getSelectedItem();
+    builder.serviceCode(serviceList.getServiceCode())
+      .serviceName(serviceList.getServiceName())
+      .description(descriptionField.getText().toString())
+      .latitude(37.76524078)
+      .longtitude(-122.4212043);
+
+    // Need to upload the photo before I can add this URL.
+//    builder.mediaUrl(cachedPhotoUri.toString());
+
+    // FIXME - 4** (and probably other error codes) seem to be ignored by my
+    // FIXME - Open311 library. Gotta fix.
+    requestAdapter.create(builder.createServiceRequest());
   }
 }

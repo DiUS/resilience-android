@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TabHost;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
-import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.ui.ResilienceActionBarThemer;
 import au.com.dius.resilience.util.Logger;
@@ -29,9 +28,6 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
   private String currentTabTag;
 
   @Inject
-  private LocationBroadcaster locationBroadcaster;
-
-  @Inject
   private PreferenceAdapter preferenceAdapter;
 
   @Inject
@@ -45,7 +41,6 @@ public class ResilienceActivity extends RoboTabActivity implements TabHost.OnTab
     super.onCreate(savedInstanceState);
 
     setupTabs();
-    locationBroadcaster.startPolling();
   }
 
   private void setupTabs() {

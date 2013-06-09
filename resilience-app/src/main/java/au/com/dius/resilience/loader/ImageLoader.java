@@ -51,7 +51,6 @@ public class ImageLoader {
   public void loadFullsizeImage(ImageView view, String imageName) {
     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
     int widthPixels = metrics.widthPixels;
-    int heightPixels = metrics.heightPixels;
 
     String thumbnailUrl = cloudinary.url().transformation(thumbnailTransformation
       .width(widthPixels)
