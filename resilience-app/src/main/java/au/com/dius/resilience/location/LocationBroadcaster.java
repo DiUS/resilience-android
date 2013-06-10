@@ -9,6 +9,7 @@ import android.os.Bundle;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
+import au.com.dius.resilience.util.Logger;
 import com.google.inject.Inject;
 import roboguice.inject.ContextSingleton;
 
@@ -85,6 +86,12 @@ public class LocationBroadcaster implements LocationListener {
   }
 
   public void stopPolling() {
-    locationManager.removeUpdates(this);
+    try {
+      threadPoolExecutor.awaitTermination(0, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      Logger.e(this, "Interrupted while terminating location timeout thread.");
+    } finally {
+      locationManager.removeUpdates(this);
+    }
   }
 }

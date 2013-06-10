@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+
+  <ImageView
+      android:id="@+id/locating_icon"
+      android:src="@drawable/blue_poi"
+      android:layout_gravity="center_vertical"
+      />
+
+  <TextView
+      android:id="@+id/locating_text"
+      android:text="@string/locating_text"
+      android:layout_gravity="center_vertical"
+      />
+</LinearLayout>

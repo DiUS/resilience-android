@@ -47,4 +47,10 @@
   <!-- List view selector toggle buttons -->
   <string name="label_tab_map_view">Map</string>
   <string name="label_tab_list_view">List</string>
+
+  <!-- Locating fragment -->
+  <string name="locating_text">Finding your location&#8230;</string>
+  <string name="located">Reporting issue in %1$s</string>
+  <string name="locate_failed">Sorry, I couldn\'t find you!</string>
+
 </resources>

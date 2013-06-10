@@ -22,14 +22,14 @@ import au.com.justinb.open311.GenericRequestAdapter;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
-import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboFragmentActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
 import java.io.File;
 
 @ContentView(R.layout.activity_create_service_request)
-public class CreateServiceRequestActivity extends RoboActivity {
+public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
   public static final int CAPTURE_PHOTO_REQUEST_CODE = 100;
 

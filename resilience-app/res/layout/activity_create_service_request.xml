@@ -51,6 +51,13 @@
       android:background="@color/light_green"
       android:onClick="onSubmitClick"
       android:textColor="@android:color/white"
+      android:layout_marginBottom="@dimen/content_margin"
+      />
+
+  <fragment
+      android:id="@+id/location_resolver"
+      android:name="au.com.dius.resilience.ui.fragment.LocationResolverFragment"
+      android:layout_width="match_parent"
       />
 
 </LinearLayout>

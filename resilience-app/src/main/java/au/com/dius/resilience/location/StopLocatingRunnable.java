@@ -10,6 +10,8 @@ public class StopLocatingRunnable implements Runnable {
 
   @Override
   public void run() {
-    locationBroadcaster.stopPolling();
+    // FIXME - Hacky.
+    locationBroadcaster.onLocationChanged(null);
+//    locationBroadcaster.stopPolling();
   }
 }
