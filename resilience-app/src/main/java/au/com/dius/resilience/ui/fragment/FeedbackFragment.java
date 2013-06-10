@@ -61,11 +61,11 @@ public class FeedbackFragment extends Fragment {
   protected void feedbackResult(FeedbackResult result) {
     Toast toast;
 
-    if (result.getResult() == true) {
+    if (result.getResult()) {
       toast = Toast.makeText(getActivity(), R.string.feedback_thanks, Toast.LENGTH_LONG);
-      toast.show();
     } else {
       toast = Toast.makeText(getActivity(), R.string.feedback_failure + ": " + result.getException().getMessage(), Toast.LENGTH_LONG);
     }
+    toast.show();
   }
 }
