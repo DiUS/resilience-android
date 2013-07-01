@@ -4,9 +4,11 @@ import android.app.LoaderManager;
 import android.content.IntentFilter;
 import android.content.Loader;
 import android.os.Bundle;
+import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.observer.LocationUpdatedMapBroadcastReceiver;
 import au.com.justinb.open311.model.ServiceRequest;
@@ -15,6 +17,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
+import com.squareup.otto.Subscribe;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
@@ -39,13 +42,26 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
     registerReceiver(new LocationUpdatedMapBroadcastReceiver(map), new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
+  }
 
+  @Override
+  public void onResume() {
+    super.onResume();
     locationBroadcaster.startPolling();
   }
 
   @Override
+  public void onPause() {
+    locationBroadcaster.stopPolling();
+    super.onPause();
+  }
+
+  @Override
   public Loader<List<ServiceRequest>> onCreateLoader(int id, Bundle args) {
-    return new ServiceRequestLoader(this);
+    ServiceRequestLoader serviceRequestLoader = new ServiceRequestLoader(this);
+    serviceRequestLoader.subscribe(this);
+    locationBroadcaster.subscribe(serviceRequestLoader);
+    return serviceRequestLoader;
   }
 
   @Override
@@ -70,10 +86,18 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> loader) {
 
+    ((ServiceRequestLoader)loader).unsubscribe(this);
+    locationBroadcaster.unsubscribe(loader);
+
     if (map == null) {
       return;
     }
 
     map.clear();
+  }
+
+  @Subscribe
+  public void onServiceRequestLoadFailedEvent(ServiceRequestLoadFailed event) {
+    Toast.makeText(this, "Load failed, please try again later.", Toast.LENGTH_LONG);
   }
 }

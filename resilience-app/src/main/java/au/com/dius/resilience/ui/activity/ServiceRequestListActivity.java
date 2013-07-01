@@ -11,10 +11,14 @@ import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
+import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.persistence.async.AnonymousRepeatableTask;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import au.com.dius.resilience.util.Logger;
 import au.com.justinb.open311.model.ServiceRequest;
+import com.google.inject.Inject;
+import com.squareup.otto.Subscribe;
 import org.apache.commons.lang.StringUtils;
 import roboguice.activity.RoboListActivity;
 
@@ -35,6 +39,9 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   private AnonymousRepeatableTask blockRefreshTask;
 
   private Toast toast;
+
+  @Inject
+  private LocationBroadcaster locationBroadcaster;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,11 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     });
   }
 
+  @Subscribe
+  public void onServiceRequestLoadFailedEvent(ServiceRequestLoadFailed event) {
+    Toast.makeText(this, "Load failed, please try again later.", Toast.LENGTH_LONG).show();
+  }
+
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
 
@@ -84,26 +96,22 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Override
   public Loader<List<ServiceRequest>> onCreateLoader(int i, Bundle bundle) {
     Logger.d(this, "Creating ServiceRequestLoader.");
-    return new ServiceRequestLoader(this);
+    ServiceRequestLoader serviceRequestLoader = new ServiceRequestLoader(this);
+    serviceRequestLoader.subscribe(this);
+    locationBroadcaster.subscribe(serviceRequestLoader);
+    return serviceRequestLoader;
   }
 
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> listLoader, List<ServiceRequest> incidentList) {
-
-    if (incidentList.size() == 0) {
-      String toastText = adapter.getCount() > 0 ? getString(R.string.list_view_no_more_incidents) :
-        getString(R.string.list_view_no_incidents);
-
-      toast.setText(toastText);
-      toast.show();
-    }
-
     adapter.addAll(incidentList);
   }
 
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> listLoader) {
     adapter.setData(null);
+    ((ServiceRequestLoader)listLoader).unsubscribe(this);
+    locationBroadcaster.unsubscribe(listLoader);
   }
 
   @Override

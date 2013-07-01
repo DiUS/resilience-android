@@ -6,6 +6,7 @@ import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import au.com.justinb.open311.GenericRequestAdapter;
+import au.com.justinb.open311.Open311Exception;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.xtremelabs.robolectric.Robolectric;
 import junitx.util.PrivateAccessor;
@@ -42,7 +43,7 @@ public class ServiceRequestLoaderTest {
   private ArrayList<ServiceRequest> serviceRequests;
 
   @Before
-  public void setUp() throws NoSuchFieldException {
+  public void setUp() throws NoSuchFieldException, Open311Exception {
     listLoader = new ServiceRequestLoader(context);
     shadowLoader = (ShadowLoader) Robolectric.shadowOf_(listLoader);
 
@@ -84,7 +85,7 @@ public class ServiceRequestLoaderTest {
   }
 
   @Test
-  public void shouldNotIncrementPageWhenNoResultsAreReturned() {
+  public void shouldNotIncrementPageWhenNoResultsAreReturned() throws Open311Exception {
     int initialPage = (Integer) getField(listLoader, "page");
 
     given(requestAdapter.list((Map<String, String>) anyObject())).willReturn(new ArrayList<ServiceRequest>());

@@ -55,7 +55,7 @@
       />
 
   <fragment
-      android:id="@+id/location_resolver"
+      android:id="@+id/location_resolver_fragment"
       android:name="au.com.dius.resilience.ui.fragment.LocationResolverFragment"
       android:layout_width="match_parent"
       />

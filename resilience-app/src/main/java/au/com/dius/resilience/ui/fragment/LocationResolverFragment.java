@@ -1,20 +1,19 @@
 package au.com.dius.resilience.ui.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import au.com.dius.resilience.R;
-import au.com.dius.resilience.intent.Intents;
+import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.location.LocationBroadcaster;
+import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.ui.ViewStateManager;
 import au.com.dius.resilience.ui.fragment.state.LocationNotResolvedViewState;
 import au.com.dius.resilience.ui.fragment.state.LocationResolvedViewState;
 import com.google.inject.Inject;
+import com.squareup.otto.Subscribe;
 import roboguice.fragment.RoboFragment;
 
 public class LocationResolverFragment extends RoboFragment {
@@ -45,14 +44,14 @@ public class LocationResolverFragment extends RoboFragment {
     super.onActivityCreated(savedInstanceState);
 
     locationBroadcaster.startPolling();
-    getActivity().registerReceiver(new LocationResolverFragmentReceiver(), new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
   }
 
-  private class LocationResolverFragmentReceiver extends BroadcastReceiver {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      viewStateManager.swap(STATE_LOCATION_RESOLVED, intent);
-      locationBroadcaster.stopPolling();
-    }
+  @Subscribe
+  public void onLocationUpdatedEvent(LocationUpdatedEvent event) {
+    Intent intent = new Intent();
+    intent.putExtra(Extras.LOCATION, event.getLocation());
+
+    viewStateManager.swap(STATE_LOCATION_RESOLVED, intent);
+    locationBroadcaster.stopPolling();
   }
 }

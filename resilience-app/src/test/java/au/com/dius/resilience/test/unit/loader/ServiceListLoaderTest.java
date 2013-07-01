@@ -5,6 +5,7 @@ import android.content.Context;
 import au.com.dius.resilience.loader.ServiceListLoader;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
 import au.com.justinb.open311.GenericRequestAdapter;
+import au.com.justinb.open311.Open311Exception;
 import au.com.justinb.open311.model.ServiceList;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class ServiceListLoaderTest {
   private Context context;
 
   @Before
-  public void setup() throws NoSuchFieldException {
+  public void setup() throws NoSuchFieldException, Open311Exception {
     serviceListLoader = new ServiceListLoader(context);
 
     ArrayList<ServiceList> serviceLists = new ArrayList<ServiceList>();
@@ -51,7 +52,7 @@ public class ServiceListLoaderTest {
   }
 
   @Test
-  public void shouldReturnListOfServices() {
+  public void shouldReturnListOfServices() throws Open311Exception {
     List<ServiceList> serviceLists = serviceListLoader.loadInBackground();
 
     verify(genericRequestAdapter).list();

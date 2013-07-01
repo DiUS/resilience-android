@@ -7,10 +7,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.event.Publisher;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
-import au.com.dius.resilience.util.Logger;
+import au.com.dius.resilience.location.event.LocationUpdatedEvent;import au.com.dius.resilience.util.Logger;
 import com.google.inject.Inject;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Produce;
 import roboguice.inject.ContextSingleton;
 
 import java.util.concurrent.Executors;
@@ -18,7 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @ContextSingleton
-public class LocationBroadcaster implements LocationListener {
+public class LocationBroadcaster implements LocationListener, Publisher {
 
   public static final long TIMEOUT = 20;
 
@@ -33,9 +36,12 @@ public class LocationBroadcaster implements LocationListener {
   @Inject
   private BestLocationDelegate bestLocationDelegate;
 
+  private final Bus bus;
+
   @Inject
   public LocationBroadcaster() {
     threadPoolExecutor = Executors.newSingleThreadScheduledExecutor();
+    bus = new Bus();
   }
 
   public void startPolling() {
@@ -45,7 +51,7 @@ public class LocationBroadcaster implements LocationListener {
     if (lastLocation == null) {
       requestLocationUpdates();
     } else {
-      broadcastLocationUpdate(lastLocation);
+      bus.post(new LocationUpdatedEvent(lastLocation));
     }
   }
 
@@ -60,16 +66,7 @@ public class LocationBroadcaster implements LocationListener {
 
   @Override
   public void onLocationChanged(Location location) {
-    broadcastLocationUpdate(location);
-  }
-
-  private void broadcastLocationUpdate(Location location) {
-    Intent intent = new Intent(Intents.RESILIENCE_LOCATION_UPDATED);
-    Bundle extras = new Bundle();
-    extras.putParcelable(Extras.LOCATION, location);
-    intent.putExtras(extras);
-    context.sendBroadcast(intent);
-
+    bus.post(new LocationUpdatedEvent(location));
     stopPolling();
   }
 
@@ -93,5 +90,20 @@ public class LocationBroadcaster implements LocationListener {
     } finally {
       locationManager.removeUpdates(this);
     }
+  }
+
+  @Override
+  public void subscribe(Object subscriber) {
+    bus.register(subscriber);
+  }
+
+  @Override
+  public void unsubscribe(Object unsubscriber) {
+    bus.unregister(unsubscriber);
+  }
+
+  @Produce
+  public LocationUpdatedEvent produceLocation() {
+    return new LocationUpdatedEvent(bestLocationDelegate.getBestLastKnownLocation());
   }
 }
