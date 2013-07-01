@@ -1,8 +1,6 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -12,13 +10,11 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.factory.MediaFileFactory;
+import au.com.dius.resilience.loader.ImageLoader;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.model.MediaType;
@@ -30,6 +26,7 @@ import au.com.justinb.open311.GenericRequestAdapter;
 import au.com.justinb.open311.Open311Exception;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
+import com.cloudinary.Cloudinary;
 import com.google.inject.Inject;
 import com.squareup.otto.Subscribe;
 import roboguice.activity.RoboFragmentActivity;
@@ -38,11 +35,14 @@ import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectView;
 
 import java.io.File;
+import java.util.Map;
 
 @ContentView(R.layout.activity_create_service_request)
 public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
   public static final int CAPTURE_PHOTO_REQUEST_CODE = 100;
+  public static final String API_KEY = "api_key";
+  public static final String API_SECRET = "api_secret";
 
   @Inject
   private ActionBarHandler actionBarHandler;
@@ -58,6 +58,9 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
   @InjectFragment(R.id.location_resolver_fragment)
   private LocationResolverFragment locationResolverFragment;
+
+  @InjectView(R.id.submit_button)
+  private Button submitButton;
 
   @Inject
   private LocationBroadcaster locationBroadcaster;
@@ -87,6 +90,12 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Subscribe
   public void onLocationUpdatedEvent(LocationUpdatedEvent event) {
     lastKnownLocation = event.getLocation();
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    enableSubmitButton();
   }
 
   private void setupAdapter() {
@@ -136,16 +145,43 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     }
   }
 
-  public void onSubmitClick(final View button) {
+  // TODO - clean up.
+  public void onSubmitClick(final View view) {
 
-    button.setEnabled(false);
+    submitButton.setText(R.string.uploading);
     if (lastKnownLocation == null) {
       Toast.makeText(this, "Can't resolve your location, please check your location services.", Toast.LENGTH_SHORT).show();
-
-      button.setEnabled(true);
+      enableSubmitButton();
       return;
     }
 
+    final Activity finalThis = this;
+    AsyncTask.execute(new Runnable() {
+      @Override
+      public void run() {
+        Cloudinary cloudinary = new Cloudinary();
+        cloudinary.setConfig(ImageLoader.CLOUD_NAME, getString(R.string.cloudinary_cloud_name));
+        cloudinary.setConfig(API_KEY, getString(R.string.cloudinary_api_key));
+        cloudinary.setConfig(API_SECRET, getString(R.string.cloudinary_api_secret));
+
+        try {
+          Map result = cloudinary.uploader().upload(new File(cachedPhotoUri.getPath()), Cloudinary.emptyMap());
+          String publicId = (String) result.get("public_id");
+
+          submitServiceRequest(cloudinary.url().generate(publicId + ".jpg"));
+
+        } catch (Exception e) {
+          Toast.makeText(finalThis, "Photo upload failed.", Toast.LENGTH_LONG).show();
+        }
+      }
+    });
+  }
+
+  private void enableSubmitButton() {
+    submitButton.setText(R.string.submit);
+  }
+
+  private void submitServiceRequest(String imageUrl) {
     final ServiceRequest.Builder builder = new ServiceRequest.Builder();
 
     ServiceList serviceList = (ServiceList) serviceSpinner.getSelectedItem();
@@ -153,13 +189,9 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
       .serviceName(serviceList.getServiceName())
       .description(descriptionField.getText().toString())
       .latitude(lastKnownLocation.getLatitude())
-      .longtitude(lastKnownLocation.getLongitude());
+      .longtitude(lastKnownLocation.getLongitude())
+      .mediaUrl(imageUrl);
 
-    // Need to upload the photo before I can add this URL.
-//    builder.mediaUrl(cachedPhotoUri.toString());
-
-    // FIXME - 4** (and probably other error codes) seem to be ignored by my
-    // FIXME - Open311 library. Gotta fix.
     final Activity finalThis = this;
     AsyncTask.execute(new Runnable() {
       @Override
@@ -169,7 +201,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
           finalThis.finish();
         } catch (Open311Exception e) {
           Toast.makeText(finalThis, "Failed to create Service Request", Toast.LENGTH_LONG).show();
-          button.setEnabled(true);
+          enableSubmitButton();
           Logger.e(this, "Exception while creating service request: " + e.getMessage());
         }
       }

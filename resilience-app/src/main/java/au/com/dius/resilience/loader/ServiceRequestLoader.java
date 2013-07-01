@@ -30,9 +30,7 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
   public static final int SERVICE_REQUEST_LIST_LOADER = 0;
 
   private static final String PAGE_PROPERTY = "page";
-
   private static final String LAT = "lat";
-
   private static final String LONG = "long";
   private static final String RADIUS = "radius";
   private static final String DEFAULT_RADIUS = "500";

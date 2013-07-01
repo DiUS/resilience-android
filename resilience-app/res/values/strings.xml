@@ -18,6 +18,7 @@
 
   <!-- NEW create incident -->
   <string name="incident_type">Nature of the incident</string>
+  <string name="uploading">Uploading&#8230;</string>
   <string name="submit">Submit</string>
   <string name="description_hint">Add a description&#8230;</string>
   <string name="incident_filename_prefix">IncidentAt_</string>
@@ -50,7 +51,7 @@
 
   <!-- Locating fragment -->
   <string name="locating_text">Finding your location&#8230;</string>
-  <string name="located">Reporting issue in %1$s</string>
+  <string name="located">Located</string>
   <string name="locate_failed">Sorry, I couldn\'t find you!</string>
 
 </resources>

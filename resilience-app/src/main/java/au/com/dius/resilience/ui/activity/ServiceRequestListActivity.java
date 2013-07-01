@@ -127,6 +127,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> listLoader, List<ServiceRequest> incidentList) {
+    Logger.d(this, "Adding " + incidentList.size() + " incidents to UI.");
     adapter.addAll(incidentList);
   }
 
