@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @ContextSingleton
 public class LocationBroadcaster implements LocationListener, Publisher {
 
-  public static final long TIMEOUT = 20;
+  public static final long TIMEOUT = 60;
 
   @Inject
   private LocationManager locationManager;

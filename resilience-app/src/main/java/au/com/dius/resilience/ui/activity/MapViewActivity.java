@@ -1,8 +1,9 @@
 package au.com.dius.resilience.ui.activity;
 
 import android.app.LoaderManager;
-import android.content.IntentFilter;
+import android.content.Intent;
 import android.content.Loader;
+import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
 import au.com.dius.resilience.R;
@@ -10,8 +11,9 @@ import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.LocationBroadcaster;
-import au.com.dius.resilience.observer.LocationUpdatedMapBroadcastReceiver;
+import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.justinb.open311.model.ServiceRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,10 +28,13 @@ import java.util.List;
 @ContentView(R.layout.activity_map_view)
 public class MapViewActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
 
+  public static final float ZOOM_LEVEL = 16.0f;
   private GoogleMap map;
 
   @Inject
   private LocationBroadcaster locationBroadcaster;
+
+  private boolean loaded = false;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +43,6 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
     if (map == null) {
       map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
     }
-
-    registerReceiver(new LocationUpdatedMapBroadcastReceiver(map), new IntentFilter(Intents.RESILIENCE_LOCATION_UPDATED));
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
@@ -61,7 +64,22 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
     ServiceRequestLoader serviceRequestLoader = new ServiceRequestLoader(this);
     serviceRequestLoader.subscribe(this);
     locationBroadcaster.subscribe(serviceRequestLoader);
+    locationBroadcaster.subscribe(this);
     return serviceRequestLoader;
+  }
+
+  @Subscribe
+  public void onLocationUpdatedEvent(LocationUpdatedEvent event) {
+    if (!loaded) {
+      Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
+      sendBroadcast(intent);
+
+      Location location = event.getLocation();
+      LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+      map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
+
+      loaded = true;
+    }
   }
 
   @Override

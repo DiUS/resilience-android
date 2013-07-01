@@ -10,9 +10,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.LocationBroadcaster;
+import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.persistence.async.AnonymousRepeatableTask;
 import au.com.dius.resilience.ui.adapter.ListViewAdapter;
 import au.com.dius.resilience.util.Logger;
@@ -59,6 +61,18 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    locationBroadcaster.startPolling();
+  }
+
+  @Override
+  public void onPause() {
+    locationBroadcaster.stopPolling();
+    super.onPause();
+  }
+
   private void initBlockingTask() {
     blockRefreshTask = new AnonymousRepeatableTask(new Runnable() {
       @Override
@@ -99,7 +113,16 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     ServiceRequestLoader serviceRequestLoader = new ServiceRequestLoader(this);
     serviceRequestLoader.subscribe(this);
     locationBroadcaster.subscribe(serviceRequestLoader);
+    locationBroadcaster.subscribe(this);
     return serviceRequestLoader;
+  }
+
+  @Subscribe
+  public void onLocationUpdatedEvent(LocationUpdatedEvent event) {
+    if (getListAdapter() != null && getListAdapter().getCount() == 0) {
+      Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
+      sendBroadcast(intent);
+    }
   }
 
   @Override

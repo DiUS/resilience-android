@@ -11,7 +11,7 @@ public class LocationNotResolvedViewState implements ViewState {
   @Override
   public void invoke(View container, Intent intent) {
     View locatingIcon = container.findViewById(R.id.locating_icon);
-    locatingIcon.setVisibility(View.VISIBLE);
+    locatingIcon.setVisibility(View.GONE);
 
     TextView locatingText = (TextView) container.findViewById(R.id.locating_text);
     locatingText.setText(locatingText.getContext().getString(R.string.locating_text));

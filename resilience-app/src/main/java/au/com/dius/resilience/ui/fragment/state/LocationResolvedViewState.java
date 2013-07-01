@@ -13,7 +13,7 @@ public class LocationResolvedViewState implements ViewState {
   @Override
   public void invoke(View container, Intent intent) {
     View locatingIcon = container.findViewById(R.id.locating_icon);
-    locatingIcon.setVisibility(View.GONE);
+    locatingIcon.setVisibility(View.VISIBLE);
 
     Location location = (Location) intent.getExtras().getParcelable(Extras.LOCATION);
 
@@ -22,7 +22,7 @@ public class LocationResolvedViewState implements ViewState {
     if (location == null) {
       locatingText.setText(locatingText.getContext().getString(R.string.locate_failed));
     } else {
-      locatingText.setText(locatingText.getContext().getString(R.string.located, "" + location.getLatitude() + ", "+ location.getLongitude()));
+      locatingText.setText(locatingText.getContext().getString(R.string.located));
     }
   }
 }
