@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import au.com.dius.resilience.R;
@@ -29,6 +30,7 @@ import au.com.justinb.open311.model.ServiceRequest;
 import com.cloudinary.Cloudinary;
 import com.google.inject.Inject;
 import com.squareup.otto.Subscribe;
+import org.apache.commons.lang.StringUtils;
 import roboguice.activity.RoboFragmentActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectFragment;
@@ -43,6 +45,8 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   public static final int CAPTURE_PHOTO_REQUEST_CODE = 100;
   public static final String API_KEY = "api_key";
   public static final String API_SECRET = "api_secret";
+  public static final String PUBLIC_ID = "public_id";
+  public static final String JPG = ".jpg";
 
   @Inject
   private ActionBarHandler actionBarHandler;
@@ -84,6 +88,14 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     locationBroadcaster.subscribe(this);
     locationBroadcaster.subscribe(locationResolverFragment);
 
+    descriptionField.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        descriptionField.setError(null);
+        return false;
+      }
+    });
+
     requestAdapter = new GenericRequestAdapter<ServiceRequest>(ServiceRequest.class);
   }
 
@@ -95,7 +107,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Override
   public void onResume() {
     super.onResume();
-    enableSubmitButton();
+    setStateEnabled();
   }
 
   private void setupAdapter() {
@@ -148,12 +160,23 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   // TODO - clean up.
   public void onSubmitClick(final View view) {
 
-    submitButton.setText(R.string.uploading);
-    if (lastKnownLocation == null) {
-      Toast.makeText(this, "Can't resolve your location, please check your location services.", Toast.LENGTH_SHORT).show();
-      enableSubmitButton();
+    if (StringUtils.isEmpty(descriptionField.getText().toString())) {
+      descriptionField.setError("Can't be blank");
       return;
     }
+
+    if (cachedPhotoUri == null) {
+      Toast.makeText(this, "You need to attach a photo to the issue.", Toast.LENGTH_SHORT).show();
+      return;
+    }
+
+    if (lastKnownLocation == null) {
+      Toast.makeText(this, "Can't resolve your location, please check your location services.", Toast.LENGTH_SHORT).show();
+      setStateEnabled();
+      return;
+    }
+
+    setStateUploading();
 
     final Activity finalThis = this;
     AsyncTask.execute(new Runnable() {
@@ -166,9 +189,9 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
         try {
           Map result = cloudinary.uploader().upload(new File(cachedPhotoUri.getPath()), Cloudinary.emptyMap());
-          String publicId = (String) result.get("public_id");
+          String publicId = (String) result.get(PUBLIC_ID);
 
-          submitServiceRequest(cloudinary.url().generate(publicId + ".jpg"));
+          submitServiceRequest(cloudinary.url().generate(publicId + JPG));
 
         } catch (Exception e) {
           Toast.makeText(finalThis, "Photo upload failed.", Toast.LENGTH_LONG).show();
@@ -177,8 +200,21 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     });
   }
 
-  private void enableSubmitButton() {
+  private void setStateUploading() {
+    submitButton.setText(R.string.uploading);
+    submitButton.setEnabled(false);
+    descriptionField.setEnabled(false);
+    photoPreview.setEnabled(false);
+    serviceSpinner.setEnabled(false);
+
+  }
+
+  private void setStateEnabled() {
     submitButton.setText(R.string.submit);
+    serviceSpinner.setEnabled(true);
+    submitButton.setEnabled(true);
+    descriptionField.setEnabled(true);
+    photoPreview.setEnabled(true);
   }
 
   private void submitServiceRequest(String imageUrl) {
@@ -201,7 +237,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
           finalThis.finish();
         } catch (Open311Exception e) {
           Toast.makeText(finalThis, "Failed to create Service Request", Toast.LENGTH_LONG).show();
-          enableSubmitButton();
+          setStateEnabled();
           Logger.e(this, "Exception while creating service request: " + e.getMessage());
         }
       }

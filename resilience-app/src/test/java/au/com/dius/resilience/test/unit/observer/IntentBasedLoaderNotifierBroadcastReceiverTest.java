@@ -3,7 +3,7 @@ package au.com.dius.resilience.test.unit.observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.Loader;
+import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Before;
@@ -22,7 +22,7 @@ public class IntentBasedLoaderNotifierBroadcastReceiverTest {
   private Context mockContext;
 
   @Mock
-  private Loader mockLoader;
+  private ServiceRequestLoader mockLoader;
 
   private IntentBasedLoaderNotifierBroadcastReceiver receiver;
 

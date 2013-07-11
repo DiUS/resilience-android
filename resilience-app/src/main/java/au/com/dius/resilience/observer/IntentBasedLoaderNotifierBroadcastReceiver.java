@@ -1,6 +1,7 @@
 package au.com.dius.resilience.observer;
 
 import android.content.*;
+import au.com.dius.resilience.loader.ServiceRequestLoader;
 
 public class IntentBasedLoaderNotifierBroadcastReceiver extends BroadcastReceiver {
 
@@ -21,6 +22,7 @@ public class IntentBasedLoaderNotifierBroadcastReceiver extends BroadcastReceive
 
   @Override
   public void onReceive(Context context, Intent intent) {
+    ((ServiceRequestLoader)loader).resetPage();
     loader.onContentChanged();
   }
 

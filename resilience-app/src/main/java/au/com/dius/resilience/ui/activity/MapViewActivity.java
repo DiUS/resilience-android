@@ -9,6 +9,7 @@ import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.loader.event.PageResetEvent;
 import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
@@ -105,13 +106,17 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
   public void onLoaderReset(Loader<List<ServiceRequest>> loader) {
 
     ((ServiceRequestLoader)loader).unsubscribe(this);
-    locationBroadcaster.unsubscribe(loader);
 
     if (map == null) {
       return;
     }
 
     map.clear();
+  }
+
+  @Subscribe
+  public void onPageResetEvent(PageResetEvent event) {
+   map.clear();
   }
 
   @Subscribe

@@ -9,7 +9,7 @@ import roboguice.inject.ContextSingleton;
 @ContextSingleton
 public class IsRecentEnoughCriteria implements LocationCriteria {
 
-  public static final long MIN_AGE = 1000 * 60 * 60; // One hour
+  public static final long MIN_AGE = 1000 * 60 * 5; // 5 Minutes
 
   @Inject
   private TimeFactory timeFactory;

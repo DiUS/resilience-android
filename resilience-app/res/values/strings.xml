@@ -42,8 +42,6 @@
   <string name="list_view_more_details_desc">More details</string>
   <string name="list_view_category_desc">Incident category</string>
   <string name="list_view_loading_more">Searching for incidents&#8230;</string>
-  <string name="list_view_no_more_incidents">No more incidents found!</string>
-  <string name="list_view_no_incidents">No incidents found!</string>
 
   <!-- List view selector toggle buttons -->
   <string name="label_tab_map_view">Map</string>

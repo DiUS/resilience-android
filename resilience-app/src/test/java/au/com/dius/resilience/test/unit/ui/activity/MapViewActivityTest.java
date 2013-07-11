@@ -53,6 +53,9 @@ public class MapViewActivityTest {
   private ArrayList<ServiceRequest> noLong = new ArrayList<ServiceRequest>();
   private ArrayList<ServiceRequest> noLatOrLong = new ArrayList<ServiceRequest>();
 
+  @Mock
+  private ServiceRequestLoader mockLoader;
+
   @Before
   public void setup() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -61,7 +64,7 @@ public class MapViewActivityTest {
     // and using callReadMethod on methods I want to test. Otherwise a Stub! exception is thrown
     // from the MapViewActivity constructor.
     Mockito.doCallRealMethod().when(mapViewActivity).onLoadFinished(eq(serviceRequestLoader), anyList());
-    Mockito.doCallRealMethod().when(mapViewActivity).onLoaderReset(null);
+    Mockito.doCallRealMethod().when(mapViewActivity).onLoaderReset(mockLoader);
     googleMap = PowerMockito.mock(GoogleMap.class);
 
     PrivateAccessor.setField(mapViewActivity, "map", googleMap);
@@ -129,10 +132,10 @@ public class MapViewActivityTest {
     mapViewActivity.onLoadFinished(serviceRequestLoader, noLatOrLong);
     verify(googleMap, never()).addMarker(any(MarkerOptions.class));
   }
-  
+
   @Test
   public void mapClearedOnLoaderReset() {
-    mapViewActivity.onLoaderReset(null);
+    mapViewActivity.onLoaderReset(mockLoader);
     verify(googleMap).clear();
   }
 }

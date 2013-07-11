@@ -2,6 +2,7 @@ package au.com.dius.resilience.test.unit.loader;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.location.Location;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.test.unit.utils.ResilienceTestRunner;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(ResilienceTestRunner.class)
@@ -55,6 +57,7 @@ public class ServiceRequestLoaderTest {
     when(requestAdapter.list((Map<String, String>) anyObject())).thenReturn(serviceRequests);
 
     PrivateAccessor.setField(listLoader, "requestAdapter", requestAdapter);
+    PrivateAccessor.setField(listLoader, "lastKnownLocation", mock(Location.class));
   }
 
   @Test

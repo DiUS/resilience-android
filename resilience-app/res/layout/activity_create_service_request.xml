@@ -38,6 +38,7 @@
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:src="@drawable/ic_menu_camera"
+      android:scaleType="center"
       android:onClick="onCameraButtonClick"
       android:layout_weight="70"
       style="@style/bordered_content"

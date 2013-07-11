@@ -12,6 +12,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.loader.event.PageResetEvent;
 import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
@@ -45,6 +46,8 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Inject
   private LocationBroadcaster locationBroadcaster;
 
+  private ServiceRequestLoader serviceRequestLoader;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -64,12 +67,18 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Override
   public void onResume() {
     super.onResume();
+    serviceRequestLoader.subscribe(this);
+    locationBroadcaster.subscribe(serviceRequestLoader);
+    locationBroadcaster.subscribe(this);
     locationBroadcaster.startPolling();
   }
 
   @Override
   public void onPause() {
     locationBroadcaster.stopPolling();
+    serviceRequestLoader.unsubscribe(this);
+    locationBroadcaster.unsubscribe(this);
+    locationBroadcaster.unsubscribe(serviceRequestLoader);
     super.onPause();
   }
 
@@ -92,6 +101,12 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     Toast.makeText(this, "Load failed, please try again later.", Toast.LENGTH_LONG).show();
   }
 
+  @Subscribe
+  public void onPageResetEvent(PageResetEvent event) {
+    adapter.clear();
+    adapter.setData(null);
+  }
+
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
 
@@ -110,10 +125,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Override
   public Loader<List<ServiceRequest>> onCreateLoader(int i, Bundle bundle) {
     Logger.d(this, "Creating ServiceRequestLoader.");
-    ServiceRequestLoader serviceRequestLoader = new ServiceRequestLoader(this);
-    serviceRequestLoader.subscribe(this);
-    locationBroadcaster.subscribe(serviceRequestLoader);
-    locationBroadcaster.subscribe(this);
+    serviceRequestLoader = new ServiceRequestLoader(this);
     return serviceRequestLoader;
   }
 
@@ -133,9 +145,8 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> listLoader) {
+    adapter.clear();
     adapter.setData(null);
-    ((ServiceRequestLoader)listLoader).unsubscribe(this);
-    locationBroadcaster.unsubscribe(listLoader);
   }
 
   @Override

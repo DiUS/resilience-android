@@ -147,22 +147,6 @@ public class ServiceRequestListActivityTest {
   }
 
   @Test
-  public void shouldShowNoIncidentsMessageWhenNoIncidentsReturned() {
-    given(listViewAdapter.getCount()).willReturn(0);
-    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
-    verify(toast).setText("No incidents found!");
-    verify(toast).show();
-  }
-
-  @Test
-  public void shouldShowNoMOREIncidentsMessageWhenNoIncidentsReturned() {
-    given(listViewAdapter.getCount()).willReturn(1);
-    serviceRequestListActivity.onLoadFinished(null, new ArrayList<ServiceRequest>());
-    verify(toast).setText("No more incidents found!");
-    verify(toast).show();
-  }
-
-  @Test
   public void shouldBlockRefreshOnStartLoad() {
     Boolean isLoading = (Boolean) getField(serviceRequestListActivity, "isLoading");
     assertFalse(isLoading);

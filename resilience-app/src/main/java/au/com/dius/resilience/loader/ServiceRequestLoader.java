@@ -9,7 +9,7 @@ import android.os.Looper;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.event.Publisher;
 import au.com.dius.resilience.intent.Intents;
-import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
+import au.com.dius.resilience.loader.event.PageResetEvent;import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.util.Logger;
@@ -42,6 +42,7 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
   private int page = 1;
 
   private final Bus bus;
+
   private Location lastKnownLocation;
 
   public ServiceRequestLoader(Context context) {
@@ -53,6 +54,11 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
   @Override
   public BroadcastReceiver createBroadcastReceiver() {
     return new IntentBasedLoaderNotifierBroadcastReceiver(this, new IntentFilter(Intents.RESILIENCE_INCIDENT_CREATED));
+  }
+
+  public void resetPage() {
+    page = 1;
+    bus.post(new PageResetEvent());
   }
 
   @Override
