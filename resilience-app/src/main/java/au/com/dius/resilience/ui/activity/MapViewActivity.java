@@ -71,7 +71,7 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   @Subscribe
   public void onLocationUpdatedEvent(LocationUpdatedEvent event) {
-    if (!loaded) {
+    if (!loaded && map != null) {
       Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
       sendBroadcast(intent);
 
@@ -116,7 +116,12 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   @Subscribe
   public void onPageResetEvent(PageResetEvent event) {
-   map.clear();
+
+    if (map == null) {
+      return;
+    }
+
+    map.clear();
   }
 
   @Subscribe
