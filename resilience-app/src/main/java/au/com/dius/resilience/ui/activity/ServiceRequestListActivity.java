@@ -140,6 +140,11 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> listLoader, List<ServiceRequest> incidentList) {
     Logger.d(this, "Adding " + incidentList.size() + " incidents to UI.");
+
+    if (incidentList.size() == 0 && adapter.getCount() == 0) {
+      Toast.makeText(this, "No incidents found.", Toast.LENGTH_LONG).show();
+    }
+
     adapter.addAll(incidentList);
   }
 

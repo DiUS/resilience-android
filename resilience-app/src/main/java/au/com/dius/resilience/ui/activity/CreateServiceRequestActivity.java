@@ -2,6 +2,8 @@ package au.com.dius.resilience.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -37,6 +39,7 @@ import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Map;
 
 @ContentView(R.layout.activity_create_service_request)
@@ -79,6 +82,8 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   private Uri cachedPhotoUri;
 
   private Location lastKnownLocation;
+
+  private static final int IMAGE_QUALITY = 35;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -187,8 +192,18 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
         cloudinary.setConfig(API_KEY, getString(R.string.cloudinary_api_key));
         cloudinary.setConfig(API_SECRET, getString(R.string.cloudinary_api_secret));
 
+        FileOutputStream fileOutputStream = null;
+        final String compressedFilename = cachedPhotoUri.getPath().replace(".jpg", ".compressed.png");
         try {
-          Map result = cloudinary.uploader().upload(new File(cachedPhotoUri.getPath()), Cloudinary.emptyMap());
+          fileOutputStream = new FileOutputStream(compressedFilename);
+          BitmapFactory.decodeFile(cachedPhotoUri.getPath()).compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, fileOutputStream);
+          fileOutputStream.close();
+        } catch (Exception e) {
+          Logger.e("An error occurred while compressing image: ", e.getMessage());
+        }
+
+        try {
+          Map result = cloudinary.uploader().upload(new File(compressedFilename), Cloudinary.emptyMap());
           String publicId = (String) result.get(PUBLIC_ID);
 
           submitServiceRequest(cloudinary.url().generate(publicId + JPG));
