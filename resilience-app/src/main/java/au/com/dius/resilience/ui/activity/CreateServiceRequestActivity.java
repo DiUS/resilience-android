@@ -24,6 +24,7 @@ import au.com.dius.resilience.model.MediaType;
 import au.com.dius.resilience.model.ServiceListDefaults;
 import au.com.dius.resilience.ui.adapter.ServiceListSpinnerAdapter;
 import au.com.dius.resilience.ui.fragment.LocationResolverFragment;
+import au.com.dius.resilience.util.ImageCompressor;
 import au.com.dius.resilience.util.Logger;
 import au.com.justinb.open311.GenericRequestAdapter;
 import au.com.justinb.open311.Open311Exception;
@@ -50,6 +51,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   public static final String API_SECRET = "api_secret";
   public static final String PUBLIC_ID = "public_id";
   public static final String JPG = ".jpg";
+  public static final String COMPRESSED_JPG = ".compressed.jpg";
 
   @Inject
   private ActionBarHandler actionBarHandler;
@@ -82,8 +84,6 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   private Uri cachedPhotoUri;
 
   private Location lastKnownLocation;
-
-  private static final int IMAGE_QUALITY = 35;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -183,27 +183,21 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
     setStateUploading();
 
+    // TODO - compression, upload and submission in a service.
     final Activity finalThis = this;
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
+
+        File compressedFile = new ImageCompressor().compress(cachedPhotoUri.getPath(), 100);
+
         Cloudinary cloudinary = new Cloudinary();
         cloudinary.setConfig(ImageLoader.CLOUD_NAME, getString(R.string.cloudinary_cloud_name));
         cloudinary.setConfig(API_KEY, getString(R.string.cloudinary_api_key));
         cloudinary.setConfig(API_SECRET, getString(R.string.cloudinary_api_secret));
 
-        FileOutputStream fileOutputStream = null;
-        final String compressedFilename = cachedPhotoUri.getPath().replace(".jpg", ".compressed.png");
         try {
-          fileOutputStream = new FileOutputStream(compressedFilename);
-          BitmapFactory.decodeFile(cachedPhotoUri.getPath()).compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, fileOutputStream);
-          fileOutputStream.close();
-        } catch (Exception e) {
-          Logger.e("An error occurred while compressing image: ", e.getMessage());
-        }
-
-        try {
-          Map result = cloudinary.uploader().upload(new File(compressedFilename), Cloudinary.emptyMap());
+          Map result = cloudinary.uploader().upload(compressedFile, Cloudinary.emptyMap());
           String publicId = (String) result.get(PUBLIC_ID);
 
           submitServiceRequest(cloudinary.url().generate(publicId + JPG));
