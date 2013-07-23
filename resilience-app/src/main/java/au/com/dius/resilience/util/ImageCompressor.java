@@ -22,7 +22,10 @@ public class ImageCompressor {
     try {
       compressedFile = new File(path.replace(JPG, COMPRESSED_JPG));
       FileOutputStream fileOutputStream = new FileOutputStream(compressedFile);
-      BitmapFactory.decodeFile(path).compress(Bitmap.CompressFormat.JPEG, quality, fileOutputStream);
+
+      BitmapFactory.Options options = optimiseDecoderOptions(path);
+
+      BitmapFactory.decodeFile(path, options).compress(Bitmap.CompressFormat.JPEG, quality, fileOutputStream);
       fileOutputStream.close();
     } catch (Exception e) {
       Logger.e("An error occurred while compressing image: ", e.getMessage());
@@ -31,5 +34,21 @@ public class ImageCompressor {
     }
 
     return compressedFile;
+  }
+
+  // Prevents OOM errors:
+  // http://developer.android.com/training/displaying-bitmaps/load-bitmap.html
+  private BitmapFactory.Options optimiseDecoderOptions(String path) {
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+
+    BitmapFactory.decodeFile(path, options);
+
+    int heightRatio = Math.round((float) options.outHeight / (float) 500);
+    int widthRatio = Math.round((float) options.outWidth / (float) 500);
+
+    options.inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+    options.inJustDecodeBounds = false;
+    return options;
   }
 }

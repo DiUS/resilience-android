@@ -1,12 +1,8 @@
 package au.com.dius.resilience.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -17,20 +13,17 @@ import android.widget.*;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.factory.MediaFileFactory;
-import au.com.dius.resilience.loader.ImageLoader;
+import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.model.MediaType;
 import au.com.dius.resilience.model.ServiceListDefaults;
+import au.com.dius.resilience.persistence.repository.impl.ServiceRequestRepository;
+import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.adapter.ServiceListSpinnerAdapter;
 import au.com.dius.resilience.ui.fragment.LocationResolverFragment;
-import au.com.dius.resilience.util.ImageCompressor;
-import au.com.dius.resilience.util.Logger;
-import au.com.justinb.open311.GenericRequestAdapter;
-import au.com.justinb.open311.Open311Exception;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
-import com.cloudinary.Cloudinary;
 import com.google.inject.Inject;
 import com.squareup.otto.Subscribe;
 import org.apache.commons.lang.StringUtils;
@@ -40,18 +33,11 @@ import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectView;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Map;
 
 @ContentView(R.layout.activity_create_service_request)
 public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
   public static final int CAPTURE_PHOTO_REQUEST_CODE = 100;
-  public static final String API_KEY = "api_key";
-  public static final String API_SECRET = "api_secret";
-  public static final String PUBLIC_ID = "public_id";
-  public static final String JPG = ".jpg";
-  public static final String COMPRESSED_JPG = ".compressed.jpg";
 
   @Inject
   private ActionBarHandler actionBarHandler;
@@ -77,8 +63,6 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Inject
   private MediaFileFactory mediaFileFactory;
 
-  public GenericRequestAdapter<ServiceRequest> requestAdapter;
-
   private ServiceListSpinnerAdapter serviceListSpinnerAdapter;
 
   private Uri cachedPhotoUri;
@@ -100,8 +84,11 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
         return false;
       }
     });
+  }
 
-    requestAdapter = new GenericRequestAdapter<ServiceRequest>(ServiceRequest.class);
+  @Subscribe
+  public void onServiceRequestErrorEvent(ServiceRequestRepository.ErrorEvent errorEvent) {
+    setStateEnabled();
   }
 
   @Subscribe
@@ -112,7 +99,18 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Override
   public void onResume() {
     super.onResume();
+
+    // FIXME - resume image on rotate.
+//    if (cachedPhotoUri != null) {
+//      photoPreview.setImageURI(cachedPhotoUri);
+//    }
+
     setStateEnabled();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
   }
 
   private void setupAdapter() {
@@ -162,7 +160,6 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     }
   }
 
-  // TODO - clean up.
   public void onSubmitClick(final View view) {
 
     if (StringUtils.isEmpty(descriptionField.getText().toString())) {
@@ -183,30 +180,12 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
     setStateUploading();
 
-    // TODO - compression, upload and submission in a service.
-    final Activity finalThis = this;
-    AsyncTask.execute(new Runnable() {
-      @Override
-      public void run() {
+    Intent service = new Intent(this, CreateIncidentService.class);
+    service.putExtra(Extras.PHOTO_LOCAL_URI, cachedPhotoUri.getPath());
+    service.putExtra(Extras.SERVICE_REQUEST_BUILDER, buildServiceRequest());
+    startService(service);
 
-        File compressedFile = new ImageCompressor().compress(cachedPhotoUri.getPath(), 100);
-
-        Cloudinary cloudinary = new Cloudinary();
-        cloudinary.setConfig(ImageLoader.CLOUD_NAME, getString(R.string.cloudinary_cloud_name));
-        cloudinary.setConfig(API_KEY, getString(R.string.cloudinary_api_key));
-        cloudinary.setConfig(API_SECRET, getString(R.string.cloudinary_api_secret));
-
-        try {
-          Map result = cloudinary.uploader().upload(compressedFile, Cloudinary.emptyMap());
-          String publicId = (String) result.get(PUBLIC_ID);
-
-          submitServiceRequest(cloudinary.url().generate(publicId + JPG));
-
-        } catch (Exception e) {
-          Toast.makeText(finalThis, "Photo upload failed.", Toast.LENGTH_LONG).show();
-        }
-      }
-    });
+    finish();
   }
 
   private void setStateUploading() {
@@ -226,7 +205,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     photoPreview.setEnabled(true);
   }
 
-  private void submitServiceRequest(String imageUrl) {
+  private ServiceRequest.Builder buildServiceRequest() {
     final ServiceRequest.Builder builder = new ServiceRequest.Builder();
 
     ServiceList serviceList = (ServiceList) serviceSpinner.getSelectedItem();
@@ -234,22 +213,8 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
       .serviceName(serviceList.getServiceName())
       .description(descriptionField.getText().toString())
       .latitude(lastKnownLocation.getLatitude())
-      .longtitude(lastKnownLocation.getLongitude())
-      .mediaUrl(imageUrl);
+      .longtitude(lastKnownLocation.getLongitude());
 
-    final Activity finalThis = this;
-    AsyncTask.execute(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          requestAdapter.create(builder.createServiceRequest());
-          finalThis.finish();
-        } catch (Open311Exception e) {
-          Toast.makeText(finalThis, "Failed to create Service Request", Toast.LENGTH_LONG).show();
-          setStateEnabled();
-          Logger.e(this, "Exception while creating service request: " + e.getMessage());
-        }
-      }
-    });
+    return builder;
   }
 }
