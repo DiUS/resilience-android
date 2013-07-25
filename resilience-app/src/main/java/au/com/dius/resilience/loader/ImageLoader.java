@@ -59,7 +59,7 @@ public class ImageLoader {
 
     Logger.i(this, "Loading full sized image with width:", widthPixels);
 
-    load(view, thumbnailUrl);
+    loadFromUrl(view, thumbnailUrl);
   }
 
   public void loadThumbnailImage(ImageView view, String imageName) {
@@ -69,13 +69,14 @@ public class ImageLoader {
       .crop(THUMB))
       .generate(imageName);
 
-    Logger.i(this, "Loading thumbnail.");
-
-    load(view, thumbnailUrl);
+    loadFromUrl(view, thumbnailUrl);
   }
 
-  private void load(ImageView view, String thumbnailUrl) {
-    ImageTag tag = imageTagFactory.build(thumbnailUrl, context);
+  public void loadFromUrl(ImageView view, String url) {
+
+    Logger.i(this, "Loading image from url", url);
+
+    ImageTag tag = imageTagFactory.build(url, context);
     view.setTag(tag);
     imageManager.getLoader().load(view);
   }

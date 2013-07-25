@@ -14,6 +14,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.factory.MediaFileFactory;
 import au.com.dius.resilience.intent.Extras;
+import au.com.dius.resilience.loader.ImageLoader;
 import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.model.MediaType;
@@ -22,6 +23,7 @@ import au.com.dius.resilience.persistence.repository.impl.ServiceRequestReposito
 import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.adapter.ServiceListSpinnerAdapter;
 import au.com.dius.resilience.ui.fragment.LocationResolverFragment;
+import au.com.dius.resilience.util.Logger;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
@@ -38,6 +40,7 @@ import java.io.File;
 public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
   public static final int CAPTURE_PHOTO_REQUEST_CODE = 100;
+  public static final String SERVICE_REQUEST_URI = "ServiceRequestUri";
 
   @Inject
   private ActionBarHandler actionBarHandler;
@@ -63,9 +66,12 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Inject
   private MediaFileFactory mediaFileFactory;
 
+  @Inject
+  private ImageLoader imageLoader;
+
   private ServiceListSpinnerAdapter serviceListSpinnerAdapter;
 
-  private Uri cachedPhotoUri;
+  private String cachedPhotoUri;
 
   private Location lastKnownLocation;
 
@@ -76,6 +82,10 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
     locationBroadcaster.subscribe(this);
     locationBroadcaster.subscribe(locationResolverFragment);
+
+    if (savedInstanceState != null) {
+      cachedPhotoUri = savedInstanceState.getString(SERVICE_REQUEST_URI);
+    }
 
     descriptionField.setOnTouchListener(new View.OnTouchListener() {
       @Override
@@ -99,18 +109,15 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Override
   public void onResume() {
     super.onResume();
-
-    // FIXME - resume image on rotate.
-//    if (cachedPhotoUri != null) {
-//      photoPreview.setImageURI(cachedPhotoUri);
-//    }
-
+    if (cachedPhotoUri != null) {
+      imageLoader.loadFromUrl(photoPreview, cachedPhotoUri);
+    }
     setStateEnabled();
   }
 
   @Override
-  public void onPause() {
-    super.onPause();
+  public void onSaveInstanceState(Bundle state) {
+    state.putString(SERVICE_REQUEST_URI, cachedPhotoUri == null ? null : cachedPhotoUri);
   }
 
   private void setupAdapter() {
@@ -128,13 +135,11 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     }
 
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, cachePhotoFilename(mediaFile));
-    startActivityForResult(intent, CAPTURE_PHOTO_REQUEST_CODE);
-  }
 
-  private Uri cachePhotoFilename(File mediaFile) {
-    cachedPhotoUri = Uri.fromFile(mediaFile);
-    return cachedPhotoUri;
+    Uri photoUri = Uri.fromFile(mediaFile);
+    cachedPhotoUri = photoUri.toString();
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+    startActivityForResult(intent, CAPTURE_PHOTO_REQUEST_CODE);
   }
 
   @Override
@@ -155,7 +160,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
     if (requestCode == CAPTURE_PHOTO_REQUEST_CODE) {
       if (resultCode == RESULT_OK) {
-        photoPreview.setImageURI(cachedPhotoUri);
+        imageLoader.loadFromUrl(photoPreview, cachedPhotoUri);
       }
     }
   }
@@ -181,7 +186,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     setStateUploading();
 
     Intent service = new Intent(this, CreateIncidentService.class);
-    service.putExtra(Extras.PHOTO_LOCAL_URI, cachedPhotoUri.getPath());
+    service.putExtra(Extras.PHOTO_LOCAL_URI, cachedPhotoUri);
     service.putExtra(Extras.SERVICE_REQUEST_BUILDER, buildServiceRequest());
     startService(service);
 
