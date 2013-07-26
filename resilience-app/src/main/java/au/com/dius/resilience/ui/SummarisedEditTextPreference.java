@@ -38,7 +38,7 @@ public class SummarisedEditTextPreference extends EditTextPreference implements 
 
     Pattern verificationPattern = KEY_TO_PATTERN.get(preference.getKey());
     if (verificationPattern != null && !verificationPattern.matcher(asString).matches()) {
-      getEditText().setError("Invalid");
+      getEditText().setError(getContext().getString(R.string.invalid));
       showDialog(null);
       return false;
     }

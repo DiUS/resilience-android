@@ -5,6 +5,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,11 +20,11 @@ import au.com.dius.resilience.location.LocationBroadcaster;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.model.MediaType;
 import au.com.dius.resilience.model.ServiceListDefaults;
+import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
 import au.com.dius.resilience.persistence.repository.impl.ServiceRequestRepository;
 import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.adapter.ServiceListSpinnerAdapter;
 import au.com.dius.resilience.ui.fragment.LocationResolverFragment;
-import au.com.dius.resilience.util.Logger;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
@@ -61,6 +62,9 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   private Button submitButton;
 
   @Inject
+  private PreferenceAdapter preferenceAdapter;
+
+  @Inject
   private LocationBroadcaster locationBroadcaster;
 
   @Inject
@@ -83,7 +87,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     locationBroadcaster.subscribe(this);
     locationBroadcaster.subscribe(locationResolverFragment);
 
-    if (savedInstanceState != null) {
+    if (savedInstanceState != null && savedInstanceState.getString(SERVICE_REQUEST_URI) != null) {
       cachedPhotoUri = Uri.parse(savedInstanceState.getString(SERVICE_REQUEST_URI));
     }
 
@@ -211,7 +215,12 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
       .serviceName(serviceList.getServiceName())
       .description(descriptionField.getText().toString())
       .latitude(lastKnownLocation.getLatitude())
-      .longtitude(lastKnownLocation.getLongitude());
+      .longtitude(lastKnownLocation.getLongitude())
+      .firstName((String) preferenceAdapter.getUserPreference(R.string.profile_first_name_key))
+      .lastName((String) preferenceAdapter.getUserPreference(R.string.profile_surname_key))
+      .phone((String) preferenceAdapter.getUserPreference(R.string.profile_phone_key))
+      .email((String) preferenceAdapter.getUserPreference(R.string.profile_email_key))
+      .deviceId(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
     return builder;
   }

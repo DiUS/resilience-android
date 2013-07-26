@@ -8,6 +8,7 @@
   <string name="save">Save</string>
   <string name="send_feedback">Send Feedback</string>
   <string name="feedback">Feedback</string>
+  <string name="invalid">Invalid</string>
 
   <!-- Action bar menu -->
   <string name="all_incidents">All incidents</string>
