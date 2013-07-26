@@ -165,7 +165,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
         return;
       }
 
-      if (getListView().getLastVisiblePosition() == adapter.getCount() - 1) {
+      if (adapter.getCount() > 0 && getListView().getLastVisiblePosition() == adapter.getCount() - 1) {
 
         toast.setText(getString(R.string.list_view_loading_more));
         toast.show();

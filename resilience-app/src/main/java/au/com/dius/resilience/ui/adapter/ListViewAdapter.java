@@ -21,6 +21,7 @@ import java.util.List;
  */
 public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
 
+  public static final int ONE_MINUTE = 60000;
   @Inject
   private ImageLoader imageLoader;
 
@@ -43,21 +44,33 @@ public class ListViewAdapter extends ArrayAdapter<ServiceRequest> {
     TextView locationField = (TextView) rowView.findViewById(R.id.list_view_item_location);
     locationField.setText(formatAddress(serviceRequest));
 
+    formatReportedDate(serviceRequest, rowView);
+
+    ImageView previewImage = (ImageView) rowView.findViewById(R.id.list_view_preview_icon);
+    imageLoader.loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());
+
+    return rowView;
+  }
+
+  private void formatReportedDate(ServiceRequest serviceRequest, View rowView) {
+
     TextView reportedTime = (TextView) rowView.findViewById(R.id.list_view_item_time_reported);
 
     if (serviceRequest.getRequestedDatetime() != null) {
-      reportedTime.setText(DateUtils.getRelativeDateTimeString(
-        getContext(),
-        serviceRequest.getRequestedDatetime().getTime(),
-        DateUtils.SECOND_IN_MILLIS,
-        DateUtils.YEAR_IN_MILLIS, 0).toString().toUpperCase());
+
+      long now = System.currentTimeMillis();
+      long duration = Math.abs(now - serviceRequest.getRequestedDatetime().getTime());
+
+      if (duration < ONE_MINUTE) {
+        reportedTime.setText(R.string.now);
+      } else {
+        reportedTime.setText(DateUtils.getRelativeDateTimeString(
+          getContext(),
+          serviceRequest.getRequestedDatetime().getTime(),
+          DateUtils.SECOND_IN_MILLIS,
+          DateUtils.YEAR_IN_MILLIS, 0).toString().toUpperCase());
+      }
     }
-
-
-    ImageView previewImage = (ImageView) rowView.findViewById(R.id.list_view_preview_icon);
-    imageLoader.  loadThumbnailImage(previewImage, serviceRequest.getMediaUrl());
-
-    return rowView;
   }
 
   private String formatAddress(ServiceRequest serviceRequest) {

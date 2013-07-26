@@ -19,6 +19,8 @@
         android:padding="@dimen/list_item_image_padding"
         android:layout_weight="30"
         android:clickable="false"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/list_view_category_desc"
         android:background="@color/list_item_image_background"/>
 
