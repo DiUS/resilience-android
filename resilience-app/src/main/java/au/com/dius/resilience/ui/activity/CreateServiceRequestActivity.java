@@ -71,7 +71,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
   private ServiceListSpinnerAdapter serviceListSpinnerAdapter;
 
-  private String cachedPhotoUri;
+  private Uri cachedPhotoUri;
 
   private Location lastKnownLocation;
 
@@ -84,7 +84,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     locationBroadcaster.subscribe(locationResolverFragment);
 
     if (savedInstanceState != null) {
-      cachedPhotoUri = savedInstanceState.getString(SERVICE_REQUEST_URI);
+      cachedPhotoUri = Uri.parse(savedInstanceState.getString(SERVICE_REQUEST_URI));
     }
 
     descriptionField.setOnTouchListener(new View.OnTouchListener() {
@@ -110,14 +110,14 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   public void onResume() {
     super.onResume();
     if (cachedPhotoUri != null) {
-      imageLoader.loadFromUrl(photoPreview, cachedPhotoUri);
+      imageLoader.loadFromUrl(photoPreview, cachedPhotoUri.toString());
     }
     setStateEnabled();
   }
 
   @Override
   public void onSaveInstanceState(Bundle state) {
-    state.putString(SERVICE_REQUEST_URI, cachedPhotoUri == null ? null : cachedPhotoUri);
+    state.putString(SERVICE_REQUEST_URI, cachedPhotoUri == null ? null : cachedPhotoUri.toString());
   }
 
   private void setupAdapter() {
@@ -136,9 +136,8 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-    Uri photoUri = Uri.fromFile(mediaFile);
-    cachedPhotoUri = photoUri.toString();
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+    cachedPhotoUri = Uri.fromFile(mediaFile);
+    intent.putExtra(MediaStore.EXTRA_OUTPUT, cachedPhotoUri);
     startActivityForResult(intent, CAPTURE_PHOTO_REQUEST_CODE);
   }
 
@@ -157,12 +156,6 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode,
                                   Intent data) {
-
-    if (requestCode == CAPTURE_PHOTO_REQUEST_CODE) {
-      if (resultCode == RESULT_OK) {
-        imageLoader.loadFromUrl(photoPreview, cachedPhotoUri);
-      }
-    }
   }
 
   public void onSubmitClick(final View view) {
@@ -186,7 +179,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     setStateUploading();
 
     Intent service = new Intent(this, CreateIncidentService.class);
-    service.putExtra(Extras.PHOTO_LOCAL_URI, cachedPhotoUri);
+    service.putExtra(Extras.PHOTO_LOCAL_URI, cachedPhotoUri.getPath());
     service.putExtra(Extras.SERVICE_REQUEST_BUILDER, buildServiceRequest());
     startService(service);
 
