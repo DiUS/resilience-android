@@ -62,11 +62,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     getListView().setOnScrollListener(this);
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
-  }
 
-  @Override
-  public void onResume() {
-    super.onResume();
     serviceRequestLoader.subscribe(this);
     locationBroadcaster.subscribe(serviceRequestLoader);
     locationBroadcaster.subscribe(this);
@@ -74,12 +70,12 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   }
 
   @Override
-  public void onPause() {
+  public void onDestroy() {
     locationBroadcaster.stopPolling();
-    serviceRequestLoader.unsubscribe(this);
     locationBroadcaster.unsubscribe(this);
     locationBroadcaster.unsubscribe(serviceRequestLoader);
-    super.onPause();
+    serviceRequestLoader.unsubscribe(this);
+    super.onDestroy();
   }
 
   private void initBlockingTask() {
@@ -139,6 +135,11 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Override
   public void onLoadFinished(Loader<List<ServiceRequest>> listLoader, List<ServiceRequest> incidentList) {
+
+    if (listLoader.getId() != ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER) {
+      return;
+    }
+
     Logger.d(this, "Adding " + incidentList.size() + " incidents to UI.");
 
     if (incidentList.size() == 0 && adapter.getCount() == 0) {

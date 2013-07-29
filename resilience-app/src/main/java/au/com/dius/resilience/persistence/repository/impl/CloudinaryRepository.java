@@ -27,7 +27,7 @@ public class CloudinaryRepository {
     cloudinary.setConfig(API_SECRET, resources.getString(R.string.cloudinary_api_secret));
   }
 
-  public String create(File imageFile) {
+  public String create(File imageFile) throws IOException {
 
     try {
       Map result = cloudinary.uploader().upload(imageFile, Cloudinary.emptyMap());
@@ -35,7 +35,7 @@ public class CloudinaryRepository {
       return cloudinary.url().generate(publicId + JPG);
     } catch (IOException e) {
       Logger.e(this, "Failed to upload image to Cloudinary: " + e.getMessage());
-      return null;
+      throw e;
     }
   }
 }

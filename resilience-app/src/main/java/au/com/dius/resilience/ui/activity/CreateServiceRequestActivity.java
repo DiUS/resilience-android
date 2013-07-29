@@ -21,7 +21,6 @@ import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.model.MediaType;
 import au.com.dius.resilience.model.ServiceListDefaults;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
-import au.com.dius.resilience.persistence.repository.impl.ServiceRequestRepository;
 import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.adapter.ServiceListSpinnerAdapter;
 import au.com.dius.resilience.ui.fragment.LocationResolverFragment;
@@ -37,6 +36,8 @@ import roboguice.inject.InjectFragment;
 import roboguice.inject.InjectView;
 
 import java.io.File;
+
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 @ContentView(R.layout.activity_create_service_request)
 public class CreateServiceRequestActivity extends RoboFragmentActivity {
@@ -94,8 +95,9 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
     locationBroadcaster.subscribe(this);
     locationBroadcaster.subscribe(locationResolverFragment);
 
-    if (savedInstanceState != null && savedInstanceState.getString(SERVICE_REQUEST_URI) != null) {
-      cachedPhotoUri = Uri.parse(savedInstanceState.getString(SERVICE_REQUEST_URI));
+    if (savedInstanceState != null) {
+      String photoUri = savedInstanceState.getString(SERVICE_REQUEST_URI);
+      cachedPhotoUri = isBlank(photoUri) ? null : Uri.parse(photoUri);
       serviceSpinner.setSelection(savedInstanceState.getInt(SERVICE_LIST_ID));
       descriptionField.setText(savedInstanceState.getString(SERVICE_REQUEST_DESC));
     }
@@ -107,11 +109,6 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
         return false;
       }
     });
-  }
-
-  @Subscribe
-  public void onServiceRequestErrorEvent(ServiceRequestRepository.ErrorEvent errorEvent) {
-    setStateEnabled();
   }
 
   @Subscribe
@@ -224,7 +221,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
     ServiceList serviceList = (ServiceList) serviceSpinner.getSelectedItem();
     builder.serviceCode(serviceList.getServiceCode())
-      .serviceName(serviceList.getServiceName())
+      .  serviceName(serviceList.getServiceName())
       .description(descriptionField.getText().toString())
       .latitude(lastKnownLocation.getLatitude())
       .longtitude(lastKnownLocation.getLongitude())

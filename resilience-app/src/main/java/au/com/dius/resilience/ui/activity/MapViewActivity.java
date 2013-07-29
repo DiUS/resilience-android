@@ -3,10 +3,12 @@ package au.com.dius.resilience.ui.activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
 import au.com.dius.resilience.loader.event.PageResetEvent;
@@ -17,17 +19,21 @@ import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
 import com.squareup.otto.Subscribe;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ContentView(R.layout.activity_map_view)
-public class MapViewActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>> {
+public class MapViewActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>>, GoogleMap.OnInfoWindowClickListener {
 
   public static final float ZOOM_LEVEL = 16.0f;
   private GoogleMap map;
@@ -37,13 +43,20 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   private boolean loaded = false;
 
+  private CircleOptions circleOptions;
+
+  private Map<String, ServiceRequest> markerToServiceRequestMap;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     if (map == null) {
       map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+      map.setOnInfoWindowClickListener(this);
     }
+
+    markerToServiceRequestMap = new HashMap<String, ServiceRequest>();
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
   }
@@ -51,12 +64,14 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
   @Override
   public void onResume() {
     super.onResume();
+    locationBroadcaster.subscribe(this);
     locationBroadcaster.startPolling();
   }
 
   @Override
   public void onPause() {
     locationBroadcaster.stopPolling();
+    locationBroadcaster.unsubscribe(this);
     super.onPause();
   }
 
@@ -79,6 +94,14 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
       LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
       map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_LEVEL));
 
+      circleOptions = new CircleOptions()
+        .center(latLng)
+        .radius(location.getAccuracy())
+        .strokeWidth(1.0f)
+        .strokeColor(Color.WHITE)
+        .fillColor(Color.argb(100, 0, 20, 255));
+      map.addCircle(circleOptions);
+
       loaded = true;
     }
   }
@@ -97,7 +120,8 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
     for (ServiceRequest serviceRequest : data) {
       if (serviceRequest.getLat() != null && serviceRequest.getLong() != null) {
         LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());
-        map.addMarker(new MarkerOptions().position(latLng).title(serviceRequest.getServiceName()));
+        Marker marker = map.addMarker(new MarkerOptions().position(latLng).title(serviceRequest.getServiceName()));
+        markerToServiceRequestMap.put(marker.getId(), serviceRequest);
       }
     }
   }
@@ -105,13 +129,13 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> loader) {
 
-    ((ServiceRequestLoader)loader).unsubscribe(this);
+    ((ServiceRequestLoader) loader).unsubscribe(this);
 
     if (map == null) {
       return;
     }
 
-    map.clear();
+    clearMarkers();
   }
 
   @Subscribe
@@ -121,11 +145,24 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
       return;
     }
 
-    map.clear();
+    clearMarkers();
   }
 
   @Subscribe
   public void onServiceRequestLoadFailedEvent(ServiceRequestLoadFailed event) {
     Toast.makeText(this, "Load failed, please try again later.", Toast.LENGTH_LONG);
+  }
+
+  private void clearMarkers() {
+    map.clear();
+    map.addCircle(circleOptions);
+  }
+
+  @Override
+  public void onInfoWindowClick(Marker marker) {
+    ServiceRequest serviceRequest = markerToServiceRequestMap.get(marker.getId());
+    Intent intent = new Intent(this, ViewServiceRequestActivity.class);
+    intent.putExtra(Extras.SERVICE_REQUEST, serviceRequest);
+    startActivity(intent);
   }
 }

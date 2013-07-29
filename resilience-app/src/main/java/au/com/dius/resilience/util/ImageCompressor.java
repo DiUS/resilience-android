@@ -21,6 +21,11 @@ public class ImageCompressor {
     File compressedFile;
     try {
       compressedFile = new File(path.replace(JPG, COMPRESSED_JPG));
+
+      if (compressedFile.exists()) {
+        return compressedFile;
+      }
+
       FileOutputStream fileOutputStream = new FileOutputStream(compressedFile);
 
       BitmapFactory.Options options = optimiseDecoderOptions(path);

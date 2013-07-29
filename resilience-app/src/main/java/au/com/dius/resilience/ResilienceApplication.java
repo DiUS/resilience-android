@@ -19,6 +19,7 @@ public class ResilienceApplication extends Application {
 
   private void initialiseOpen311() {
     Open311.setBaseUrl(getApplicationContext().getString(R.string.open_311_base_url));
+    Open311.setBasicAuth("android", "yyy");
   }
 
   private void setDefaultPreferences() {

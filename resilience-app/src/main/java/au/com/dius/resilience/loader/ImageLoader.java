@@ -45,7 +45,7 @@ public class ImageLoader {
 
   private void initialiseImageLoader() {
     imageTagFactory = ImageTagFactory.newInstance(context, R.drawable.background_border);
-    imageTagFactory.setErrorImageId(R.drawable.border_white);
+    imageTagFactory.setErrorImageId(android.R.drawable.ic_menu_close_clear_cancel);
   }
 
   public void loadFullsizeImage(ImageView view, String imageName) {
