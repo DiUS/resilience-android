@@ -29,7 +29,6 @@ import au.com.dius.resilience.util.FileUtils;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
-import com.novoda.imageloader.core.file.util.FileUtil;
 import com.squareup.otto.Subscribe;
 import org.apache.commons.lang.StringUtils;
 import roboguice.activity.RoboFragmentActivity;
@@ -43,7 +42,10 @@ import java.io.File;
 public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
   public static final int CAPTURE_PHOTO_REQUEST_CODE = 100;
-  public static final String SERVICE_REQUEST_URI = "ServiceRequestUri";
+
+  private static final String SERVICE_REQUEST_URI = "ServiceRequestUri";
+  private static final String SERVICE_REQUEST_DESC = "ServiceRequestDescription";
+  private static final String SERVICE_LIST_ID = "ServiceList";
 
   @Inject
   private ActionBarHandler actionBarHandler;
@@ -94,6 +96,8 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
 
     if (savedInstanceState != null && savedInstanceState.getString(SERVICE_REQUEST_URI) != null) {
       cachedPhotoUri = Uri.parse(savedInstanceState.getString(SERVICE_REQUEST_URI));
+      serviceSpinner.setSelection(savedInstanceState.getInt(SERVICE_LIST_ID));
+      descriptionField.setText(savedInstanceState.getString(SERVICE_REQUEST_DESC));
     }
 
     descriptionField.setOnTouchListener(new View.OnTouchListener() {
@@ -129,6 +133,8 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Override
   public void onSaveInstanceState(Bundle state) {
     state.putString(SERVICE_REQUEST_URI, cachedPhotoUri == null ? null : cachedPhotoUri.toString());
+    state.putString(SERVICE_REQUEST_DESC, descriptionField.getText().toString());
+    state.putInt(SERVICE_LIST_ID, serviceSpinner.getSelectedItemPosition());
   }
 
   private void setupAdapter() {
