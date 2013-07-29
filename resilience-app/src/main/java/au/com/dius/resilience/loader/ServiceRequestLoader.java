@@ -9,7 +9,8 @@ import android.os.Looper;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.event.Publisher;
 import au.com.dius.resilience.intent.Intents;
-import au.com.dius.resilience.loader.event.PageResetEvent;import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
+import au.com.dius.resilience.loader.event.PageResetEvent;
+import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.event.LocationUpdatedEvent;
 import au.com.dius.resilience.observer.IntentBasedLoaderNotifierBroadcastReceiver;
 import au.com.dius.resilience.util.Logger;
@@ -83,7 +84,7 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
       list.addAll(requestAdapter.list(extraProperties));
 
       // TODO - perhaps this should only increment when size = max page size?
-      // TOOD - otherwise could lose issues if a full page wasn't loaded on the last refresh.
+      // TODO - otherwise could lose issues if a full page wasn't loaded on the last refresh.
       if (list.size() > 0) {
         ++page;
       }

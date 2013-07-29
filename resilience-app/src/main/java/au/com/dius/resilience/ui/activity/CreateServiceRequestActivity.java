@@ -25,9 +25,11 @@ import au.com.dius.resilience.persistence.repository.impl.ServiceRequestReposito
 import au.com.dius.resilience.service.CreateIncidentService;
 import au.com.dius.resilience.ui.adapter.ServiceListSpinnerAdapter;
 import au.com.dius.resilience.ui.fragment.LocationResolverFragment;
+import au.com.dius.resilience.util.FileUtils;
 import au.com.justinb.open311.model.ServiceList;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
+import com.novoda.imageloader.core.file.util.FileUtil;
 import com.squareup.otto.Subscribe;
 import org.apache.commons.lang.StringUtils;
 import roboguice.activity.RoboFragmentActivity;
@@ -73,6 +75,9 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Inject
   private ImageLoader imageLoader;
 
+  @Inject
+  private FileUtils fileUtils;
+
   private ServiceListSpinnerAdapter serviceListSpinnerAdapter;
 
   private Uri cachedPhotoUri;
@@ -113,9 +118,11 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   @Override
   public void onResume() {
     super.onResume();
-    if (cachedPhotoUri != null) {
+
+    if (cachedPhotoUri != null && fileUtils.exists(cachedPhotoUri.getPath())) {
       imageLoader.loadFromUrl(photoPreview, cachedPhotoUri.toString());
     }
+
     setStateEnabled();
   }
 
@@ -158,8 +165,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   }
 
   @Override
-  protected void onActivityResult(int requestCode, int resultCode,
-                                  Intent data) {
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
   }
 
   public void onSubmitClick(final View view) {
@@ -208,7 +214,7 @@ public class CreateServiceRequestActivity extends RoboFragmentActivity {
   }
 
   private ServiceRequest.Builder buildServiceRequest() {
-    final ServiceRequest.Builder builder = new ServiceRequest.Builder();
+    ServiceRequest.Builder builder = new ServiceRequest.Builder();
 
     ServiceList serviceList = (ServiceList) serviceSpinner.getSelectedItem();
     builder.serviceCode(serviceList.getServiceCode())
