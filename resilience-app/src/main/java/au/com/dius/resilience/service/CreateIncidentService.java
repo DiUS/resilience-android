@@ -3,6 +3,7 @@ package au.com.dius.resilience.service;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
+import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.persistence.repository.impl.CloudinaryRepository;
 import au.com.dius.resilience.util.ImageCompressor;
@@ -16,6 +17,7 @@ public class CreateIncidentService extends IntentService {
 
   private static final String CREATE_INCIDENT_SERVICE = "CreateIncidentService";
   private static final int PHOTO_QUALITY = 30;
+  private static final int DONE = 100;
 
   private GenericRequestAdapter<ServiceRequest> requestAdapter;
 
@@ -38,31 +40,28 @@ public class CreateIncidentService extends IntentService {
 
     ServiceRequest serviceRequest = serviceRequestBuilder.createServiceRequest();
 
-    ProgressNotifier progressNotifier = new ProgressNotifier(this, "Reporting " + serviceRequest.getServiceName());
+    ProgressNotifier progressNotifier = new ProgressNotifier(this,
+      getString(R.string.reporting, serviceRequest.getServiceName()));
 
     try {
 
-      progressNotifier.setText("Compressing and uploading photo..");
-      Logger.d(this, "Compressing and uploading photo: ", photoUri);
+      progressNotifier.setText(getString(R.string.uploading_photo));
 
       File compressedFile = new ImageCompressor().compress(photoUri, PHOTO_QUALITY);
       String url = new CloudinaryRepository(getResources()).create(compressedFile);
-      Logger.d(this, "Uploaded photo to cloudinary with url: ", url);
 
-      progressNotifier.setText("Creating issue..");
-
-      Logger.d(this, "Submitting service request..");
+      progressNotifier.setText(getString(R.string.uploading_issue));
       serviceRequestBuilder.mediaUrl(url);
 
       requestAdapter.create(serviceRequestBuilder.createServiceRequest());
 
-      progressNotifier.setText("Complete.");
-      progressNotifier.setProgress(100);
+      progressNotifier.setText(getString(R.string.upload_complete));
+      progressNotifier.setProgress(DONE);
 
     } catch (Throwable e) {
       progressNotifier.setFailureAction(PendingIntent.getService(this, 0, intent, 0));
-      progressNotifier.setText("Upload failed. Please try again in a few minutes.");
-      progressNotifier.setProgress(100);
+      progressNotifier.setText(getString(R.string.upload_failed));
+      progressNotifier.setProgress(DONE);
       Logger.e(this, "Error while uploading incident: ", e, e.getCause().getMessage());
     }
   }
