@@ -4,6 +4,7 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -12,6 +13,7 @@ import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.loader.event.LoadingEvent;
 import au.com.dius.resilience.loader.event.PageResetEvent;
 import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.LocationBroadcaster;
@@ -22,7 +24,9 @@ import au.com.dius.resilience.util.Logger;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.inject.Inject;
 import com.squareup.otto.Subscribe;
-import org.apache.commons.lang.StringUtils;
+import de.keyboardsurfer.android.widget.crouton.Configuration;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.activity.RoboListActivity;
 
 import java.util.ArrayList;
@@ -33,15 +37,14 @@ import static java.lang.Thread.sleep;
 public class ServiceRequestListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>>
   , AbsListView.OnScrollListener {
 
+  public static final int CROUTON_DURATION = 5000;
   private ListViewAdapter adapter;
 
-  private long MIN_REFRESH_TIME = 5000;
+  private long MIN_REFRESH_TIME = 2000;
 
   private boolean isLoading = false;
 
   private AnonymousRepeatableTask blockRefreshTask;
-
-  private Toast toast;
 
   @Inject
   private LocationBroadcaster locationBroadcaster;
@@ -53,8 +56,6 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     super.onCreate(savedInstanceState);
     adapter = new ListViewAdapter(this, R.layout.service_request_list_view_item, new ArrayList<ServiceRequest>());
     super.setListAdapter(adapter);
-
-    toast = Toast.makeText(this, StringUtils.EMPTY, Toast.LENGTH_SHORT);
 
     initBlockingTask();
 
@@ -69,12 +70,25 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     locationBroadcaster.startPolling();
   }
 
+  // TODO - move to factory, or something.
+  private Crouton createLoadingCrouton() {
+    Style style = new Style.Builder()
+      .setGravity(Gravity.CENTER)
+      .setBackgroundColor(R.color.background)
+      .setTextColor(android.R.color.black)
+      .setConfiguration(new Configuration.Builder().setDuration(CROUTON_DURATION).build())
+      .build();
+
+    return Crouton.makeText(this, "Loading incidents..", style, getListView());
+  }
+
   @Override
   public void onDestroy() {
     locationBroadcaster.stopPolling();
     locationBroadcaster.unsubscribe(this);
     locationBroadcaster.unsubscribe(serviceRequestLoader);
     serviceRequestLoader.unsubscribe(this);
+    Crouton.cancelAllCroutons();
     super.onDestroy();
   }
 
@@ -94,13 +108,19 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Subscribe
   public void onServiceRequestLoadFailedEvent(ServiceRequestLoadFailed event) {
-    Toast.makeText(this, "Load failed, please try again later.", Toast.LENGTH_LONG).show();
+    Crouton.makeText(this, "Load failed, please try again later.", Style.ALERT).show();
   }
 
   @Subscribe
   public void onPageResetEvent(PageResetEvent event) {
     adapter.clear();
     adapter.setData(null);
+  }
+
+  @Subscribe
+  public void onLoadingEvent(LoadingEvent event) {
+    Crouton.clearCroutonsForActivity(this);
+    createLoadingCrouton().show();
   }
 
   @Override
@@ -167,9 +187,6 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
       }
 
       if (adapter.getCount() > 0 && getListView().getLastVisiblePosition() == adapter.getCount() - 1) {
-
-        toast.setText(getString(R.string.list_view_loading_more));
-        toast.show();
 
         isLoading = true;
         serviceRequestLoader.onContentChanged();

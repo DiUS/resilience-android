@@ -47,6 +47,8 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   private Map<String, ServiceRequest> markerToServiceRequestMap;
 
+  private ServiceRequestLoader serviceRequestLoader;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -58,29 +60,25 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
     markerToServiceRequestMap = new HashMap<String, ServiceRequest>();
 
-    getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
     locationBroadcaster.subscribe(this);
+    getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
+    serviceRequestLoader.subscribe(this);
+    locationBroadcaster.subscribe(serviceRequestLoader);
     locationBroadcaster.startPolling();
   }
 
   @Override
-  public void onPause() {
+  public void onDestroy() {
+    serviceRequestLoader.unsubscribe(this);
     locationBroadcaster.stopPolling();
     locationBroadcaster.unsubscribe(this);
-    super.onPause();
+    locationBroadcaster.unsubscribe(serviceRequestLoader);
+    super.onDestroy();
   }
 
   @Override
   public Loader<List<ServiceRequest>> onCreateLoader(int id, Bundle args) {
-    ServiceRequestLoader serviceRequestLoader = new ServiceRequestLoader(this);
-    serviceRequestLoader.subscribe(this);
-    locationBroadcaster.subscribe(serviceRequestLoader);
-    locationBroadcaster.subscribe(this);
+    serviceRequestLoader = new ServiceRequestLoader(this);
     return serviceRequestLoader;
   }
 
@@ -128,8 +126,6 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   @Override
   public void onLoaderReset(Loader<List<ServiceRequest>> loader) {
-
-    ((ServiceRequestLoader) loader).unsubscribe(this);
 
     if (map == null) {
       return;
