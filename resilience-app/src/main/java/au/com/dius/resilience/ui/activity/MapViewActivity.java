@@ -6,11 +6,13 @@ import android.content.Loader;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ServiceRequestLoader;
+import au.com.dius.resilience.loader.event.LoadingEvent;
 import au.com.dius.resilience.loader.event.PageResetEvent;
 import au.com.dius.resilience.loader.event.ServiceRequestLoadFailed;
 import au.com.dius.resilience.location.LocationBroadcaster;
@@ -25,6 +27,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
 import com.squareup.otto.Subscribe;
+import de.keyboardsurfer.android.widget.crouton.Configuration;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 
@@ -36,6 +41,9 @@ import java.util.Map;
 public class MapViewActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>>, GoogleMap.OnInfoWindowClickListener {
 
   public static final float ZOOM_LEVEL = 16.0f;
+
+  private static final int CROUTON_DURATION = 2000;
+
   private GoogleMap map;
 
   @Inject
@@ -55,6 +63,11 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
     if (map == null) {
       map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+
+      if (map == null) {
+        return;
+      }
+
       map.setOnInfoWindowClickListener(this);
     }
 
@@ -67,12 +80,31 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
     locationBroadcaster.startPolling();
   }
 
+  // TODO - move to factory, or something.
+  private Crouton createLoadingCrouton() {
+    Style style = new Style.Builder()
+      .setGravity(Gravity.CENTER)
+      .setBackgroundColor(R.color.background)
+      .setTextColor(android.R.color.black)
+      .setConfiguration(new Configuration.Builder().setDuration(CROUTON_DURATION).build())
+      .build();
+
+    return Crouton.makeText(this, "Loading incidents..", style);
+  }
+
+  @Subscribe
+  public void onLoadingEvent(LoadingEvent event) {
+    Crouton.cancelAllCroutons();
+    createLoadingCrouton().show();
+  }
+
   @Override
   public void onDestroy() {
     serviceRequestLoader.unsubscribe(this);
     locationBroadcaster.stopPolling();
     locationBroadcaster.unsubscribe(this);
     locationBroadcaster.unsubscribe(serviceRequestLoader);
+    Crouton.cancelAllCroutons();
     super.onDestroy();
   }
 

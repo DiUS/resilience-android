@@ -66,6 +66,13 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
   @Override
   public List<ServiceRequest> loadInBackground() {
 
+    new Handler(Looper.getMainLooper()).post(new Runnable() {
+      @Override
+      public void run() {
+        bus.post(new LoadingEvent());
+      }
+    });
+
     if (lastKnownLocation == null) {
       Logger.d(this, "Haven't located you yet!");
       return new ArrayList<ServiceRequest>();
@@ -82,14 +89,6 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
 
     List<ServiceRequest> list = new ArrayList<ServiceRequest>();
     try {
-
-      new Handler(Looper.getMainLooper()).post(new Runnable() {
-        @Override
-        public void run() {
-          bus.post(new LoadingEvent());
-        }
-      });
-
       list.addAll(requestAdapter.list(extraProperties));
 
       // TODO - perhaps this should only increment when size = max page size?

@@ -1,16 +1,14 @@
 package au.com.dius.resilience.location;
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.event.Publisher;
-import au.com.dius.resilience.intent.Extras;
-import au.com.dius.resilience.intent.Intents;
-import au.com.dius.resilience.location.event.LocationUpdatedEvent;import au.com.dius.resilience.util.Logger;
+import au.com.dius.resilience.location.event.LocationUpdatedEvent;
+import au.com.dius.resilience.util.Logger;
 import com.google.inject.Inject;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;

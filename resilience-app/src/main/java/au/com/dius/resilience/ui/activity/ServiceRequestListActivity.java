@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
 import au.com.dius.resilience.intent.Intents;
@@ -27,17 +27,21 @@ import com.squareup.otto.Subscribe;
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
-import roboguice.activity.RoboListActivity;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class ServiceRequestListActivity extends RoboListActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>>
-  , AbsListView.OnScrollListener {
+@ContentView(R.layout.activity_service_request_list)
+public class ServiceRequestListActivity extends RoboActivity implements LoaderManager.LoaderCallbacks<List<ServiceRequest>>
+  , AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
 
-  public static final int CROUTON_DURATION = 5000;
+  private static final int CROUTON_DURATION = 2000;
+
   private ListViewAdapter adapter;
 
   private long MIN_REFRESH_TIME = 2000;
@@ -45,6 +49,9 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   private boolean isLoading = false;
 
   private AnonymousRepeatableTask blockRefreshTask;
+
+  @InjectView(R.id.service_request_list_view)
+  private ListView listView;
 
   @Inject
   private LocationBroadcaster locationBroadcaster;
@@ -54,13 +61,15 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    listView.setOnItemClickListener(this);
+
     adapter = new ListViewAdapter(this, R.layout.service_request_list_view_item, new ArrayList<ServiceRequest>());
-    super.setListAdapter(adapter);
+    listView.setAdapter(adapter);
 
     initBlockingTask();
 
-    getListView().setDividerHeight(0);
-    getListView().setOnScrollListener(this);
+    listView.setDividerHeight(0);
+    listView.setOnScrollListener(this);
 
     getLoaderManager().initLoader(ServiceRequestLoader.SERVICE_REQUEST_LIST_LOADER, null, this);
 
@@ -79,7 +88,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
       .setConfiguration(new Configuration.Builder().setDuration(CROUTON_DURATION).build())
       .build();
 
-    return Crouton.makeText(this, "Loading incidents..", style, getListView());
+    return Crouton.makeText(this, "Loading incidents..", style);
   }
 
   @Override
@@ -119,23 +128,8 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Subscribe
   public void onLoadingEvent(LoadingEvent event) {
-    Crouton.clearCroutonsForActivity(this);
+    Crouton.cancelAllCroutons();
     createLoadingCrouton().show();
-  }
-
-  @Override
-  public void onListItemClick(ListView l, View v, int position, long id) {
-
-    ServiceRequest serviceRequest = adapter.getItem(position);
-
-    Bundle bundle = new Bundle();
-    // FIXME - use parceable instead of serializable since it's faster.
-    bundle.putSerializable(Extras.SERVICE_REQUEST, serviceRequest);
-
-    Intent intent = new Intent(this, ViewServiceRequestActivity.class);
-    intent.putExtras(bundle);
-
-    startActivity(intent);
   }
 
   @Override
@@ -147,7 +141,7 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
 
   @Subscribe
   public void onLocationUpdatedEvent(LocationUpdatedEvent event) {
-    if (getListAdapter() != null && getListAdapter().getCount() == 0) {
+    if (listView != null && listView.getCount() == 0) {
       Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
       sendBroadcast(intent);
     }
@@ -161,10 +155,6 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
     }
 
     Logger.d(this, "Adding " + incidentList.size() + " incidents to UI.");
-
-    if (incidentList.size() == 0 && adapter.getCount() == 0) {
-      Toast.makeText(this, "No incidents found.", Toast.LENGTH_LONG).show();
-    }
 
     adapter.addAll(incidentList);
   }
@@ -186,7 +176,9 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
         return;
       }
 
-      if (adapter.getCount() > 0 && getListView().getLastVisiblePosition() == adapter.getCount() - 1) {
+      Crouton.cancelAllCroutons();
+
+      if (adapter.getCount() > 0 && listView.getLastVisiblePosition() == adapter.getCount() - 1) {
 
         isLoading = true;
         serviceRequestLoader.onContentChanged();
@@ -194,6 +186,20 @@ public class ServiceRequestListActivity extends RoboListActivity implements Load
         blockRefreshTask.execute();
       }
     }
+  }
+
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    ServiceRequest serviceRequest = adapter.getItem(position);
+
+    Bundle bundle = new Bundle();
+    // FIXME - use parceable instead of serializable since it's faster.
+    bundle.putSerializable(Extras.SERVICE_REQUEST, serviceRequest);
+
+    Intent intent = new Intent(this, ViewServiceRequestActivity.class);
+    intent.putExtras(bundle);
+
+    startActivity(intent);
   }
 
   @Override
