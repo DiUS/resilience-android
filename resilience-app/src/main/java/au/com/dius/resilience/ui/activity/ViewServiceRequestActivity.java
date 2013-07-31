@@ -1,20 +1,25 @@
 package au.com.dius.resilience.ui.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.*;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import au.com.dius.resilience.R;
+import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.factory.SerializableExtraFactory;
 import au.com.dius.resilience.intent.Extras;
-import au.com.dius.resilience.ui.ResilienceActionBarThemer;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.loader.ImageLoader;
+import au.com.dius.resilience.ui.ResilienceActionBarThemer;
 import au.com.dius.resilience.util.ResilienceDateUtils;
+import au.com.justinb.open311.GenericRequestAdapter;
+import au.com.justinb.open311.Open311Exception;
 import au.com.justinb.open311.model.ServiceRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,6 +28,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -50,17 +57,22 @@ public class ViewServiceRequestActivity extends RoboActivity {
   @Inject
   private ImageLoader imageLoader;
 
-  private ServiceRequest serviceRequest;
-
   @Inject
   private ResilienceDateUtils dateUtils;
 
   @Inject
   private SerializableExtraFactory extraFactory;
 
+  @Inject
+  private ActionBarHandler actionBarHandler;
+
+  private ServiceRequest serviceRequest;
+
   private GoogleMap map;
 
   private AlertDialog.Builder imageAlert;
+
+  private GenericRequestAdapter<ServiceRequest> requestAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -92,12 +104,19 @@ public class ViewServiceRequestActivity extends RoboActivity {
         dialog.dismiss();
       }
     });
+
+    requestAdapter = new GenericRequestAdapter<ServiceRequest>(ServiceRequest.class);
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.action_bar_resolve, menu);
     return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    return actionBarHandler.handleMenuItemSelected(item);
   }
 
   @Override
@@ -110,6 +129,24 @@ public class ViewServiceRequestActivity extends RoboActivity {
     imageLoader.loadFullsizeImage(previewImage, serviceRequest.getMediaUrl());
 
     super.onResume();
+  }
+
+  public void onResolveClick(final View button) {
+
+    final Activity finalActivity = this;
+    AsyncTask.execute(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          button.setClickable(false);
+          serviceRequest.updateStatus("closed", "Solved it single-handedly using a toothpick and some twine.");
+          requestAdapter.update(serviceRequest.getServiceRequestId(), serviceRequest);
+          finalActivity.finish();
+        } catch (Open311Exception e) {
+          Crouton.showText(finalActivity, "Failed to resolve incident, try again later.", Style.ALERT);
+        }
+      }
+    });
   }
 
   public void onImageClick(View image) {

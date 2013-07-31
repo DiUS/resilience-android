@@ -13,4 +13,6 @@
           android:textColor="@android:color/white"
           android:drawableLeft="@drawable/create_incident"
           android:background="@drawable/submit_button"
-          android:clickable="true"/>
+          android:onClick="onResolveClick"
+          android:clickable="true"
+          />

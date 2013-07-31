@@ -33,8 +33,8 @@ public class ActionBarHandler {
     switch (item.getItemId()) {
 
       case R.id.refresh:
-        Intent intent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
-        activity.sendBroadcast(intent);
+        Intent refreshIntent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
+        activity.sendBroadcast(refreshIntent);
         break;
 
       case R.id.send_feedback:
@@ -48,8 +48,8 @@ public class ActionBarHandler {
         break;
 
       case R.id.create_incident:
-        Intent raiseIncident = new Intent(activity, CreateServiceRequestActivity.class);
-        activity.startActivityForResult(raiseIncident, Codes.CreateIncident.REQUEST_CODE);
+        Intent raiseIncidentIntent = new Intent(activity, CreateServiceRequestActivity.class);
+        activity.startActivityForResult(raiseIncidentIntent, Codes.CreateIncident.REQUEST_CODE);
         break;
 
       default:

@@ -36,6 +36,8 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
   private static final String LONG = "long";
   private static final String RADIUS = "radius";
   private static final String DEFAULT_RADIUS = "15";
+  private static final String STATUS = "status";
+  private static final String OPEN_STATUS = "open";
 
   private GenericRequestAdapter<ServiceRequest> requestAdapter;
 
@@ -82,6 +84,7 @@ public class ServiceRequestLoader extends AbstractAsyncListLoader<ServiceRequest
     extraProperties.put(LAT, String.valueOf(lastKnownLocation.getLatitude()));
     extraProperties.put(LONG, String.valueOf(lastKnownLocation.getLongitude()));
     extraProperties.put(RADIUS, DEFAULT_RADIUS);
+    extraProperties.put(STATUS, OPEN_STATUS);
 
     Logger.d(this, "Loading page", page, "of service requests from", getContext().getString(R.string.open_311_base_url));
     Logger.d(this, "Querying area around ", String.valueOf(lastKnownLocation.getLatitude()), String.valueOf(lastKnownLocation.getLongitude()));
