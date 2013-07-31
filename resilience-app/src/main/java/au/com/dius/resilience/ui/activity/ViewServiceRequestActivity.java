@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -86,11 +87,17 @@ public class ViewServiceRequestActivity extends RoboActivity {
     }
 
     imageAlert = new AlertDialog.Builder(this, android.R.style.Theme_Translucent_NoTitleBar);
-    imageAlert.setNeutralButton("Dismiss", new DialogInterface.OnClickListener() {
+    imageAlert.setNeutralButton(R.string.dismiss, new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int buttonId) {
         dialog.dismiss();
       }
     });
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.action_bar_resolve, menu);
+    return true;
   }
 
   @Override
@@ -108,6 +115,7 @@ public class ViewServiceRequestActivity extends RoboActivity {
   public void onImageClick(View image) {
 
     ImageView view = new ImageView(this);
+    view.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
     imageLoader.loadFullsizeImage(view, serviceRequest.getMediaUrl());
 

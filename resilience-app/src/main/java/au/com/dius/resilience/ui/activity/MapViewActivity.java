@@ -43,6 +43,7 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
   public static final float ZOOM_LEVEL = 16.0f;
 
   private static final int CROUTON_DURATION = 2000;
+  public static final int CURRENT_POSITION_DIAMETER = 10;
 
   private GoogleMap map;
 
@@ -126,7 +127,7 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
       circleOptions = new CircleOptions()
         .center(latLng)
-        .radius(location.getAccuracy())
+        .radius(CURRENT_POSITION_DIAMETER)
         .strokeWidth(1.0f)
         .strokeColor(Color.WHITE)
         .fillColor(Color.argb(100, 0, 20, 255));
@@ -178,7 +179,7 @@ public class MapViewActivity extends RoboActivity implements LoaderManager.Loade
 
   @Subscribe
   public void onServiceRequestLoadFailedEvent(ServiceRequestLoadFailed event) {
-    Toast.makeText(this, "Load failed, please try again later.", Toast.LENGTH_LONG);
+    Crouton.makeText(this, "Load failed, please try again later.", Style.ALERT).show();
   }
 
   private void clearMarkers() {
