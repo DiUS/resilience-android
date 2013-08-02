@@ -3,12 +3,17 @@
 .idea/workspace.xml
 .idea/uiDesigner.xml
 .idea
+.gradle/
 ant_build/
 bin/
 gen/
+build/
 out/
 tmp/
 local.properties
 target/
 resilience-local.properties
 *.iml
+*.ipr
+*.iws
+

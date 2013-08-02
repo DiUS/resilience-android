@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.actionbar.ActionBarHandler;
 import au.com.dius.resilience.factory.SerializableExtraFactory;
@@ -21,6 +22,7 @@ import au.com.dius.resilience.util.ResilienceDateUtils;
 import au.com.justinb.open311.GenericRequestAdapter;
 import au.com.justinb.open311.Open311Exception;
 import au.com.justinb.open311.model.ServiceRequest;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -28,135 +30,143 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.inject.Inject;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
-@ContentView(R.layout.activity_view_service_request)
+//@ContentView(R.layout.activity_view_service_request)
 public class ViewServiceRequestActivity extends RoboActivity {
 
-  public static final int ZOOM_LEVEL = 12;
+    public static final int ZOOM_LEVEL = 12;
 
-  @Inject
-  private ResilienceActionBarThemer themer;
+    @Inject
+    private ResilienceActionBarThemer themer;
 
-  @InjectView(R.id.title)
-  private TextView title;
+    @InjectView(R.id.title)
+    private TextView title;
 
-  @InjectView(R.id.time_reported)
-  private TextView timeReported;
+    @InjectView(R.id.time_reported)
+    private TextView timeReported;
 
-  @InjectView(R.id.description)
-  private TextView description;
+    @InjectView(R.id.description)
+    private TextView description;
 
-  @InjectView(R.id.view_service_request_preview_image)
-  private ImageView previewImage;
+    @InjectView(R.id.view_service_request_preview_image)
+    private ImageView previewImage;
 
-  @Inject
-  private ImageLoader imageLoader;
+    @Inject
+    private ImageLoader imageLoader;
 
-  @Inject
-  private ResilienceDateUtils dateUtils;
+    @Inject
+    private ResilienceDateUtils dateUtils;
 
-  @Inject
-  private SerializableExtraFactory extraFactory;
+    @Inject
+    private SerializableExtraFactory extraFactory;
 
-  @Inject
-  private ActionBarHandler actionBarHandler;
+    @Inject
+    private ActionBarHandler actionBarHandler;
 
-  private ServiceRequest serviceRequest;
+    private ServiceRequest serviceRequest;
 
-  private GoogleMap map;
+    private GoogleMap map;
 
-  private AlertDialog.Builder imageAlert;
+    private AlertDialog.Builder imageAlert;
 
-  private GenericRequestAdapter<ServiceRequest> requestAdapter;
+    private GenericRequestAdapter<ServiceRequest> requestAdapter;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
 
-    serviceRequest = (ServiceRequest) extraFactory.createSerializable(this, Extras.SERVICE_REQUEST);
 
-    if (map == null) {
-      // TODO - should this be in onResume? Look at docs to verify.
-      map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-      if (map != null) {
-        map.getUiSettings().setZoomControlsEnabled(false);
-        map.getUiSettings().setAllGesturesEnabled(false);
+        setContentView(R.layout.activity_view_service_request);
 
-        LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-          .target(latLng)
-          .zoom(ZOOM_LEVEL)
-          .build();
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        map.addMarker(new MarkerOptions().position(latLng));
-      }
+        serviceRequest = (ServiceRequest) extraFactory.createSerializable(this, Extras.SERVICE_REQUEST);
+
+        if (map == null) {
+            // TODO - should this be in onResume? Look at docs to verify.
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            if (mapFragment != null) {
+                map = mapFragment.getMap();
+
+                if (map != null) {
+                    map.getUiSettings().setZoomControlsEnabled(false);
+                    map.getUiSettings().setAllGesturesEnabled(false);
+
+                    LatLng latLng = new LatLng(serviceRequest.getLat(), serviceRequest.getLong());
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(latLng)
+                            .zoom(ZOOM_LEVEL)
+                            .build();
+                    map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    map.addMarker(new MarkerOptions().position(latLng));
+                }
+            }
+        }
+
+        imageAlert = new AlertDialog.Builder(this, android.R.style.Theme_Translucent_NoTitleBar);
+        imageAlert.setNeutralButton(R.string.dismiss, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int buttonId) {
+                dialog.dismiss();
+            }
+        });
+
+        requestAdapter = new GenericRequestAdapter<ServiceRequest>(ServiceRequest.class);
     }
 
-    imageAlert = new AlertDialog.Builder(this, android.R.style.Theme_Translucent_NoTitleBar);
-    imageAlert.setNeutralButton(R.string.dismiss, new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int buttonId) {
-        dialog.dismiss();
-      }
-    });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_resolve, menu);
+        return true;
+    }
 
-    requestAdapter = new GenericRequestAdapter<ServiceRequest>(ServiceRequest.class);
-  }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return actionBarHandler.handleMenuItemSelected(item);
+    }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.action_bar_resolve, menu);
-    return true;
-  }
+    @Override
+    public void onResume() {
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    return actionBarHandler.handleMenuItemSelected(item);
-  }
+        title.setText(serviceRequest.getAddress());
+        timeReported.setText(dateUtils.formatRelativeDate(serviceRequest.getRequestedDatetime()));
+        description.setText(serviceRequest.getDescription());
 
-  @Override
-  public void onResume() {
+        imageLoader.loadFullsizeImage(previewImage, serviceRequest.getMediaUrl());
 
-    title.setText(serviceRequest.getAddress());
-    timeReported.setText(dateUtils.formatRelativeDate(serviceRequest.getRequestedDatetime()));
-    description.setText(serviceRequest.getDescription());
+        super.onResume();
+    }
 
-    imageLoader.loadFullsizeImage(previewImage, serviceRequest.getMediaUrl());
+    public void onResolveClick(final View button) {
 
-    super.onResume();
-  }
+        final Activity finalActivity = this;
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    button.setClickable(false);
+                    serviceRequest.updateStatus("closed", "Solved it single-handedly using a toothpick and some twine.");
+                    requestAdapter.update(serviceRequest.getServiceRequestId(), serviceRequest);
+                    finalActivity.finish();
+                } catch (Open311Exception e) {
+                    Crouton.showText(finalActivity, "Failed to resolve incident, try again later.", Style.ALERT);
+                }
+            }
+        });
+    }
 
-  public void onResolveClick(final View button) {
+    public void onImageClick(View image) {
 
-    final Activity finalActivity = this;
-    AsyncTask.execute(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          button.setClickable(false);
-          serviceRequest.updateStatus("closed", "Solved it single-handedly using a toothpick and some twine.");
-          requestAdapter.update(serviceRequest.getServiceRequestId(), serviceRequest);
-          finalActivity.finish();
-        } catch (Open311Exception e) {
-          Crouton.showText(finalActivity, "Failed to resolve incident, try again later.", Style.ALERT);
-        }
-      }
-    });
-  }
+        ImageView view = new ImageView(this);
+        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-  public void onImageClick(View image) {
+        imageLoader.loadFullsizeImage(view, serviceRequest.getMediaUrl());
 
-    ImageView view = new ImageView(this);
-    view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-    imageLoader.loadFullsizeImage(view, serviceRequest.getMediaUrl());
-
-    imageAlert.setView(view);
-    imageAlert.show();
-  }
+        imageAlert.setView(view);
+        imageAlert.show();
+    }
 }
