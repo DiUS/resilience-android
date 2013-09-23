@@ -141,6 +141,10 @@ public class ViewServiceRequestActivity extends RoboActivity {
           button.setClickable(false);
           serviceRequest.updateStatus("closed", "Solved it single-handedly using a toothpick and some twine.");
           requestAdapter.update(serviceRequest.getServiceRequestId(), serviceRequest);
+
+          Intent refreshIntent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
+          finalActivity.sendBroadcast(refreshIntent);
+
           finalActivity.finish();
         } catch (Open311Exception e) {
           Crouton.showText(finalActivity, "Failed to resolve incident, try again later.", Style.ALERT);
