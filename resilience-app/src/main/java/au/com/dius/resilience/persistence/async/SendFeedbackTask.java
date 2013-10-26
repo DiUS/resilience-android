@@ -7,6 +7,9 @@ import au.com.dius.resilience.model.Feedback;
 import au.com.dius.resilience.model.FeedbackResult;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
@@ -46,21 +49,19 @@ public class SendFeedbackTask extends AsyncTask<Feedback, Void, FeedbackResult> 
     FeedbackResult result = null;
 
     for (int i = 0; i < params.length; i++) {
-
       result = sendFeedback(params[i]);
-
     }
 
     return result;
   }
 
   private FeedbackResult sendFeedback(Feedback f) {
-    JSONObject json = null;
-    HttpParams httpParams = null;
-    HttpClient client = null;
-    StringBuilder address = null;
-    HttpPost request = null;
-    HttpResponse response = null;
+    JSONObject json;
+    HttpParams httpParams;
+    HttpClient client;
+    StringBuilder address;
+    HttpPost request;
+    HttpResponse response;
 
     // Create JSON object
     try {
@@ -78,6 +79,8 @@ public class SendFeedbackTask extends AsyncTask<Feedback, Void, FeedbackResult> 
         TIMEOUT_MILLISEC);
     HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
     client = new DefaultHttpClient(httpParams);
+
+    addAuthentication(client);
 
     // Create URL
     address = new StringBuilder(activity.getString(R.string.open_311_base_url));
@@ -108,6 +111,12 @@ public class SendFeedbackTask extends AsyncTask<Feedback, Void, FeedbackResult> 
     StatusLine status = response.getStatusLine();
 
     return new FeedbackResult(status.getStatusCode() == FEEDBACK_SUCCESSFUL_STATUS, null);
+  }
+
+  private void addAuthentication(HttpClient client) {
+    Credentials credentials = new UsernamePasswordCredentials(activity.getString(R.string.open_311_username),
+            activity.getString(R.string.open_311_password));
+    ((DefaultHttpClient)client).getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
   }
 
   @Override

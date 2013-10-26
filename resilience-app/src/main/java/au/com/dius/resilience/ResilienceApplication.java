@@ -1,6 +1,7 @@
 package au.com.dius.resilience;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import au.com.dius.resilience.persistence.repository.impl.PreferenceAdapter;
@@ -18,8 +19,10 @@ public class ResilienceApplication extends Application {
   }
 
   private void initialiseOpen311() {
-    Open311.setBaseUrl(getApplicationContext().getString(R.string.open_311_base_url));
-    Open311.setBasicAuth("android", "yyy");
+    Context applicationContext = getApplicationContext();
+    Open311.setBaseUrl(applicationContext.getString(R.string.open_311_base_url));
+    Open311.setBasicAuth(applicationContext.getString(R.string.open_311_username)
+            , applicationContext.getString(R.string.open_311_password));
   }
 
   private void setDefaultPreferences() {

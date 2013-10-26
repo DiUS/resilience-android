@@ -1,1 +1,2 @@
 res/values/secret.xml
+**/*.keystore

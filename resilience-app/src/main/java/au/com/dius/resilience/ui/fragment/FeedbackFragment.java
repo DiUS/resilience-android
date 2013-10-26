@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.model.Device;
 import au.com.dius.resilience.model.Feedback;
@@ -63,8 +64,9 @@ public class FeedbackFragment extends Fragment {
 
     if (result.getResult()) {
       toast = Toast.makeText(getActivity(), R.string.feedback_thanks, Toast.LENGTH_LONG);
+      getActivity().finish();
     } else {
-      toast = Toast.makeText(getActivity(), R.string.feedback_failure + ": " + result.getException().getMessage(), Toast.LENGTH_LONG);
+      toast = Toast.makeText(getActivity(), R.string.feedback_failure, Toast.LENGTH_LONG);
     }
     toast.show();
   }

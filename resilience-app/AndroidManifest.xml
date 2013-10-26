@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="au.com.dius.resilience"
-          android:versionCode="1"
-          android:versionName="1.0-SNAPSHOT">
+          android:versionCode="2"
+          android:versionName="0.1">
 
   <uses-sdk
           android:minSdkVersion="14"
-          android:targetSdkVersion="17"/>
+          android:targetSdkVersion="18"/>
 
   <uses-feature
           android:name="android.hardware.camera"
@@ -43,7 +43,6 @@
       </intent-filter>
     </activity>
 
-    <activity android:name=".ui.activity.ViewIncidentActivity"/>
     <activity android:name=".ui.activity.CreateServiceRequestActivity"/>
     <activity android:name=".ui.activity.ServiceRequestListActivity"/>
     <activity android:name=".ui.activity.MapViewActivity"/>
@@ -56,7 +55,7 @@
 
     <!-- TODO - extract from properties file -->
     <meta-data android:name="com.google.android.maps.v2.API_KEY"
-               android:value="AIzaSyDTpNpP7fh20uISO8MI3opvmDxQTbQlhp0" />
+               android:value="" />
 
   </application>
 

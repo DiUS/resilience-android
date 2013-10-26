@@ -3,15 +3,17 @@ package au.com.dius.resilience.service;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
+
+import java.io.File;
+
 import au.com.dius.resilience.R;
 import au.com.dius.resilience.intent.Extras;
+import au.com.dius.resilience.intent.Intents;
 import au.com.dius.resilience.persistence.repository.impl.CloudinaryRepository;
 import au.com.dius.resilience.util.ImageCompressor;
 import au.com.dius.resilience.util.Logger;
 import au.com.justinb.open311.GenericRequestAdapter;
 import au.com.justinb.open311.model.ServiceRequest;
-
-import java.io.File;
 
 public class CreateIncidentService extends IntentService {
 
@@ -36,12 +38,12 @@ public class CreateIncidentService extends IntentService {
 
     String photoUri = intent.getStringExtra(Extras.PHOTO_LOCAL_URI);
     ServiceRequest.Builder serviceRequestBuilder =
-      (ServiceRequest.Builder) intent.getSerializableExtra(Extras.SERVICE_REQUEST_BUILDER);
+            (ServiceRequest.Builder) intent.getSerializableExtra(Extras.SERVICE_REQUEST_BUILDER);
 
     ServiceRequest serviceRequest = serviceRequestBuilder.createServiceRequest();
 
     ProgressNotifier progressNotifier = new ProgressNotifier(this,
-      getString(R.string.reporting, serviceRequest.getServiceName()));
+            getString(R.string.reporting, serviceRequest.getServiceName()));
 
     try {
 
@@ -55,6 +57,9 @@ public class CreateIncidentService extends IntentService {
 
       requestAdapter.create(serviceRequestBuilder.createServiceRequest());
 
+      Intent refreshIntent = new Intent(Intents.RESILIENCE_INCIDENT_CREATED);
+      sendBroadcast(refreshIntent);
+
       progressNotifier.setText(getString(R.string.upload_complete));
       progressNotifier.setProgress(DONE);
 
@@ -62,7 +67,10 @@ public class CreateIncidentService extends IntentService {
       progressNotifier.setFailureAction(PendingIntent.getService(this, 0, intent, 0));
       progressNotifier.setText(getString(R.string.upload_failed));
       progressNotifier.setProgress(DONE);
-      Logger.e(this, "Error while uploading incident: ", e, e.getCause().getMessage());
+      Logger.e(this, "Error while uploading incident: ", e);
+      if (e != null && e.getCause() != null) {
+        Logger.e(this, "Cause: ", e.getCause().getMessage());
+      }
     }
   }
 }

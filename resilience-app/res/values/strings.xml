@@ -27,7 +27,7 @@
   <string name="uploading_photo">Compressing and uploading photo&#8230;</string>
   <string name="uploading_issue">Creating issue&#8230;</string>
   <string name="upload_complete">Complete.</string>
-  <string name="upload_failed">Upload failed. Please try again in a few minutes.</string>
+  <string name="upload_failed">Upload failed. Tap to try again.</string>
   <string name="reporting">Reporting %s</string>
 
   <!-- View/create incident -->
